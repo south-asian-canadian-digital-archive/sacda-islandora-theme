@@ -5,7 +5,7 @@ description: test
 package: Custom
 core_version_requirement: ^10
 libraries:
-  - sacda_test_2/global
+  - sacda_test/global
 regions:
   header: 'Header'
   primary_menu: 'Primary menu'
