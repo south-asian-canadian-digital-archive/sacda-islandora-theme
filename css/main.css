@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+/* Scan templates and JS for Tailwind classes */
+@source "../../templates/**/*.twig";
+@source "../../js/**/*.js";
