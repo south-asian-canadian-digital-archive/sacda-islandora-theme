@@ -4,6 +4,33 @@
 # Note: image_fid will be populated when images are uploaded through the theme settings form.
 footer_partners: []
 
+# Default footer partners (image_fid left as 0 placeholders to be replaced after upload)
+footer_partners:
+  - name: 'SACDA'
+    image_fid: 0
+    link: 'http://sacda.ca'
+    weight: 0
+  - name: 'South Asian Studies Institute'
+    image_fid: 0
+    link: 'http://www.ufv.ca/sasi'
+    weight: 1
+  - name: 'University of the Fraser Valley'
+    image_fid: 0
+    link: 'http://www.ufv.ca/'
+    weight: 2
+  - name: 'South Asian Canadian Legacy Project'
+    image_fid: 0
+    link: 'https://saclp.southasiancanadianheritage.ca/'
+    weight: 3
+  - name: 'Canada'
+    image_fid: 0
+    link: 'https://www.canada.ca/en.html'
+    weight: 4
+  - name: 'UBC Irving K. Barber Learning Centre'
+    image_fid: 0
+    link: 'https://ikblc.ubc.ca/'
+    weight: 5
+
 # Footer social links - array of social link items with icon, link, title and weight for ordering.
 footer_social_links:
   - title: 'Facebook'
