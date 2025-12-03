@@ -8,66 +8,71 @@
  * - footer_logo: Logo URL for the footer (if provided).
  * - site_name: The site name.
  * - current_year: The current year for copyright.
+ * - footer_partners: Array of partner items with name, image, link, weight.
+ * - footer_social_links: Array of social link items with title, icon, link, weight.
  */
 #}
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-container">
 
-    {# Footer Top Section #}
-    <div class="footer-top">
-      <div class="footer-branding">
-        {% if footer_logo %}
-          <img src="{{ footer_logo }}" alt="{{ site_name }} logo" class="footer-logo">
-        {% endif %}
-        {% if site_name %}
-          <span class="footer-site-name">{{ site_name }}</span>
-        {% endif %}
-      </div>
+{# Social icon SVGs #}
+{% set social_icons = {
+  'facebook': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>',
+  'twitter': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" /></svg>',
+  'instagram': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>',
+  'linkedin': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>',
+  'youtube': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>',
+  'flickr': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="4"></circle><circle cx="18" cy="12" r="4"></circle></svg>',
+  'tiktok': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>',
+  'email': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
+  'website': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>'
+} %}
 
-      {# Footer Navigation / Links #}
-      {% if page.footer_first %}
-        <div class="footer-column footer-first">
-          {{ page.footer_first }}
-        </div>
-      {% endif %}
+<footer class="sacda-footer relative flex flex-col-reverse items-end justify-between gap-4 bg-[#414042] px-6 pt-10 pb-24 md:flex-row md:py-24 lg:flex-row lg:py-24">
+	{# Partners section #}
+	<div class="flex flex-row items-center gap-5 pb-3">
+		{% for partner in footer_partners %}
+			<a href="{{ partner.link }}" target="_blank" rel="noopener noreferrer" class="*:size-10">
+				<img src="{{ partner.image }}" alt="{{ partner.name }}" />
+			</a>
+		{% endfor %}
+	</div>
 
-      {% if page.footer_second %}
-        <div class="footer-column footer-second">
-          {{ page.footer_second }}
-        </div>
-      {% endif %}
+	{# Social links section #}
+	<div class="flex w-full flex-col items-center gap-4 md:w-fit lg:w-fit">
+		<p class="w-fit border-b border-b-[#ffce34] pb-1 text-lg font-bold text-white uppercase md:self-end lg:self-end">
+			GET IN TOUCH
+		</p>
 
-      {% if page.footer_third %}
-        <div class="footer-column footer-third">
-          {{ page.footer_third }}
-        </div>
-      {% endif %}
-    </div>
+		<div class="flex flex-row gap-3">
+			{% if footer_social_links is not empty %}
+				{% for social in footer_social_links %}
+					{% if social.link %}
+						<a
+							href="{{ social.link }}"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="flex h-12 w-12 items-center justify-center rounded-full border border-[#ffce34] text-lg text-white"
+							title="{{ social.title|default('') }}"
+						>
+							{{ social_icons[social.icon]|default(social_icons['website'])|raw }}
+						</a>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
 
-    {# Footer Bottom Section #}
-    <div class="footer-bottom">
-      <div class="footer-copyright">
-        <p>&copy; {{ current_year|default('now'|date('Y')) }} {{ site_name|default('South Asian Canadian Digital Archive') }}. All rights reserved.</p>
-      </div>
+	{# Copyright section #}
+	<div class="absolute bottom-6 w-full self-center text-center text-sm text-white md:w-fit md:self-start lg:w-fit lg:self-start">
+		<div class="flex w-full items-center justify-center md:hidden lg:hidden">
+			<p class="w-fit border-t border-t-[#ffce34] pb-1 text-lg font-bold text-transparent">
+				GET IN TOUCH
+			</p>
+		</div>
 
-      {# Social Media Links #}
-      <div class="footer-social">
-        {# Add your social media links here #}
-        <ul class="social-links">
-          {# Example social links - customize as needed
-          <li><a href="#" class="social-link social-facebook" aria-label="Facebook"><span class="visually-hidden">Facebook</span></a></li>
-          <li><a href="#" class="social-link social-twitter" aria-label="Twitter"><span class="visually-hidden">Twitter</span></a></li>
-          <li><a href="#" class="social-link social-instagram" aria-label="Instagram"><span class="visually-hidden">Instagram</span></a></li>
-          #}
-        </ul>
-      </div>
+		<a href="https://sacda.ca/policy/takedown">Statement of Use and Takedown Policy</a>
+		|
+		<a href="https://sacda.ca/index.php/About/media" class="">Media</a>		
+		&copy; {{ current_year|default('now'|date('Y')) }} {{ site_name|default('South Asian Canadian Digital Archive') }}. All rights reserved.
 
-      {% if page.footer %}
-        <div class="footer-main">
-          {{ page.footer }}
-        </div>
-      {% endif %}
-    </div>
-
-  </div>
+	</div>
 </footer>

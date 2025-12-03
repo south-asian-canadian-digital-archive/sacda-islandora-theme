@@ -1,0 +1,28 @@
+# Default theme settings for SACDA Test theme.
+
+# Footer partners - array of partner items with image file ID, link, name and weight for ordering.
+# Note: image_fid will be populated when images are uploaded through the theme settings form.
+footer_partners: []
+
+# Footer social links - array of social link items with icon, link, title and weight for ordering.
+footer_social_links:
+  - title: 'Facebook'
+    icon: 'facebook'
+    link: 'https://www.facebook.com/profile.php?id=100092345694324'
+    weight: 0
+  - title: 'Instagram'
+    icon: 'instagram'
+    link: 'https://www.instagram.com/sacda.sasi/'
+    weight: 1
+  - title: 'Twitter'
+    icon: 'twitter'
+    link: 'https://twitter.com/ufvsasi'
+    weight: 2
+  - title: 'Youtube'
+    icon: 'youtube'
+    link: 'https://www.youtube.com/channel/UCN5tvG-Q8ly9z0YOyWsoaNA'
+    weight: 3
+  - title: 'Flickr'
+    icon: 'flickr'
+    link: 'https://www.flickr.com/photos/ufvcics/albums'
+    weight: 4

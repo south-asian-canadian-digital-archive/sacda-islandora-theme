@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Custom header template for SACDA theme.
+ *
+ * Available variables:
+ * - page: The page render array containing footer regions.
+ * - logo: Logo URL for the footer (if provided).
+ * - site_name: The site name.
+ */
+#}
+
+
+<header class="flex" role="banner">
+	{{ page.header }}
+
+	<div class="ml-auto flex flex-col">
+		{{ page.menu_top }}
+		{{ page.menu_bottom }}
+	</div>
+
+</header>

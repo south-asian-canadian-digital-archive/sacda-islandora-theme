@@ -1,0 +1,50 @@
+# Schema for SACDA Test theme settings.
+
+sacda_test.settings:
+  type: theme_settings
+  label: 'SACDA Test theme settings'
+  mapping:
+    footer_partners:
+      type: sequence
+      label: 'Footer partners'
+      sequence:
+        type: mapping
+        label: 'Partner'
+        mapping:
+          name:
+            type: string
+            label: 'Partner name'
+          image_fid:
+            type: integer
+            label: 'Partner image file ID'
+          link:
+            type: string
+            label: 'Partner link URL'
+          weight:
+            type: integer
+            label: 'Weight for ordering'
+    footer_social_links:
+      type: sequence
+      label: 'Footer social links'
+      sequence:
+        type: mapping
+        label: 'Social link'
+        mapping:
+          title:
+            type: string
+            label: 'Link title'
+          icon:
+            type: string
+            label: 'Icon name'
+          link:
+            type: string
+            label: 'Social link URL'
+          weight:
+            type: integer
+            label: 'Weight for ordering'
+    footer_contact_title:
+      type: string
+      label: 'Footer contact section title'
+    footer_copyright_text:
+      type: string
+      label: 'Custom copyright text'

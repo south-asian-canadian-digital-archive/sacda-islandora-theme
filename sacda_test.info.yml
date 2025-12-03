@@ -8,18 +8,14 @@ libraries:
   - sacda_test/global
 regions:
   header: 'Header'
-  primary_menu: 'Primary menu'
-  secondary_menu: 'Secondary menu'
-  page_top: 'Page top'
-  page_bottom: 'Page bottom'
-  featured: 'Featured'
+  menu_top: 'Top menu'
+  menu_bottom: 'Primary menu'
+
   breadcrumb: 'Breadcrumb'
-  highlighted: 'Highlighted'
-  help: 'Help'
   content: 'Content'
+
   sidebar_first: 'Sidebar first'
   sidebar_second: 'Sidebar second'
-  footer_first: 'Footer first'
-  footer_second: 'Footer second'
-  footer_third: 'Footer third'
+
   footer: 'Footer'
+  

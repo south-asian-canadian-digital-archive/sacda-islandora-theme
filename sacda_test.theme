@@ -7,42 +7,358 @@ declare(strict_types=1);
  * Functions to support theming in the sacda_test theme.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
+
+/**
+ * Implements hook_form_system_theme_settings_alter().
+ */
+function sacda_test_form_system_theme_settings_alter(array &$form, FormStateInterface $form_state): void {
+  $form['footer_settings'] = [
+    '#type' => 'details',
+    '#title' => t('Footer Settings'),
+    '#open' => TRUE,
+  ];
+
+  $form['footer_settings']['partners_wrapper'] = [
+    '#type' => 'details',
+    '#title' => t('Footer Partners'),
+    '#open' => TRUE,
+    '#prefix' => '<div id="partners-wrapper">',
+    '#suffix' => '</div>',
+  ];
+
+  $partners = theme_get_setting('footer_partners') ?: [];
+  $num_partners = $form_state->get('num_partners') ?? max(count($partners), 1);
+  $form_state->set('num_partners', $num_partners);
+
+  $form['footer_settings']['partners_wrapper']['footer_partners'] = [
+    '#type' => 'container',
+    '#tree' => TRUE,
+    '#parents' => ['footer_partners'],
+  ];
+
+  for ($i = 0; $i < $num_partners; $i++) {
+    $partner = $partners[$i] ?? [];
+
+    $form['footer_settings']['partners_wrapper']['footer_partners'][$i] = [
+      '#type' => 'details',
+      '#title' => t('Partner @num', ['@num' => $i + 1]),
+      '#open' => TRUE,
+      '#attributes' => ['class' => ['partner-item']],
+    ];
+
+    $form['footer_settings']['partners_wrapper']['footer_partners'][$i]['name'] = [
+      '#type' => 'textfield',
+      '#title' => t('Partner name'),
+      '#default_value' => $partner['name'] ?? '',
+      '#description' => t('Used for alt text.'),
+    ];
+
+    $form['footer_settings']['partners_wrapper']['footer_partners'][$i]['image_fid'] = [
+      '#type' => 'managed_file',
+      '#title' => t('Partner logo'),
+      '#upload_location' => 'public://theme/partners/',
+      '#upload_validators' => [
+        'file_validate_extensions' => ['png jpg jpeg gif svg webp'],
+        'file_validate_size' => [2 * 1024 * 1024],
+      ],
+      '#default_value' => !empty($partner['image_fid']) ? [$partner['image_fid']] : NULL,
+    ];
+
+    $form['footer_settings']['partners_wrapper']['footer_partners'][$i]['link'] = [
+      '#type' => 'url',
+      '#title' => t('Partner website URL'),
+      '#default_value' => $partner['link'] ?? '',
+    ];
+
+    $form['footer_settings']['partners_wrapper']['footer_partners'][$i]['weight'] = [
+      '#type' => 'weight',
+      '#title' => t('Weight'),
+      '#default_value' => $partner['weight'] ?? $i,
+      '#description' => t('Lower weight items appear first.'),
+    ];
+  }
+
+  $form['footer_settings']['partners_wrapper']['add_partner'] = [
+    '#type' => 'submit',
+    '#value' => t('Add Partner'),
+    '#submit' => ['sacda_test_add_partner_callback'],
+    '#ajax' => [
+      'callback' => 'sacda_test_partners_ajax_callback',
+      'wrapper' => 'partners-wrapper',
+    ],
+    '#limit_validation_errors' => [],
+  ];
+
+  if ($num_partners > 1) {
+    $form['footer_settings']['partners_wrapper']['remove_partner'] = [
+      '#type' => 'submit',
+      '#value' => t('Remove Last Partner'),
+      '#submit' => ['sacda_test_remove_partner_callback'],
+      '#ajax' => [
+        'callback' => 'sacda_test_partners_ajax_callback',
+        'wrapper' => 'partners-wrapper',
+      ],
+      '#limit_validation_errors' => [],
+    ];
+  }
+
+  $form['footer_settings']['social_wrapper'] = [
+    '#type' => 'details',
+    '#title' => t('Footer Social Links'),
+    '#open' => TRUE,
+    '#prefix' => '<div id="social-wrapper">',
+    '#suffix' => '</div>',
+  ];
+
+  $social_links = theme_get_setting('footer_social_links') ?: [];
+  $num_social = $form_state->get('num_social') ?? max(count($social_links), 1);
+  $form_state->set('num_social', $num_social);
+
+  $icon_options = [
+    'facebook' => t('Facebook'),
+    'twitter' => t('Twitter / X'),
+    'instagram' => t('Instagram'),
+    'linkedin' => t('LinkedIn'),
+    'youtube' => t('YouTube'),
+    'flickr' => t('Flickr'),
+    'tiktok' => t('TikTok'),
+    'email' => t('Email'),
+    'website' => t('Website'),
+  ];
+
+  $form['footer_settings']['social_wrapper']['footer_social_links'] = [
+    '#type' => 'table',
+    '#header' => [t('Title'), t('Icon'), t('Link URL'), t('Weight')],
+    '#empty' => t('No social links added yet.'),
+    '#tree' => TRUE,
+    '#parents' => ['footer_social_links'],
+    '#tabledrag' => [
+      [
+        'action' => 'order',
+        'relationship' => 'sibling',
+        'group' => 'social-weight',
+      ],
+    ],
+  ];
+
+  for ($i = 0; $i < $num_social; $i++) {
+    $social = $social_links[$i] ?? [];
+
+    $form['footer_settings']['social_wrapper']['footer_social_links'][$i]['#attributes']['class'][] = 'draggable';
+    $form['footer_settings']['social_wrapper']['footer_social_links'][$i]['#weight'] = $social['weight'] ?? $i;
+
+    $form['footer_settings']['social_wrapper']['footer_social_links'][$i]['title'] = [
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#title_display' => 'invisible',
+      '#default_value' => $social['title'] ?? '',
+      '#size' => 20,
+    ];
+
+    $form['footer_settings']['social_wrapper']['footer_social_links'][$i]['icon'] = [
+      '#type' => 'select',
+      '#title' => t('Icon'),
+      '#title_display' => 'invisible',
+      '#options' => $icon_options,
+      '#default_value' => $social['icon'] ?? 'facebook',
+    ];
+
+    $form['footer_settings']['social_wrapper']['footer_social_links'][$i]['link'] = [
+      '#type' => 'url',
+      '#title' => t('Link URL'),
+      '#title_display' => 'invisible',
+      '#default_value' => $social['link'] ?? '',
+      '#size' => 40,
+    ];
+
+    $form['footer_settings']['social_wrapper']['footer_social_links'][$i]['weight'] = [
+      '#type' => 'weight',
+      '#title' => t('Weight'),
+      '#title_display' => 'invisible',
+      '#default_value' => $social['weight'] ?? $i,
+      '#attributes' => ['class' => ['social-weight']],
+    ];
+  }
+
+  $form['footer_settings']['social_wrapper']['add_social'] = [
+    '#type' => 'submit',
+    '#value' => t('Add Social Link'),
+    '#submit' => ['sacda_test_add_social_callback'],
+    '#ajax' => [
+      'callback' => 'sacda_test_social_ajax_callback',
+      'wrapper' => 'social-wrapper',
+    ],
+    '#limit_validation_errors' => [],
+  ];
+
+  if ($num_social > 1) {
+    $form['footer_settings']['social_wrapper']['remove_social'] = [
+      '#type' => 'submit',
+      '#value' => t('Remove Last Social Link'),
+      '#submit' => ['sacda_test_remove_social_callback'],
+      '#ajax' => [
+        'callback' => 'sacda_test_social_ajax_callback',
+        'wrapper' => 'social-wrapper',
+      ],
+      '#limit_validation_errors' => [],
+    ];
+  }
+
+  $form['#submit'][] = 'sacda_test_theme_settings_submit';
+}
+
+/**
+ * Ajax callback for partners section.
+ */
+function sacda_test_partners_ajax_callback(array &$form, FormStateInterface $form_state) {
+  return $form['footer_settings']['partners_wrapper'];
+}
+
+/**
+ * Submit handler to add a partner.
+ */
+function sacda_test_add_partner_callback(array &$form, FormStateInterface $form_state): void {
+  $form_state->set('num_partners', $form_state->get('num_partners') + 1);
+  $form_state->setRebuild();
+}
+
+/**
+ * Submit handler to remove a partner.
+ */
+function sacda_test_remove_partner_callback(array &$form, FormStateInterface $form_state): void {
+  $num = $form_state->get('num_partners');
+  if ($num > 1) {
+    $form_state->set('num_partners', $num - 1);
+  }
+  $form_state->setRebuild();
+}
+
+/**
+ * Ajax callback for social links section.
+ */
+function sacda_test_social_ajax_callback(array &$form, FormStateInterface $form_state) {
+  return $form['footer_settings']['social_wrapper'];
+}
+
+/**
+ * Submit handler to add a social link.
+ */
+function sacda_test_add_social_callback(array &$form, FormStateInterface $form_state): void {
+  $form_state->set('num_social', $form_state->get('num_social') + 1);
+  $form_state->setRebuild();
+}
+
+/**
+ * Submit handler to remove a social link.
+ */
+function sacda_test_remove_social_callback(array &$form, FormStateInterface $form_state): void {
+  $num = $form_state->get('num_social');
+  if ($num > 1) {
+    $form_state->set('num_social', $num - 1);
+  }
+  $form_state->setRebuild();
+}
+
+/**
+ * Submit handler to clean up empty entries and make files permanent.
+ */
+function sacda_test_theme_settings_submit(array &$form, FormStateInterface $form_state): void {
+  $partners = $form_state->getValue('footer_partners') ?: [];
+  $cleaned_partners = [];
+
+  foreach ($partners as $partner) {
+    if (empty($partner['name']) && empty($partner['image_fid']) && empty($partner['link'])) {
+      continue;
+    }
+
+    $fid = is_array($partner['image_fid']) ? reset($partner['image_fid']) : $partner['image_fid'];
+    if ($fid && $file = File::load($fid)) {
+      $file->setPermanent();
+      $file->save();
+      \Drupal::service('file.usage')->add($file, 'sacda_test', 'theme', 1);
+    }
+
+    $cleaned_partners[] = [
+      'name' => $partner['name'] ?? '',
+      'image_fid' => $fid ?: NULL,
+      'link' => $partner['link'] ?? '',
+      'weight' => $partner['weight'] ?? 0,
+    ];
+  }
+
+  usort($cleaned_partners, fn($a, $b) => $a['weight'] <=> $b['weight']);
+  $form_state->setValue('footer_partners', $cleaned_partners);
+
+  $social_links = $form_state->getValue('footer_social_links') ?: [];
+  $cleaned_social = array_filter($social_links, fn($s) => !empty($s['title']) || !empty($s['link']));
+  usort($cleaned_social, fn($a, $b) => ($a['weight'] ?? 0) <=> ($b['weight'] ?? 0));
+  $form_state->setValue('footer_social_links', array_values($cleaned_social));
+}
+
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
 function sacda_test_preprocess_html(array &$variables): void {
+  $is_dev = getenv('DRUPAL_ENV') === 'development' ||
+            file_exists(DRUPAL_ROOT . '/sites/development.services.yml');
 
+  if ($is_dev) {
+    $variables['page']['#attached']['html_head'][] = [
+      [
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#attributes' => ['src' => 'http://localhost:35729/livereload.js'],
+      ],
+      'livereload',
+    ];
+  }
 }
 
 /**
  * Implements hook_preprocess_HOOK() for page.html.twig.
  */
 function sacda_test_preprocess_page(array &$variables): void {
-  // Pass site name to templates.
-  // $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['current_year'] = date('Y');
+  $variables['logo'] = '/' . \Drupal::theme()->getActiveTheme()->getPath() . '/logo.svg';
 
-  // Pass the current year for copyright.
-  // $variables['current_year'] = date('Y');
+  $partners = theme_get_setting('footer_partners') ?: [];
+  $variables['footer_partners'] = [];
 
-  // Optional: Pass a footer-specific logo if different from main logo.
-  // $variables['footer_logo'] = '/' . \Drupal::theme()->getActiveTheme()->getPath() . '/logo.svg';
+  foreach ($partners as $partner) {
+    $image_url = '';
+    $fid = is_array($partner['image_fid']) ? reset($partner['image_fid']) : ($partner['image_fid'] ?? NULL);
+    if ($fid && $file = File::load($fid)) {
+      $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
+    }
+
+    $variables['footer_partners'][] = [
+      'name' => $partner['name'] ?? '',
+      'image' => $image_url,
+      'link' => $partner['link'] ?? '',
+      'weight' => $partner['weight'] ?? 0,
+    ];
+  }
+
+  usort($variables['footer_partners'], fn($a, $b) => $a['weight'] <=> $b['weight']);
+
+  $variables['footer_social_links'] = theme_get_setting('footer_social_links') ?: [];
+  usort($variables['footer_social_links'], fn($a, $b) => ($a['weight'] ?? 0) <=> ($b['weight'] ?? 0));
 }
 
 /**
  * Implements hook_preprocess_HOOK() for node.html.twig.
  */
 function sacda_test_preprocess_node(array &$variables): void {
-
 }
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter() for page templates.
  */
 function sacda_test_theme_suggestions_page_alter(array &$suggestions, array $variables): void {
-  // Add page template suggestions based on content type.
-  // if ($node = \Drupal::routeMatch()->getParameter('node')) {
-  //   if (is_object($node)) {
-  //     $suggestions[] = 'page__' . $node->bundle();
-  //   }
-  // }
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    $suggestions[] = 'page__landing';
+  }
 }
