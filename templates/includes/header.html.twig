@@ -16,7 +16,7 @@
 {% set secondary = secondary_color|default('#414042') %}
 {% set light = light_color|default('#FFEDC2') %}
 
-<header role="navigation" aria-label="Main navigation" class="sacda-header relative top-0 z-999 mb-2 flex flex-col items-center justify-between bg-white px-10 pt-9 pb-6 font-semibold text-black shadow-md md:flex-row lg:flex-row" style="--sacda-primary-color: {{ primary }}; --sacda-secondary-color: {{ secondary }}; --sacda-light-color: {{ light }};">
+<header role="navigation" aria-label="Main navigation" class="sacda-header relative top-0 z-500 mb-2 flex flex-col items-center justify-between bg-white px-10 pt-9 pb-6 font-semibold text-black shadow-md md:flex-row lg:flex-row" style="--sacda-primary-color: {{ primary }}; --sacda-secondary-color: {{ secondary }}; --sacda-light-color: {{ light }};">
 	<div class="w-full md:w-fit lg:w-fit flex justify-between items-center md:block lg:block">
 		<a href="{{ path('<front>') }}">
 			{% if logo %}

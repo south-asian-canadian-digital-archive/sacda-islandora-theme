@@ -48,13 +48,12 @@ export default defineConfig({
       entry: getEntries(resolve(__dirname, 'src')),
       formats: ['es'],
       // use the entry key when naming the output file
-      fileName: (format, entryName) => `${entryName}/${entryName}.${format}.js`
+      fileName: (_format, entryName) => `${entryName}/${entryName}.js`
     },
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === 'style.css') return 'style.css';
-          // Try to use a fixed pattern if name corresponds to package name
           return '[name]/[name].[ext]';
         }
       }

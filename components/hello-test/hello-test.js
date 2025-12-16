@@ -963,6 +963,9 @@ function component_root(o) {
 		}) : (destroy_effect(F), I(void 0));
 	});
 }
+function effect(o) {
+	return create_effect(4, o, !1);
+}
 function async_effect(o) {
 	return create_effect(4194304 | EFFECT_PRESERVED, o, !0);
 }
@@ -1387,6 +1390,15 @@ function html(F, I, L = !1, R = !1, z = !1) {
 		}
 	});
 }
+function append_styles(o, F) {
+	effect(() => {
+		var I = o.getRootNode(), L = I.host ? I : I.head ?? I.ownerDocument.head;
+		if (!L.querySelector("#" + F.hash)) {
+			let o = document.createElement("style");
+			o.id = F.hash, o.textContent = F.code, L.appendChild(o);
+		}
+	});
+}
 var is_store_binding = !1;
 function capture_store_binding(o) {
 	var F = is_store_binding;
@@ -1622,9 +1634,12 @@ function create_custom_element(o, F, I, L, R, H) {
 		} });
 	}), H && (U = H(U)), o.element = U, U;
 }
-var layout_default = "h2{color:green}", root = /* @__PURE__ */ from_html("<h1> </h1> <h2>Shared Style Test</h2> <!>", 1);
-function Hello(o, F) {
-	push(F, !0);
+var layout_default = "#shared-style-test{color:green}", root = /* @__PURE__ */ from_html("<h1> </h1> <h2 id=\"shared-style-test\">Shared Style Test</h2> <h2 id=\"svelte-file-test\" class=\"svelte-13vjzse\">Svelte File Test</h2> <h2 id=\"same-dir-css-test\">Same Dir CSS Test</h2> <!>", 1), $$css = {
+	hash: "svelte-13vjzse",
+	code: "#svelte-file-test.svelte-13vjzse {color:red;}"
+};
+function Hello_test(o, F) {
+	push(F, !0), append_styles(o, $$css);
 	let I = prop(F, "name", 7, "World");
 	var L = {
 		get name() {
@@ -1634,6 +1649,6 @@ function Hello(o, F) {
 			I(o), flushSync();
 		}
 	}, R = root(), z = first_child(R), B = child(z);
-	return reset(z), html(sibling(z, 4), () => `<style>${layout_default}</style>`), template_effect(() => set_text(B, `Hello ${I() ?? ""}!`)), append(o, R), pop(L);
+	return reset(z), html(sibling(z, 8), () => `<style>${layout_default}</style>`), template_effect(() => set_text(B, `Hello ${I() ?? ""}!`)), append(o, R), pop(L);
 }
-customElements.define("hello-test", create_custom_element(Hello, { name: {} }, [], [], !0));
+customElements.define("hello-test", create_custom_element(Hello_test, { name: {} }, [], [], !0));

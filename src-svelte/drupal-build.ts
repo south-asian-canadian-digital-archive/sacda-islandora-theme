@@ -20,24 +20,14 @@ export function drupalSdcGenerator(options: { src: string }): Plugin {
 			for (const item of items) {
 				const componentSrcDir = join(srcPath, item);
 
-				// Skip files, only process directories
 				if (!statSync(componentSrcDir).isDirectory()) continue;
-
-				// Check if it's a component (has main.ts)
-				// Adjust this check if your criteria for "component directory" differs
 				if (!existsSync(join(componentSrcDir, 'main.ts'))) continue;
 
-				// Target directory in dist
 				const componentOutputDir = join(outDir, item);
+				// Vite usually creates this directory if entry exists
+				if (!existsSync(componentOutputDir)) continue;
 
-				// Ensure output dir exists (it should if build worked, but for safety)
-				if (!existsSync(componentOutputDir)) {
-					// If build didn't create it, we probably shouldn't either, 
-					// but let's be safe. If main.ts existed, vite should have built it.
-					continue;
-				}
 
-				// 1. Process .component.yml
 				const ymlFileName = `${item}.component.yml`;
 				const srcYmlPath = join(componentSrcDir, ymlFileName);
 				const distYmlPath = join(componentOutputDir, ymlFileName);
@@ -53,31 +43,34 @@ export function drupalSdcGenerator(options: { src: string }): Plugin {
 
 					let jsSection = '';
 					if (jsFiles.length > 0) {
-						jsSection = 'library:\n  js:\n';
+						jsSection = 'js:\n';
 						jsFiles.forEach((f) => {
-							jsSection += `    ${f}: { attributes: { defer: true } }\n`;
+							jsSection += `  ${f}: {}\n`;
 						});
 					}
 
 					let cssSection = '';
 					if (cssFiles.length > 0) {
-						if (!jsSection) jsSection = 'library:\n'; // Ensure library key exists if no JS
-						cssSection = '  css:\n    component:\n';
+						cssSection = 'css:\n';
 						cssFiles.forEach((f) => {
-							cssSection += `      ${f}: {}\n`;
+							cssSection += `  ${f}: {}\n`;
 						});
 					}
 
 					const defaultYml = `$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
-name: ${item.charAt(0).toUpperCase() + item.slice(1)}
-status: experimental
-group: custom
-${jsSection}${cssSection}`;
+name: ${item}
+
+${jsSection}${cssSection}
+# props:
+#   type: object
+#   additionalProperties: false
+#   properties: {}
+`;
 					writeFileSync(distYmlPath, defaultYml);
 					console.log(`[drupal-sdc] Generated ${ymlFileName}`);
 				}
 
-				// 2. Process .twig
+
 				const twigFileName = `${item}.twig`;
 				const srcTwigPath = join(componentSrcDir, twigFileName);
 				const distTwigPath = join(componentOutputDir, twigFileName);
