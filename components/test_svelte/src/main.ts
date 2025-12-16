@@ -7,3 +7,5 @@ const app = mount(App, {
 })
 
 export default app
+
+// export { default } from './App.svelte';
