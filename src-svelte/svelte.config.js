@@ -1,5 +1,5 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
-import adapter from '@sveltejs/adapter-auto'
+// import adapter from '@sveltejs/adapter-auto'
 
 /** @type {import("@sveltejs/vite-plugin-svelte").SvelteConfig} */
 export default {
@@ -9,8 +9,8 @@ export default {
   compilerOptions: {
     customElement: true,
   },
-  kit: {
-    adapter: adapter(),
-    "@/*": "./src/lib/*"
-  }
+  // kit: {
+  //   adapter: adapter(),
+  //   "@/*": "./src/lib/*"
+  // }
 }

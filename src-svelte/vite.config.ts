@@ -41,7 +41,11 @@ export default defineConfig({
     svelte({ compilerOptions: { customElement: true } }),
     drupalSdcGenerator({ src: 'src' })
   ],
-
+  resolve: {
+    alias: {
+      $lib: resolve("./src/lib"),
+    },
+  },
   build: {
     outDir: resolve(__dirname, '../components'),
     emptyOutDir: false,
