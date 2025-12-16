@@ -1,7 +1,7 @@
 <svelte:options customElement="hello-test" />
 
 <script>
-  import globalStyles from "../layout.css?inline";
+  import globalStyles from "../app.css?inline";
   let { name = "World" } = $props();
 </script>
 
