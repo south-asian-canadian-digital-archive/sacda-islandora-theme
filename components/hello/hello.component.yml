@@ -1,0 +1,10 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+name: Hello
+status: experimental
+group: custom
+library:
+  js:
+    hello.es.js: { attributes: { defer: true } }
+  css:
+    component:
+      hello.css: {}

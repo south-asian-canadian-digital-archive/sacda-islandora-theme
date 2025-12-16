@@ -4,9 +4,9 @@
   "scripts": {
     "livereload": "livereload --exclusions node_modules/ --exts 'css,js,twig,theme,apng,avif,gif,jpg,jpeg,jfif,pjpeg,pjp,png,svg,webp'",
     "tailwind": "tailwindcss -i ./css/main.css -o ./dist/main.css --watch",
-    "dev": "concurrently \"pnpm run tailwind\" \"pnpm run livereload\"",
-    "build:components": "find components -maxdepth 1 -mindepth 1 -type d -exec sh -c 'cd \"{}\" && pnpm build' \\;"
-
+    "dev:twig": "concurrently \"pnpm run tailwind\" \"pnpm run livereload\"",
+    "dev:svelte": "cd src-svelte && pnpm build --watch",
+    "dev": "concurrently \"pnpm run dev:twig\" \"pnpm run dev:svelte\""
   },
   "devDependencies": {
     "concurrently": "^9.1.0",

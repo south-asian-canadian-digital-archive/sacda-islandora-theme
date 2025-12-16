@@ -1,4 +1,5 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+// import adapter from '@sveltejs/adapter-auto'
 
 /** @type {import("@sveltejs/vite-plugin-svelte").SvelteConfig} */
 export default {
@@ -7,8 +8,8 @@ export default {
   preprocess: vitePreprocess(),
   compilerOptions: {
     customElement: true,
-    // outputFilename: 'assets/index.js',
-    // cssOutputFilename: 'assets/index.css',
-    
   },
+  // kit: {
+  //   adapter: adapter()
+  // }
 }
