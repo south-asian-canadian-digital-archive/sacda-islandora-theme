@@ -1,7 +1,7 @@
 <svelte:options customElement="hello-test" />
 
 <script>
-  import styles from "../layout.css?inline";
+  import globalStyles from "../layout.css?inline";
   let { name = "World" } = $props();
 </script>
 
@@ -11,7 +11,7 @@
 <h2 id="svelte-file-test">Svelte File Test</h2>
 <h2 id="same-dir-css-test">Same Dir CSS Test</h2>
 
-{@html `<style>${styles}</style>`}
+{@html `<style>${globalStyles}</style>`}
 
 <style>
   #svelte-file-test {

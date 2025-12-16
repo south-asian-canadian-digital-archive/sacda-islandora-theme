@@ -5,7 +5,7 @@ import { readdirSync, statSync } from 'fs'
 import { drupalSdcGenerator } from './drupal-build'
 
 
-const IGNORE_DIR = ['lib'];
+const IGNORE_DIR = ['lib', 'layout'];
 
 function getEntries(srcPath: string) {
   const entries: Record<string, string> = {};
