@@ -7,15 +7,14 @@ core_version_requirement: ^10
 libraries:
   - sacda_test/global
 regions:
-  header: 'Header'
-  menu_top: 'Top menu'
-  menu_bottom: 'Primary menu'
+  header: "Header"
+  menu_top: "Top menu"
+  menu_bottom: "Primary menu"
 
-  breadcrumb: 'Breadcrumb'
-  content: 'Content'
+  breadcrumb: "Breadcrumb"
+  content: "Content"
 
-  sidebar_first: 'Sidebar first'
-  sidebar_second: 'Sidebar second'
+  sidebar_first: "Sidebar first"
+  sidebar_second: "Sidebar second"
 
-  footer: 'Footer'
-  
+  footer: "Footer"

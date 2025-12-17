@@ -1,5 +1,5 @@
 ---
-applyTo: '**'
+trigger: always_on
 ---
 
 # Islandora/drupal docker context

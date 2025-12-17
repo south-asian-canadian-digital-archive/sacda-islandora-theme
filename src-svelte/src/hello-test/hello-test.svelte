@@ -2,6 +2,8 @@
 
 <script>
   import globalStyles from "../app.css?inline";
+  const styles = `<style>${globalStyles}</style>`;
+
   let { name = "World" } = $props();
 </script>
 
@@ -11,7 +13,7 @@
 <h2 id="svelte-file-test">Svelte File Test</h2>
 <h2 id="same-dir-css-test">Same Dir CSS Test</h2>
 
-{@html `<style>${globalStyles}</style>`}
+{@html styles}
 
 <style>
   #svelte-file-test {

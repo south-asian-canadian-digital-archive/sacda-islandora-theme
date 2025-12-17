@@ -25,7 +25,7 @@ function getEntries(srcPath: string) {
         if (statSync(mainPath).isFile()) {
           entries[item] = mainPath;
         }
-      } catch(e) {
+      } catch (e) {
         // file does not exist
       }
     }

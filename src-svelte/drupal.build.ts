@@ -90,7 +90,7 @@ ${jsSection}${cssSection}
 						}
 					}
 
-					const defaultTwig = `<${tagName} />`;
+					const defaultTwig = `<${tagName}></${tagName}>`;
 					writeFileSync(distTwigPath, defaultTwig);
 					console.log(`[drupal-sdc] Generated ${twigFileName}`);
 				}
