@@ -53,7 +53,10 @@ export default defineConfig({
 
     lib: {
       // map each entry to its desired bundle name
-      entry: getEntries(resolve(__dirname, 'src')),
+      entry: {
+        ...getEntries(resolve(__dirname, 'src')),
+        'styles': resolve(__dirname, 'src/styles.ts')
+      },
 
       formats: ['es'],
 
@@ -67,8 +70,8 @@ export default defineConfig({
           if (assetInfo.name === 'style.css') return 'style.css';
 
           return '[name]/[name].[ext]';
-        }
-      }
+        },
+      },
     }
   }
 });

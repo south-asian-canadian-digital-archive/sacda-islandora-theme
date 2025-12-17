@@ -18,6 +18,8 @@ export function drupalSdcGenerator(options: { src: string }): Plugin {
 			const items = readdirSync(srcPath);
 
 			for (const item of items) {
+				if (item === 'styles') continue; // Handled separately
+
 				const componentSrcDir = join(srcPath, item);
 
 				if (!statSync(componentSrcDir).isDirectory()) continue;
@@ -93,6 +95,29 @@ ${jsSection}${cssSection}
 					const defaultTwig = `<${tagName}></${tagName}>`;
 					writeFileSync(distTwigPath, defaultTwig);
 					console.log(`[drupal-sdc] Generated ${twigFileName}`);
+				}
+			}
+
+			// Handle global styles
+			const stylesDir = join(outDir, 'styles');
+			if (existsSync(stylesDir)) {
+				const styleFile = join(stylesDir, 'styles.css');
+				if (existsSync(styleFile)) {
+					// Destination: root/css/svelte/main.css
+					// outDir is root/components. So we need resolved path.
+					// Let's assume outDir is absolute or we use join(outDir, '../css/svelte').
+					// Since Vite config sets outDir using resolve(__dirname, '../components'), it is absolute.
+					const cssDestDir = join(outDir, '../css/svelte');
+
+					// Ensure directory exists
+					if (!existsSync(cssDestDir)) {
+						// Basic recursive mkdir using fs
+						const { mkdirSync } = require('fs');
+						mkdirSync(cssDestDir, { recursive: true });
+					}
+
+					copyFileSync(styleFile, join(cssDestDir, 'main.css'));
+					console.log(`[drupal-sdc] Generated css/svelte/main.css`);
 				}
 			}
 		}

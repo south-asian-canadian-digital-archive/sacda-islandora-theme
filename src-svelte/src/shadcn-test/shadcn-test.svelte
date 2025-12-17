@@ -1,3 +1,5 @@
+<svelte:options customElement="shadcn-test" />
+
 <script lang="ts">
   import * as NavigationMenu from "$lib/components/ui/navigation-menu/index.js";
   import { cn } from "$lib/utils.js";
@@ -60,8 +62,6 @@
     content: string;
   };
 </script>
-
-<svelte:options customElement="shadcn-test" />
 
 {#snippet ListItem({
   title,
