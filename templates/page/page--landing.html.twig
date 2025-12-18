@@ -10,38 +10,4 @@
 * - page: Full page object with regions.
 */
 #}
-<div class="">
-
-	{% include '@sacda_test/includes/header.html.twig' %}
-
-	<main role="main" class="main-content">
-		<a id="main-content" tabindex="-1"></a>
-		{# link is in html.html.twig #}
-
-		<div class="layout-content">
-			{{ page.content }}
-
-			{{ include('sacda_test:shadcn-test') }}
-
-			{{ include('sacda_test:hello-test') }}
-
-
-		</div>
-
-		{% if page.sidebar_first %}
-			<aside class="layout-sidebar-first" role="complementary">
-				{{ page.sidebar_first }}
-			</aside>
-		{% endif %}
-
-		{% if page.sidebar_second %}
-			<aside class="layout-sidebar-second" role="complementary">
-				{{ page.sidebar_second }}
-			</aside>
-		{% endif %}
-
-	</main>
-
-	{% include '@sacda_test/includes/footer.html.twig' %}
-
-</div>
+<div id="svelte-landing-page-mount"></div>
