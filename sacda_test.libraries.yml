@@ -3,5 +3,5 @@ global:
   # js:
   #   js/sacda-test.js: {}
   css:
-    theme:
+    theme: 
       dist/main.css: {}

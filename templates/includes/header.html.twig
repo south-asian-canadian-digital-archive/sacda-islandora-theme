@@ -47,22 +47,13 @@
 </header>
 
 <style>
-	/* SACDA Header Component Styles */
-	.sacda-header {
-		--sacda-primary-color: #F99D2A;
-		--sacda-secondary-color: #414042;
-		--sacda-light-color: #FFEDC2;
-	}
+	@source "../../css/main.css";
 
-	.sacda-header * {
-		box-sizing: border-box;
-	}
-
+	/* Breakpoint-specific styles that need CSS for is-open state toggle */
 	#sacda-nav-content {
 		max-height: 0;
 		overflow: hidden;
 		transition: max-height 0.2s ease-in-out;
-		flex-direction: column;
 	}
 
 	#sacda-nav-content.is-open {
@@ -78,30 +69,13 @@
 		}
 	}
 
-	/* Navigation Links */
+	/* Navigation Links - hover state with custom property */
 	.sacda-header .sacda-nav-list .sacda-nav-item .sacda-nav-link {
-		border-bottom-width: 2px;
-		border-bottom-color: transparent;
-		padding-bottom: 0.25rem;
-		transition-property: all;
-		transition-duration: 200ms;
-		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-		text-decoration: none;
-		display: inline-block;
-		color: #000;
-		font-weight: 600;
+		@apply border-b-2 border-transparent pb-1 transition-all duration-200 ease-in-out no-underline inline-block text-black font-semibold;
 	}
 
 	.sacda-header .sacda-nav-list .sacda-nav-item .sacda-nav-link:hover {
-		color: #000000 !important;
-		border-bottom-color: var(--sacda-primary-color) !important;
-	}
-
-	/* Mobile Toggle */
-	.sacda-header .sacda-mobile-nav-toggle {
-		position: absolute;
-		right: 1rem;
-		padding: 2rem 1rem 1rem;
+		@apply border-b-2 border-primary-color;
 	}
 </style>
 

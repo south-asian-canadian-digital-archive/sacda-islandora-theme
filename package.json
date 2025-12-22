@@ -1,20 +1,18 @@
 {
   "name": "sacda_test",
   "private": true,
+  "type": "module",
   "scripts": {
-    "livereload": "livereload --exclusions node_modules/ --exts 'css,js,twig,theme,apng,avif,gif,jpg,jpeg,jfif,pjpeg,pjp,png,svg,webp'",
-    "tailwind:watch": "tailwindcss -i ./css/main.css -o ./dist/main.css --watch",
-    "dev:twig": "concurrently \"pnpm run tailwind:watch\" \"pnpm run livereload\"",
-    "dev:svelte": "cd src-svelte && pnpm build --watch && cd ../..",
-    "build:svelte": "cd src-svelte && pnpm build && cd ../..",
-    "dev": "concurrently \"pnpm run dev:twig\" \"pnpm run dev:svelte\""
+    "dev": "concurrently \"vite build --watch\" \"pnpm run livereload\"",
+    "build": "vite build",
+    "livereload": "livereload --exclusions node_modules/,dist/ --exts 'css,js,twig,theme,apng,avif,gif,jpg,jpeg,jfif,pjpeg,pjp,png,svg,webp'"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.17",
     "concurrently": "^9.1.0",
-    "livereload": "^0.9.3"
-  },
-  "dependencies": {
-    "@tailwindcss/cli": "^4.1.17",
-    "tailwindcss": "^4.1.17"
+    "livereload": "^0.9.3",
+    "tailwindcss": "^4.1.17",
+    "tw-animate-css": "^1.4.0",
+    "vite": "^6.0.6"
   }
 }

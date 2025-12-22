@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * SACDA theme's page template - overrides Olivero to use custom header/footer.
+ * Keeps the main content area intact from Olivero.
+ */
+#}
+
+<div id="page-wrapper" class="page-wrapper">
+	<div
+		id="page">
+
+		{# =====================================================
+		       CUSTOM HEADER - Replaces Olivero's header
+		       ===================================================== #}
+		{% include '@sacda_test/includes/header.html.twig' %}
+
+		{# =====================================================
+		       MAIN CONTENT - Kept from Olivero
+		       ===================================================== #}
+		<div id="main-wrapper" class="layout-main-wrapper layout-container">
+			<div id="main" class="layout-main">
+				<div class="main-content">
+					<a id="main-content" tabindex="-1"></a>
+					{{ page.hero }}
+					<div class="main-content__container container">
+						{{ page.highlighted }}
+						{{ page.breadcrumb }}
+
+						{% if page.sidebar %}
+							<div class="sidebar-grid grid-full">
+								<main role="main" class="site-main">
+									{{ page.content_above }}
+									{{ page.content }}
+								</main>
+
+								{{ page.sidebar }}
+							</div>
+						{% else %}
+							<main role="main">
+								{{ page.content_above }}
+								{{ page.content }}
+							</main>
+						{% endif %}
+						{{ page.content_below }}
+					</div>
+				</div>
+				<div class="social-bar">
+					{{ page.social }}
+				</div>
+			</div>
+		</div>
+
+		{# =====================================================
+		       CUSTOM FOOTER - Replaces Olivero's footer
+		       ===================================================== #}
+		{% include '@sacda_test/includes/footer.html.twig' %}
+
+		<div class="overlay" data-drupal-selector="overlay"></div>
+
+	</div>
+</div>

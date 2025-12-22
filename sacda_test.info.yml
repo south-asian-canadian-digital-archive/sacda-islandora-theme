@@ -2,19 +2,25 @@ name: sacda_test
 type: theme
 base theme: olivero
 description: test
-package: Custom
 core_version_requirement: ^10
 libraries:
   - sacda_test/global
+# libraries-override:
+#   olivero/global-styling: sacda_test/global
+libraries-override:
+  olivero/global-styling:
+    css:
+      base:
+        css/base/base.css: false 
 regions:
-  header: "Header"
+  # header: "Header"
   menu_top: "Top menu"
   menu_bottom: "Primary menu"
 
-  breadcrumb: "Breadcrumb"
+  # breadcrumb: "Breadcrumb"
   content: "Content"
 
-  sidebar_first: "Sidebar first"
-  sidebar_second: "Sidebar second"
+  # sidebar_first: "Sidebar first"
+  # sidebar_second: "Sidebar second"
 
   footer: "Footer"

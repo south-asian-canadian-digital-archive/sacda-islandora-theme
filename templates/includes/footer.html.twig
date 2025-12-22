@@ -31,8 +31,8 @@
 	<div class="">
  	<div class="flex flex-row items-center gap-5 pb-3">
  		{% for partner in footer_partners %}
-			<a href="{{ partner.link }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center h-10 min-w-0">
-				<img src="{{ partner.image }}" alt="{{ partner.name }}" class="block" style="height: 2.5rem;" />
+			<a href="{{ partner.link }}" target="_blank" rel="noopener noreferrer" class="flex items-center h-10 min-w-0">
+				<img src="{{ partner.image }}" alt="{{ partner.name }}" class="h-10!" />
 			</a>
  		{% endfor %}
  	</div>
@@ -65,16 +65,9 @@
 
 	{# Copyright section #}
 	<div class="absolute bottom-6 w-full self-center text-center text-sm text-white md:w-fit md:self-start lg:w-fit lg:self-start">
-		<div class="flex w-full items-center justify-center md:hidden lg:hidden">
-			<p class="w-fit border-t border-t-[#ffce34] pb-1 text-lg font-bold text-transparent">
-				GET IN TOUCH
-			</p>
-		</div>
-
 		<a href="https://sacda.ca/policy/takedown">Statement of Use and Takedown Policy</a>
 		|
 		<a href="https://sacda.ca/index.php/About/media" class="">Media</a>		
 		&copy; {{ current_year|default('now'|date('Y')) }} {{ site_name|default('South Asian Canadian Digital Archive') }}. All rights reserved.
-
 	</div>
 </footer>

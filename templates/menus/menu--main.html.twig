@@ -33,20 +33,16 @@
 {% endmacro %}
 
 <style>
-	/* Main nav list - responsive layout */
+	/* Breakpoint-specific layout - responsive gap */
 	@media all and(min-width: 48rem) {
 		.sacda-nav-list {
-			display: flex;
-			flex-direction: row;
 			gap: 1.5rem;
 		}
 	}
 
-	/* Nav link hover effect */
+	/* Nav link hover effect - requires CSS variable */
 	.sacda-nav-link:hover,
 	.sacda-nav-link:focus {
-		color: #000000;
 		border-bottom-color: var(--sacda-primary, #F99D2A) !important;
-		text-decoration: none;
 	}
 </style>

@@ -22,7 +22,7 @@
 {% set heading_id = attributes.id ~ '-menu'|clean_id %}
 
 <nav
-	{{ attributes .addClass('sacda-main-nav') .setAttribute('aria-labelledby', heading_id) .setAttribute('role', 'navigation') }} style="display: contents;">
+	{{ attributes .addClass('sacda-main-nav', 'contents') .setAttribute('aria-labelledby', heading_id) .setAttribute('role', 'navigation') }}>
 	{# Label - visually hidden but available for screen readers #}
 	{% if not configuration.label_display %}
 		{% set title_attributes = title_attributes.addClass('sr-only') %}
