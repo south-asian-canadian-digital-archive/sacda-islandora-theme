@@ -1,10 +1,34 @@
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { globSync } from 'glob';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Find all CSS files in src/css/ (exclude partials starting with _)
+// Files imported by other CSS files should be prefixed with _
+const cssFiles = globSync('src/css/**/[!_]*.css').reduce(
+	(entries, file) => {
+		const name = file.replace('src/css/', '').replace('.css', '');
+		entries[name] = resolve(__dirname, file);
+		return entries;
+	},
+	{} as Record<string, string>
+);
+
+// Find all JS/TS files in src/js/
+const jsFiles = globSync('src/js/**/*.{js,ts,mjs,mts}').reduce(
+	(entries, file) => {
+		const name = file.replace('src/js/', '').replace(/\.(m?[jt]s)$/, '');
+		entries[name] = resolve(__dirname, file);
+		return entries;
+	},
+	{} as Record<string, string>
+);
 
 export default defineConfig({
 	plugins: [tailwindcss()],
-
 	build: {
 		outDir: 'dist',
 		emptyOutDir: true,
@@ -12,8 +36,8 @@ export default defineConfig({
 		minify: process.env.NODE_ENV === 'production',
 		rollupOptions: {
 			input: {
-				main: resolve(__dirname, 'css/main.css'),
-				// app: resolve(__dirname, 'js/app.js'),
+				...cssFiles,
+				...jsFiles,
 			},
 			output: {
 				// Keep consistent filenames (no hashes) for Drupal

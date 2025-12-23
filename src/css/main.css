@@ -1,7 +1,7 @@
 @import url("https://use.typekit.net/vns2lps.css");
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "./base.css";
+@import "./_base.css";
 
 @source "../templates/**/*.twig";
 @source "../templates/**/*.html";

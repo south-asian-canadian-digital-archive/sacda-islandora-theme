@@ -1,7 +1,7 @@
-# Main theme library.
+# Main theme library (auto-generated - do not edit manually)
 global:
-  # js:
-  #   js/sacda-test.js: {}
+  js:
+    dist/search.util.js: {}
   css:
-    theme: 
+    theme:
       dist/main.css: {}
