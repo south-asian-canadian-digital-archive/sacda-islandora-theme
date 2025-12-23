@@ -31,8 +31,18 @@
 
 	<div
 		id="sacda-nav-content" class="sacda-nav-content w-full md:w-auto flex flex-col items-start md:items-end gap-6 md:gap-4 pt-6 md:pt-0">
-		{# Account menu #}
-		<div class="sacda-menu-top">
+		{# Account menu with search #}
+		<div class="sacda-menu-top flex items-center gap-4">
+			<form class="flex" role="search" id="sacda-header-search">
+				<div class="flex border border-foreground">
+					<input type="text" class="w-48 h-10 px-3 bg-transparent text-foreground placeholder:text-muted-foreground outline-none" id="sacda-search-input" placeholder="Search" name="search" autocomplete="off">
+					<button type="submit" class="h-10 w-10 flex items-center justify-center bg-foreground text-primary cursor-pointer">
+						<svg class="w-5 h-5" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</button>
+				</div>
+			</form>
 			{{ page.menu_top }}
 		</div>
 		<div class="sacda-menu-bottom flex flex-col md:flex-row">{{ page.menu_bottom }}</div>
@@ -102,6 +112,21 @@
 	.sacda-header .sacda-nav-list .sacda-nav-item .sacda-nav-link:hover {
 		@apply border-b-2 border-primary;
 	}
+
+	/* temp, to overide olivero styles */
+	#sacda-search-input {
+		width: 12rem;
+		max-width: none;
+		min-height: auto;
+		border: none;
+		border-radius: 0;
+		background: transparent;
+	}
+	#sacda-search-input:focus {
+		border: none;
+		outline: none;
+		box-shadow: none;
+	}
 </style>
 
 <script>
@@ -111,11 +136,7 @@ var nav = document.getElementById('sacda-nav-content');
 var iconMenu = toggle ? toggle.querySelector('.icon-menu') : null;
 var iconClose = toggle ? toggle.querySelector('.icon-close') : null;
 
-if (! toggle || ! nav) 
-return;
-
-
-
+if (toggle && nav) {
 toggle.addEventListener('click', function () {
 var expanded = this.getAttribute('aria-expanded') === 'true';
 this.setAttribute('aria-expanded', String(! expanded));
@@ -125,5 +146,19 @@ iconMenu.classList.toggle('sacda-hide');
 iconClose.classList.toggle('sacda-hide');
 }
 });
+}
+
+var searchForm = document.getElementById('sacda-header-search');
+var searchInput = document.getElementById('sacda-search-input');
+
+if (searchForm && searchInput) {
+searchForm.addEventListener('submit', function (e) {
+e.preventDefault();
+var term = searchInput.value.trim();
+if (term && window.sacdaSearch && window.sacdaSearch.generateIslandoraUrl) {
+window.location.href = window.sacdaSearch.generateIslandoraUrl(term);
+}
+});
+}
 })();
 </script>

@@ -6,7 +6,7 @@ interface SearchConfig {
   field?: string;
   /** The comparison operator (default: "IS") */
   operator?: string;
-  /** The base domain (default: "https://islandora.dev") */
+  /** The base domain (default: window.location.origin) */
   baseUrl?: string;
   /** The search path (default: "/search") */
   path?: string;
@@ -14,15 +14,15 @@ interface SearchConfig {
 
 /**
  * Generates a correctly formatted Islandora search URL.
- * * @param term - The keyword or phrase to search for.
+ * @param term - The keyword or phrase to search for.
  * @param config - Optional configuration for field, operator, and base URL.
  * @returns The fully constructed URL string.
  */
-const generateIslandoraUrl = (term: string, config: SearchConfig = {}): string => {
+export const generateIslandoraUrl = (term: string, config: SearchConfig = {}): string => {
   const {
     field = 'all',
     operator = 'IS',
-    baseUrl = 'https://islandora.dev',
+    baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://islandora.dev',
     path = '/search'
   } = config;
 
@@ -40,3 +40,13 @@ const generateIslandoraUrl = (term: string, config: SearchConfig = {}): string =
 
   return url.toString();
 };
+
+declare global {
+  interface Window {
+    sacdaSearch: { generateIslandoraUrl: typeof generateIslandoraUrl };
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.sacdaSearch = { generateIslandoraUrl };
+}
