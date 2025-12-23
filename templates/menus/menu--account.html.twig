@@ -3,14 +3,15 @@
  * @file
  * Custom menu template for account menu in SACDA theme.
  * Refactored to use a profile icon trigger with a dropdown menu.
+ * Consolidated to include semantic nav wrapper.
  */
 #}
 {% import _self as menus %}
 
-<div class="relative inline-block text-left sacda-account-menu-wrapper">
+<nav class="relative inline-block text-left sacda-account-menu-wrapper" aria-label="Account menu">
 	<button type="button" class="flex items-center justify-center p-2 cursor-pointer rounded-full hover:bg-gray-100 focus:outline-none transition-colors duration-200" id="sacda-account-menu-button" aria-expanded="false" aria-haspopup="true">
 		<span class="sr-only">Open account menu</span>
-		<svg class="h-8 w-8 text-gray-700" width="32" height="32" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+		<svg class="h-8 w-8 text-secondary" width="32" height="32" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
 		</svg>
 	</button>
@@ -18,7 +19,7 @@
 	<div id="sacda-account-dropdown" class="absolute right-0 mt-2 min-w-48 whitespace-nowrap rounded-md shadow-lg bg-(--sacda-primary-color) focus:outline-none hidden z-50">
 		{{ menus.menu_links(items, attributes, 0) }}
 	</div>
-</div>
+</nav>
 
 {% macro menu_links(items, attributes, menu_level) %}
 	{% import _self as menus %}

@@ -32,7 +32,7 @@
     <div class="flex flex-row items-center gap-5 pb-3">
       {% if footer_partners is not empty %}
         {% for partner in footer_partners %}
-          <a href="{{ partner.link }}" target="_blank" rel="noopener noreferrer" class="flex items-center h-10 min-w-0">
+          <a href="{{ partner.link }}" target="_blank" rel="noopener noreferrer" class="flex items-center h-16 min-w-0">
             <img src="{{ partner.image }}" alt="{{ partner.name }}" class="h-16!" />
           </a>
         {% endfor %}
@@ -41,11 +41,11 @@
   </div>
 
   <div class="flex flex-col gap-4 text-background md:w-fit lg:w-fit">
-    <p class="w-fit border-b border-b-secondary pb-1 text-lg font-bold uppercase md:self-end lg:self-end">
+		<p class="w-fit border-b border-b-secondary pb-1 text-lg font-bold uppercase self-center md:self-end">
 			GET IN TOUCH
 		</p>
 
-		<div class="flex flex-row gap-3 justify-end">
+		<div class="flex flex-row gap-3 justify-center md:justify-end">
 			{% if footer_social_links is not empty %}
 				{% for social in footer_social_links %}
 					{% if social.link %}

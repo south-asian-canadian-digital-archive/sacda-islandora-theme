@@ -11,7 +11,10 @@ libraries-override:
   olivero/global-styling:
     css:
       base:
-        css/base/base.css: false 
+        css/base/base.css: false
+      layout:
+        css/layout/region.css: false
+
 regions:
   # header: "Header"
   menu_top: "Top menu"

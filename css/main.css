@@ -1,6 +1,6 @@
+@import url("https://use.typekit.net/vns2lps.css");
 @import "tailwindcss";
 @import "tw-animate-css";
-@import url("https://use.typekit.net/vns2lps.css");
 @import "./base.css";
 
 @source "../templates/**/*.twig";
@@ -177,7 +177,7 @@
 		padding: 0;
 	}
 
-	main.main-content {
+	.main-content {
 		min-height: 60vh;
 	}
 	/* body {
@@ -197,37 +197,13 @@
    ===================================================== */
 
 /* Hide Drupal contextual links in header/footer */
-.sacda-header .contextual,
+/* .sacda-header .contextual,
 .sacda-footer .contextual {
 	display: none;
-}
+} */
 
 /* Reset region wrappers to not affect layout */
-.sacda-header .region,
+/* .sacda-header .region,
 .sacda-footer .region {
 	display: contents;
-}
-
-/* =====================================================
-   SACDA Footer Component Styles
-   ===================================================== */
-
-/* .sacda-footer {
-	--sacda-accent-color: var(--secondary);
-	background-color: var(--foreground) !important;
-}
-
-.sacda-footer p {
-	color: var(--background);
-	font-weight: 700;
-}
-
-.sacda-footer a {
-	color: var(--background);
-	text-decoration: none;
-	transition: color 0.2s ease-in-out;
-}
-
-.sacda-footer a:hover {
-	color: var(--sacda-accent-color);
 } */

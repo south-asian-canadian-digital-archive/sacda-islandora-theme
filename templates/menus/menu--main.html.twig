@@ -3,6 +3,7 @@
  * @file
  * Custom menu template for main navigation in SACDA theme.
  * Uses Tailwind classes with inline styles for hover effects.
+ * Consolidated to include semantic nav wrapper.
  *
  * Available variables:
  * - menu_name: The machine name of the menu.
@@ -12,7 +13,9 @@
 #}
 {% import _self as menus %}
 
-{{ menus.menu_links(items, attributes, 0) }}
+<div class="sacda-main-menu flex items-center justify-end m-0!" role="navigation" aria-label="{{ menu_name ? menu_name|capitalize : 'Main' }} navigation">
+	{{ menus.menu_links(items, attributes, 0) }}
+</div>
 
 {% macro menu_links(items, attributes, menu_level) %}
 	{% import _self as menus %}
