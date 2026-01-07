@@ -6,3 +6,4 @@ global:
   css:
     theme:
       dist/main.css: {}
+      dist/styles.css: {}
