@@ -1,19 +1,45 @@
 <?php
+
 /**
- * Drush script: import sponsor images and update theme settings.
- *
- * Usage (from Drupal project root):
- *   drush scr themes/custom/sacda-test-islandora-theme/scripts/import_sponsors.php
- *
- * What it does:
- * - Downloads remote sponsor images
- * - Saves them to `public://sacda/footer/`
- * - Creates permanent file entities and records file usage
- * - Updates `sacda.settings` config `footer_partners` with image fids
- * - If `footer_social_links` is empty, it will populate defaults as well
+ * @file
+ * Install, update and uninstall functions for the SACDA Test theme.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\file\Entity\File;
+
+/**
+ * Implements hook_install().
+ *
+ * Ensures blocks are properly placed when the theme is installed.
+ */
+function sacda_install(): void {
+  // The block configurations in config/install will be automatically imported
+  // when the theme is installed. This hook can be used for additional setup.
+
+  // Ensure the menus exist and have default items if needed.
+  _sacda_ensure_menus();
+}
+
+/**
+ * Helper function to ensure required menus exist.
+ */
+function _sacda_ensure_menus(): void {
+  $menu_storage = \Drupal::entityTypeManager()->getStorage('menu');
+
+  // Main menu should exist by default, but verify.
+  if (!$menu_storage->load('main')) {
+    \Drupal::logger('sacda')->warning('Main menu does not exist. Please create it at /admin/structure/menu');
+  }
+
+  // Account menu should exist by default.
+  if (!$menu_storage->load('account')) {
+    \Drupal::logger('sacda')->warning('Account menu does not exist. Please create it at /admin/structure/menu');
+  }
+}
+
+
+function _import_footer_sponsors(): void {
 
 // Define sponsors (matches theme defaults).
 $sponsors = [
@@ -63,7 +89,7 @@ $default_social_links = [
  */
 function log_msg($msg) {
   if (function_exists('drush_print')) {
-    drush_print($msg);
+    \Drupal::logger('sacda')->warning($msg);
   }
   else {
     echo $msg . "\n";
@@ -135,4 +161,4 @@ else {
 
 log_msg('Done. Verify with: drush cget sacda.settings');
 
-?>
+}

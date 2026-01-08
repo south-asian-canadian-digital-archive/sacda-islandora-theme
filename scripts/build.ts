@@ -47,8 +47,8 @@ function printHeader(): void {
 	console.log(colors.cyan + line() + colors.reset);
 	console.log(
 		colors.cyan +
-			padLine("SACDA Theme Build (Bun)", "center") +
-			colors.reset,
+		padLine("SACDA Theme Build (Bun)", "center") +
+		colors.reset,
 	);
 	console.log(colors.cyan + line() + colors.reset);
 }
@@ -74,8 +74,8 @@ function printFooter(success: boolean, jsCount: number): void {
 	if (success) {
 		console.log(
 			status +
-				padLine(`Built ${jsCount} JavaScript file(s)`) +
-				colors.reset,
+			padLine(`Built ${jsCount} JavaScript file(s)`) +
+			colors.reset,
 		);
 	}
 	console.log(status + line() + colors.reset);
@@ -146,7 +146,7 @@ async function buildJS(files: string[]): Promise<boolean> {
 			"--outfile",
 			resolve(rootDir, outFile),
 			"--minify",
-			"--format=esm",
+			"--format=iife",
 		]);
 
 		if (!buildSuccess) {
@@ -189,8 +189,8 @@ async function main(): Promise<void> {
 			} else {
 				console.log(
 					colors.dim +
-						"\n  ℹ No JS files found, skipping JS build" +
-						colors.reset,
+					"\n  ℹ No JS files found, skipping JS build" +
+					colors.reset,
 				);
 			}
 

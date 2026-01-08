@@ -2,23 +2,23 @@ langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.footer
+    - system.menu.main
   module:
     - system
   theme:
-    - sacda_test
-id: sacda_test_footer_menu
-theme: sacda_test
-region: footer
+    - sacda
+id: sacda_main_menu
+theme: sacda
+region: menu_bottom
 weight: 0
 provider: null
-plugin: 'system_menu_block:footer'
+plugin: 'system_menu_block:main'
 settings:
-  id: 'system_menu_block:footer'
-  label: 'Footer menu'
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
   label_display: '0'
   provider: system
   level: 1
-  depth: 1
+  depth: 2
   expand_all_items: false
 visibility: {  }

@@ -4,9 +4,9 @@ dependencies:
   module:
     - system
   theme:
-    - sacda_test
-id: sacda_test_breadcrumbs
-theme: sacda_test
+    - sacda
+id: sacda_breadcrumbs
+theme: sacda
 region: breadcrumb
 weight: 0
 provider: null

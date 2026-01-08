@@ -1,12 +1,11 @@
-name: sacda_test
+name: sacda
 type: theme
 base theme: olivero
-description: test
+description: Theme for sacda.ca frontend
+# screenshot: src/assets/logo.svg
 core_version_requirement: ^10
 libraries:
-  - sacda_test/global
-# libraries-override:
-#   olivero/global-styling: sacda_test/global
+  - sacda/global
 libraries-override:
   olivero/global-styling:
     css:

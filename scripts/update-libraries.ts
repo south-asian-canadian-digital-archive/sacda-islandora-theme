@@ -1,5 +1,5 @@
 /**
- * Script to auto-generate sacda_test.libraries.yml from dist/ contents
+ * Script to auto-generate sacda.libraries.yml from dist/ contents
  * Run this after building: pnpm build
  */
 
@@ -96,7 +96,7 @@ if (cssFiles.length > 0) {
 	}
 }
 
-const librariesPath = resolve(rootDir, 'sacda_test.libraries.yml');
+const librariesPath = resolve(rootDir, 'sacda.libraries.yml');
 writeFileSync(librariesPath, content);
 
 printFooter(jsFiles.length, cssFiles.length);

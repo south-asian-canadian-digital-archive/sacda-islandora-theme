@@ -1,6 +1,6 @@
 # Schema for SACDA Test theme settings.
 
-sacda_test.settings:
+sacda.settings:
   type: theme_settings
   label: 'SACDA Test theme settings'
   mapping:

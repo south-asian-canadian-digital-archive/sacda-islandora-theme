@@ -32,8 +32,8 @@
     <div class="flex flex-row items-center gap-5 pb-3">
       {% if footer_partners is not empty %}
         {% for partner in footer_partners %}
-          <a href="{{ partner.link }}" target="_blank" rel="noopener noreferrer" class="flex items-center h-16 min-w-0">
-            <img src="{{ partner.image }}" alt="{{ partner.name }}" class="h-16!" />
+          <a href="{{ partner.link }}" target="_blank" rel="noopener noreferrer" class="flex items-center w-auto h-16 min-w-0">
+            <img src="{{ partner.image }}" alt="{{ partner.name }}" class="h-16! w-auto object-fit" />
           </a>
         {% endfor %}
       {% endif %}

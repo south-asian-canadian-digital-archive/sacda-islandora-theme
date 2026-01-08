@@ -4,16 +4,16 @@ dependencies:
   module:
     - system
   theme:
-    - sacda_test
-id: sacda_test_content
-theme: sacda_test
+    - sacda
+id: sacda_messages
+theme: sacda
 region: content
-weight: 0
+weight: -10
 provider: null
-plugin: system_main_block
+plugin: system_messages_block
 settings:
-  id: system_main_block
-  label: 'Main page content'
+  id: system_messages_block
+  label: 'Status messages'
   label_display: '0'
   provider: system
 visibility: {  }

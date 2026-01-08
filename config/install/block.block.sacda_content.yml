@@ -4,16 +4,16 @@ dependencies:
   module:
     - system
   theme:
-    - sacda_test
-id: sacda_test_page_title
-theme: sacda_test
+    - sacda
+id: sacda_content
+theme: sacda
 region: content
-weight: -20
+weight: 0
 provider: null
-plugin: page_title_block
+plugin: system_main_block
 settings:
-  id: page_title_block
-  label: 'Page title'
+  id: system_main_block
+  label: 'Main page content'
   label_display: '0'
   provider: system
 visibility: {  }
