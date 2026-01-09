@@ -238,6 +238,77 @@ function sacda_form_system_theme_settings_alter(array &$form, FormStateInterface
     '#description' => t('Light accent color (e.g. #FFEDC2).'),
     '#size' => 10,
   ];
+
+  // Carousel settings
+  $form['carousel_settings'] = [
+    '#type' => 'details',
+    '#title' => t('Landing Page Carousel'),
+    '#open' => FALSE,
+  ];
+
+  $form['carousel_settings']['carousel_autoplay_speed'] = [
+    '#type' => 'number',
+    '#title' => t('Autoplay Delay (ms)'),
+    '#description' => t('Time between slide transitions in milliseconds.'),
+    '#default_value' => theme_get_setting('carousel_autoplay_speed') ?: 5000,
+    '#min' => 1000,
+    '#max' => 20000,
+    '#step' => 500,
+  ];
+
+  $carousel_slides = theme_get_setting('carousel_slides') ?: [];
+
+  $form['carousel_settings']['carousel_slides'] = [
+    '#type' => 'container',
+    '#tree' => TRUE,
+    '#parents' => ['carousel_slides'],
+  ];
+
+  // Support up to 5 slides
+  for ($i = 0; $i < 5; $i++) {
+    $slide = $carousel_slides[$i] ?? [];
+
+    $form['carousel_settings']['carousel_slides'][$i] = [
+      '#type' => 'details',
+      '#title' => t('Slide @num', ['@num' => $i + 1]),
+      '#open' => $i === 0,
+    ];
+
+    $form['carousel_settings']['carousel_slides'][$i]['image_fid'] = [
+      '#type' => 'managed_file',
+      '#title' => t('Image'),
+      '#description' => t('Upload an image for this slide.'),
+      '#upload_location' => 'public://carousel/',
+      '#upload_validators' => [
+        'file_validate_extensions' => ['png jpg jpeg gif webp'],
+        'file_validate_size' => [5 * 1024 * 1024],
+      ],
+      '#default_value' => !empty($slide['image_fid']) ? [$slide['image_fid']] : [],
+    ];
+
+    $form['carousel_settings']['carousel_slides'][$i]['title'] = [
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#description' => t('Optional title overlay for this slide.'),
+      '#default_value' => $slide['title'] ?? '',
+      '#maxlength' => 255,
+    ];
+
+    $form['carousel_settings']['carousel_slides'][$i]['subtitle'] = [
+      '#type' => 'textfield',
+      '#title' => t('Subtitle'),
+      '#description' => t('Optional subtitle overlay for this slide.'),
+      '#default_value' => $slide['subtitle'] ?? '',
+      '#maxlength' => 255,
+    ];
+
+    $form['carousel_settings']['carousel_slides'][$i]['link'] = [
+      '#type' => 'url',
+      '#title' => t('Link URL'),
+      '#description' => t('Optional link for this slide.'),
+      '#default_value' => $slide['link'] ?? '',
+    ];
+  }
 }
 
 /**
@@ -326,6 +397,34 @@ function sacda_theme_settings_submit(array &$form, FormStateInterface $form_stat
   $cleaned_social = array_filter($social_links, fn($s) => !empty($s['title']) || !empty($s['link']));
   usort($cleaned_social, fn($a, $b) => ($a['weight'] ?? 0) <=> ($b['weight'] ?? 0));
   $form_state->setValue('footer_social_links', array_values($cleaned_social));
+
+  // Process carousel slides
+  $carousel_slides = $form_state->getValue('carousel_slides') ?: [];
+  $cleaned_slides = [];
+
+  foreach ($carousel_slides as $slide) {
+    $fid = is_array($slide['image_fid']) ? reset($slide['image_fid']) : ($slide['image_fid'] ?? NULL);
+    
+    // Skip empty slides
+    if (empty($fid) && empty($slide['title']) && empty($slide['subtitle'])) {
+      continue;
+    }
+
+    if ($fid && $file = File::load($fid)) {
+      $file->setPermanent();
+      $file->save();
+      \Drupal::service('file.usage')->add($file, 'sacda', 'theme', 1);
+    }
+
+    $cleaned_slides[] = [
+      'image_fid' => $fid ?: NULL,
+      'title' => $slide['title'] ?? '',
+      'subtitle' => $slide['subtitle'] ?? '',
+      'link' => $slide['link'] ?? '',
+    ];
+  }
+
+  $form_state->setValue('carousel_slides', $cleaned_slides);
 }
 
 /**
@@ -394,6 +493,28 @@ function sacda_preprocess_page(array &$variables): void {
   $variables['primary_color'] = theme_get_setting('primary_color') ?: '#F99D2A';
   $variables['secondary_color'] = theme_get_setting('secondary_color') ?: '#414042';
   $variables['light_color'] = theme_get_setting('light_color') ?: '#FFEDC2';
+
+  // Carousel slides for landing page
+  $carousel_slides = theme_get_setting('carousel_slides') ?: [];
+  $variables['carousel_slides'] = [];
+  $variables['carousel_autoplay_speed'] = theme_get_setting('carousel_autoplay_speed') ?: 5000;
+
+  foreach ($carousel_slides as $slide) {
+    $fid = is_array($slide['image_fid']) ? reset($slide['image_fid']) : ($slide['image_fid'] ?? NULL);
+    if ($fid && $file = File::load($fid)) {
+      $variables['carousel_slides'][] = [
+        'image_url' => \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri()),
+        'title' => $slide['title'] ?? '',
+        'subtitle' => $slide['subtitle'] ?? '',
+        'link' => $slide['link'] ?? '',
+      ];
+    }
+  }
+
+  // Attach carousel library if there are slides (for landing pages)
+  if (!empty($variables['carousel_slides'])) {
+    $variables['#attached']['library'][] = 'sacda/carousel';
+  }
 }
 
 /**

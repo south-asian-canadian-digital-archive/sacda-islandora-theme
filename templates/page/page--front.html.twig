@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * SACDA theme front page template.
+ */
+#}
+<div class="">
+
+	{% include '@sacda/navigation/header.html.twig' %}
+
+	<main role="main" class="main-content">
+		<a id="main-content" tabindex="-1"></a>
+		jf
+		lakjflaskf
+		{# Carousel - configured via theme settings #}
+		{% include '@sacda/blocks/sacda-carousel.html.twig' with {
+			slides: carousel_slides,
+			autoplay_speed: carousel_autoplay_speed
+		} %}
+
+	</main>
+
+	{% include '@sacda/navigation/footer.html.twig' %}
+
+</div>

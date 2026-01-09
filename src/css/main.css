@@ -35,7 +35,8 @@
 
 	/* Muted: Light Grey #f1f2f2 */
 	--muted: oklch(0.957 0.002 199.6);
-	--muted-foreground: oklch(0.428 0.015 258.4); /* Grey #474c55 */
+	--muted-foreground: oklch(0.428 0.015 258.4);
+	/* Grey #474c55 */
 
 	/* Accent: Light Yellow #ffedc2 */
 	--accent: oklch(0.951 0.052 87.6);
@@ -81,7 +82,8 @@
 	--card-foreground: oklch(0.985 0 0);
 	--popover: oklch(0.22 0 0);
 	--popover-foreground: oklch(0.985 0 0);
-	--primary: oklch(0.748 0.176 65.4); /* Keep Orange */
+	--primary: oklch(0.748 0.176 65.4);
+	/* Keep Orange */
 	--primary-foreground: oklch(0.145 0 0);
 	--secondary: oklch(0.35 0 0);
 	--secondary-foreground: oklch(0.985 0 0);
@@ -169,6 +171,7 @@
 	* {
 		@apply border-border outline-ring/50;
 	}
+
 	html,
 	body {
 		@apply bg-background text-foreground;
@@ -179,7 +182,9 @@
 
 	.main-content {
 		min-height: 60vh;
+		padding-top: 2.5rem;
 	}
+
 	/* body {
 		overflow: hidden;
 	} */
@@ -197,12 +202,15 @@
 	.hidden.md\:flex {
 		display: flex !important;
 	}
+
 	.hidden.md\:block {
 		display: block !important;
 	}
+
 	.hidden.md\:inline-flex {
 		display: inline-flex !important;
 	}
+
 	.hidden.md\:grid {
 		display: grid !important;
 	}

@@ -57,3 +57,25 @@ sacda.settings:
     light_color:
       type: string
       label: 'Light color hex'
+    carousel_autoplay_speed:
+      type: integer
+      label: 'Carousel autoplay speed (ms)'
+    carousel_slides:
+      type: sequence
+      label: 'Carousel slides'
+      sequence:
+        type: mapping
+        label: 'Slide'
+        mapping:
+          image_fid:
+            type: integer
+            label: 'Slide image file ID'
+          title:
+            type: string
+            label: 'Slide title'
+          subtitle:
+            type: string
+            label: 'Slide subtitle'
+          link:
+            type: string
+            label: 'Slide link URL'

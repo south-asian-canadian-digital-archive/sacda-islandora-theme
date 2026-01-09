@@ -5,10 +5,10 @@
  */
 
 import { globSync } from "glob";
-import { spawn } from "child_process";
+import { spawn, type ChildProcess } from "child_process";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
-import { mkdirSync } from "fs";
+import { mkdirSync, watch } from "fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, "..");
@@ -106,7 +106,27 @@ function runCommand(
 	});
 }
 
-async function buildCSS(isWatch: boolean = false): Promise<boolean> {
+function spawnBackground(
+	command: string,
+	args: string[],
+	options: { cwd?: string } = {},
+): ChildProcess {
+	const proc = spawn(command, args, {
+		cwd: options.cwd || rootDir,
+		stdio: "inherit",
+		shell: true,
+	});
+
+	proc.on("error", (error) => {
+		console.error(
+			colors.red + `  ✗ Error: ${error.message}` + colors.reset,
+		);
+	});
+
+	return proc;
+}
+
+async function buildCSS(isWatch: boolean = false): Promise<boolean | ChildProcess> {
 	console.log(
 		colors.yellow + "\n→ Building CSS with Tailwind CLI..." + colors.reset,
 	);
@@ -116,11 +136,31 @@ async function buildCSS(isWatch: boolean = false): Promise<boolean> {
 	if (isWatch) {
 		args.push("--watch");
 		console.log(colors.dim + "  (watching for changes)" + colors.reset);
+		return spawnBackground("tailwindcss", args);
 	} else {
 		args.push("--minify");
+		return runCommand("tailwindcss", args);
 	}
+}
 
-	return runCommand("tailwindcss", args);
+async function buildSingleJS(file: string): Promise<boolean> {
+	const name = file.replace("src/js/", "").replace(/\.(m?[jt]s)$/, "");
+	const outFile = `dist/${name}.js`;
+
+	// Ensure output directory exists
+	const outDir = dirname(resolve(rootDir, outFile));
+	mkdirSync(outDir, { recursive: true });
+
+	console.log(colors.dim + `  → ${file} → ${outFile}` + colors.reset);
+
+	return await runCommand("bun", [
+		"build",
+		resolve(rootDir, file),
+		"--outfile",
+		resolve(rootDir, outFile),
+		"--minify",
+		"--format=iife",
+	]);
 }
 
 async function buildJS(files: string[]): Promise<boolean> {
@@ -131,24 +171,7 @@ async function buildJS(files: string[]): Promise<boolean> {
 	let success = true;
 
 	for (const file of files.sort()) {
-		const name = file.replace("src/js/", "").replace(/\.(m?[jt]s)$/, "");
-		const outFile = `dist/${name}.js`;
-
-		// Ensure output directory exists
-		const outDir = dirname(resolve(rootDir, outFile));
-		mkdirSync(outDir, { recursive: true });
-
-		console.log(`  Processing: ${file} → ${outFile}`);
-
-		const buildSuccess = await runCommand("bun", [
-			"build",
-			resolve(rootDir, file),
-			"--outfile",
-			resolve(rootDir, outFile),
-			"--minify",
-			"--format=iife",
-		]);
-
+		const buildSuccess = await buildSingleJS(file);
 		if (!buildSuccess) {
 			console.log(
 				colors.red + `  ✗ Failed to build ${file}` + colors.reset,
@@ -158,6 +181,39 @@ async function buildJS(files: string[]): Promise<boolean> {
 	}
 
 	return success;
+}
+
+// Debounce helper for file watcher
+function debounceRebuild(fn: (filename: string) => void, delay: number): (filename: string) => void {
+	let timeoutId: ReturnType<typeof setTimeout> | null = null;
+	return (filename: string) => {
+		if (timeoutId) clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => fn(filename), delay);
+	};
+}
+
+async function watchJS(): Promise<void> {
+	console.log(colors.yellow + "\n→ Watching JavaScript files..." + colors.reset);
+	console.log(colors.dim + "  (watching src/js/ for changes)" + colors.reset);
+
+	const jsDir = resolve(rootDir, "src/js");
+
+	// Debounced rebuild function
+	const rebuild = debounceRebuild(async (filename: string) => {
+		if (!filename || !filename.match(/\.(m?[jt]s)$/)) return;
+
+		const file = `src/js/${filename}`;
+		console.log(colors.cyan + `\n  ↻ File changed: ${file}` + colors.reset);
+		await buildSingleJS(file);
+		console.log(colors.green + "  ✓ Rebuilt" + colors.reset);
+	}, 100);
+
+	// Watch for changes
+	watch(jsDir, { recursive: true }, (eventType, filename) => {
+		if (eventType === "change" && filename) {
+			rebuild(filename);
+		}
+	});
 }
 
 async function main(): Promise<void> {
@@ -173,32 +229,37 @@ async function main(): Promise<void> {
 
 		printSection("Found JavaScript Files", jsFiles);
 
-		// Build CSS with Tailwind CLI (single entry point)
-		let success = await buildCSS(isWatch);
-
-		if (!success && !isWatch) {
-			// If watch mode, Tailwind will continue running
-			printFooter(false, 0);
-			process.exit(1);
-		}
-
-		// Build JS files (only if not in watch mode for CSS)
-		if (!isWatch) {
-			if (jsFiles.length > 0) {
-				success = await buildJS(jsFiles);
-			} else {
-				console.log(
-					colors.dim +
-					"\n  ℹ No JS files found, skipping JS build" +
-					colors.reset,
-				);
-			}
-
-			if (!success) {
+		// Build JS files first (always)
+		if (jsFiles.length > 0) {
+			const success = await buildJS(jsFiles);
+			if (!success && !isWatch) {
 				printFooter(false, jsFiles.length);
 				process.exit(1);
 			}
+		} else {
+			console.log(
+				colors.dim +
+				"\n  ℹ No JS files found, skipping JS build" +
+				colors.reset,
+			);
+		}
 
+		// Build/watch CSS with Tailwind CLI
+		if (isWatch) {
+			// Start JS watcher
+			await watchJS();
+
+			// Start CSS watcher (runs in background)
+			await buildCSS(true);
+
+			// Keep process alive
+			console.log(colors.green + "\n  ✓ Watching for changes (Ctrl+C to stop)" + colors.reset);
+		} else {
+			const cssSuccess = await buildCSS(false);
+			if (!cssSuccess) {
+				printFooter(false, jsFiles.length);
+				process.exit(1);
+			}
 			printFooter(true, jsFiles.length);
 		}
 	} catch (error) {
@@ -209,3 +270,4 @@ async function main(): Promise<void> {
 }
 
 main();
+

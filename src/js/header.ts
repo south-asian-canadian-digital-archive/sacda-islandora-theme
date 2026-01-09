@@ -31,10 +31,10 @@ const CONFIG = {
 	navX: -60,
 
 	// Nav vertical shift when collapsed (negative = up)
-	navY: -25,
-
+	navY: -15,
+	
 	// Login region vertical shift when collapsed (negative = up)
-	loginY: 25,
+	loginY: 15,
 
 	// Shadow when scrolled
 	boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
