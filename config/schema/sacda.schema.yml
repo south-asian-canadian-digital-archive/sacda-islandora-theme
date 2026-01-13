@@ -1,8 +1,8 @@
-# Schema for SACDA Test theme settings.
+# Schema for SACDA theme settings.
 
 sacda.settings:
   type: theme_settings
-  label: 'SACDA Test theme settings'
+  label: 'SACDA theme settings'
   mapping:
     footer_partners:
       type: sequence
@@ -22,7 +22,7 @@ sacda.settings:
             label: 'Partner link URL'
           weight:
             type: integer
-            label: 'Weight for ordering'
+            label: 'Weight'
     footer_social_links:
       type: sequence
       label: 'Footer social links'
@@ -32,31 +32,16 @@ sacda.settings:
         mapping:
           title:
             type: string
-            label: 'Link title'
+            label: 'Title'
           icon:
             type: string
             label: 'Icon name'
           link:
             type: string
-            label: 'Social link URL'
+            label: 'URL'
           weight:
             type: integer
-            label: 'Weight for ordering'
-    footer_contact_title:
-      type: string
-      label: 'Footer contact section title'
-    footer_copyright_text:
-      type: string
-      label: 'Custom copyright text'
-    primary_color:
-      type: string
-      label: 'Primary color hex'
-    secondary_color:
-      type: string
-      label: 'Secondary color hex'
-    light_color:
-      type: string
-      label: 'Light color hex'
+            label: 'Weight'
     carousel_autoplay_speed:
       type: integer
       label: 'Carousel autoplay speed (ms)'
@@ -69,13 +54,13 @@ sacda.settings:
         mapping:
           image_fid:
             type: integer
-            label: 'Slide image file ID'
+            label: 'Image file ID'
           title:
             type: string
-            label: 'Slide title'
+            label: 'Title'
           subtitle:
             type: string
-            label: 'Slide subtitle'
+            label: 'Subtitle'
           link:
             type: string
-            label: 'Slide link URL'
+            label: 'Link URL'

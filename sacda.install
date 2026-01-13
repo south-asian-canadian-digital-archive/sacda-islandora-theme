@@ -19,6 +19,12 @@ function sacda_install(): void {
 
   // Ensure the menus exist and have default items if needed.
   _sacda_ensure_menus();
+
+  // Import footer sponsors from local static files.
+  _import_footer_sponsors();
+
+  // Import carousel slides from local static files.
+  _import_carousel_slides();
 }
 
 /**
