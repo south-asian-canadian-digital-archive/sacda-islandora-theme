@@ -13,6 +13,12 @@
     @apply scroll-m-20 text-4xl font-extrabold tracking-tight text-balance lg:text-5xl;
   }
 
+  /* Prevent overscroll bounce at top/bottom */
+  html,
+  body {
+    overscroll-behavior-y: none;
+  }
+
   h2 {
     @apply mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
   }
