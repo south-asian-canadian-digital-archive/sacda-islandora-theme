@@ -14,6 +14,9 @@ libraries-override:
         css/base/base.css: false
       layout:
         css/layout/region.css: false
+        css/layout/layout.css: false
+        css/layout/layout-content-narrow.css: false
+        css/layout/layout-content-medium.css: false
   core/drupal.base:
     css:
       component:

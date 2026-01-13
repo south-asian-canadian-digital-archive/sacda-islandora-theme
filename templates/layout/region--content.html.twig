@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * Override for content region - removes Olivero's wrapper constraints.
+ */
+#}
+{% if content %}
+	<div{{attributes.addClass('region','region-content')}}>
+		{{ content }}
+	</div>
+{% endif %}

@@ -8,16 +8,21 @@
 {% extends '@sacda/layout/page.html.twig' %}
 
 {% block main %}
-	<main role="main" class="front-page">
+	<main role="main" class="front-page w-full pb-[100vh]">
 		<a id="main-content" tabindex="-1"></a>
 
-		{% include '@sacda/blocks/sacda-carousel.html.twig' with {
-		slides: carousel_slides,
-		autoplay_speed: carousel_autoplay_speed
-	} %}
+		{# Full-width carousel #}
+		<div class="w-full">
+			{% include '@sacda/blocks/sacda-carousel.html.twig' with {
+			slides: carousel_slides,
+			autoplay_speed: carousel_autoplay_speed
+		} %}
+		</div>
 
-		{# Add more front page sections here #}
-		{{ page.content }}
+		{# Content with container #}
+		<div class="container mx-auto px-4">
+			{{ page.content }}
+		</div>
 
 	</main>
 {% endblock %}
