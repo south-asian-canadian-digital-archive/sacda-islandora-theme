@@ -42,36 +42,33 @@ function _sacda_ensure_menus(): void {
 function _import_footer_sponsors(): void {
 
 // Define sponsors (matches theme defaults).
+// Images are loaded from the theme's static folder.
+$theme_path = \Drupal::service('extension.list.theme')->getPath('sacda');
 $sponsors = [
-  [
-    'name' => 'SACDA',
-    'link' => 'http://sacda.ca',
-    'image' => 'https://sacda.ca//themes/sacda/assets/pawtucket/graphics/footer/sacda.svg',
-  ],
-  [
-    'name' => 'South Asian Studies Institute',
-    'link' => 'http://www.ufv.ca/sasi',
-    'image' => 'https://sacda.ca//themes/sacda/assets/pawtucket/graphics/footer/sasi.svg',
-  ],
   [
     'name' => 'University of the Fraser Valley',
     'link' => 'http://www.ufv.ca/',
-    'image' => 'https://sacda.ca//themes/sacda/assets/pawtucket/graphics/footer/ufv.svg',
+    'image' => $theme_path . '/src/static/footer_sponsors/ufv.svg',
   ],
   [
-    'name' => 'South Asian Canadian Legacy Project',
-    'link' => 'https://saclp.southasiancanadianheritage.ca/',
-    'image' => 'https://sacda.ca//themes/sacda/assets/pawtucket/graphics/footer/bc.svg',
+    'name' => 'Province of British Columbia',
+    'link' => 'https://www.bcb.ca/en',
+    'image' => $theme_path . '/src/static/footer_sponsors/bc.svg',
   ],
   [
     'name' => 'Canada',
     'link' => 'https://www.canada.ca/en.html',
-    'image' => 'https://sacda.ca//themes/sacda/assets/pawtucket/graphics/footer/canada_logo.svg',
+    'image' => $theme_path . '/src/static/footer_sponsors/canada_logo.svg',
+  ],
+  [
+    'name' => 'Council of Library and Information Resources',
+    'link' => 'https://www.clir.org/',
+    'image' => $theme_path . '/src/static/footer_sponsors/CLIR_red_w_wordmark_outline.svg',
   ],
   [
     'name' => 'UBC Irving K. Barber Learning Centre',
     'link' => 'https://ikblc.ubc.ca/',
-    'image' => 'https://sacda.ca//themes/sacda/assets/pawtucket/graphics/footer/BCHDP_logo_white.png',
+    'image' => $theme_path . '/src/static/footer_sponsors/BCHDP_logo_white.png',
   ],
 ];
 
@@ -106,17 +103,23 @@ $file_system->prepareDirectory($destination_dir, \Drupal\Core\File\FileSystemInt
 
 $partners = [];
 foreach ($sponsors as $index => $sponsor) {
-  $url = $sponsor['image'];
-  log_msg("Downloading: $url");
+  $local_path = DRUPAL_ROOT . '/' . $sponsor['image'];
+  log_msg("Reading local file: $local_path");
 
-  // Try to fetch the remote file. Use @ to suppress warnings and check result.
-  $data = @file_get_contents($url);
-  if ($data === FALSE) {
-    log_msg("Failed to download: $url");
+  // Check if file exists locally.
+  if (!file_exists($local_path)) {
+    log_msg("Local file not found: $local_path");
     continue;
   }
 
-  $basename = basename(parse_url($url, PHP_URL_PATH));
+  // Read the local file.
+  $data = file_get_contents($local_path);
+  if ($data === FALSE) {
+    log_msg("Failed to read local file: $local_path");
+    continue;
+  }
+
+  $basename = basename($local_path);
   $dest = $destination_dir . '/' . $basename;
 
   // Save file entity (file_save_data will create the managed file).
@@ -162,3 +165,118 @@ else {
 log_msg('Done. Verify with: drush cget sacda.settings');
 
 }
+
+/**
+ * Import carousel slides from local static files.
+ */
+function _import_carousel_slides(): void {
+  // Define carousel slides with local images.
+  // Images are loaded from the theme's static folder.
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('sacda');
+  $slides = [
+    [
+      'title' => '[Lumber mill workers]',
+      'subtitle' => '',
+      'link' => '/index.php/Detail/objects/592',
+      'image' => $theme_path . '/src/static/homepage/Advocacy-Theme_South-Asian-Canadian.jpg',
+    ],
+    [
+      'title' => '[Photo of a Sikh man standing on horse-drawn buggy]',
+      'subtitle' => '',
+      'link' => '/index.php/Detail/objects/18973',
+      'image' => $theme_path . '/src/static/homepage/Arts-Culture_South-Asian-Canadian.jpg',
+    ],
+    [
+      'title' => 'Heritage sikh temple, Abbotsford',
+      'subtitle' => '',
+      'link' => '/index.php/Detail/objects/614',
+      'image' => $theme_path . '/src/static/homepage/Chandra-Bodalia-Collection_South-Asian-Canadian.jpg',
+    ],
+    [
+      'title' => '[Group photograph of six men at Victoria gurdwara]',
+      'subtitle' => '',
+      'link' => '/index.php/Detail/objects/18700',
+      'image' => $theme_path . '/src/static/homepage/Family_South-Asian-Canadian.jpg',
+    ],
+    [
+      'title' => '[Group on steps of Hillcrest Temple]',
+      'subtitle' => '',
+      'link' => '/index.php/Detail/objects/8606',
+      'image' => $theme_path . '/src/static/homepage/Komogata-Maru-Exhibit_South-Asian-Canadian.jpg',
+    ],
+  ];
+
+  /**
+   * Helper: print via drush_print if available, fallback to echo.
+   */
+  function log_carousel_msg($msg) {
+    if (function_exists('drush_print')) {
+      \Drupal::logger('sacda')->warning($msg);
+    }
+    else {
+      echo $msg . "\n";
+    }
+  }
+
+  $file_system = \Drupal::service('file_system');
+  $file_usage = \Drupal::service('file.usage');
+  $config_factory = \Drupal::service('config.factory');
+  $editable = $config_factory->getEditable('sacda.settings');
+
+  $destination_dir = 'public://sacda/carousel';
+  $file_system->prepareDirectory($destination_dir, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY | \Drupal\Core\File\FileSystemInterface::MODIFY_PERMISSIONS);
+
+  $carousel_slides = [];
+  foreach ($slides as $index => $slide) {
+    $local_path = DRUPAL_ROOT . '/' . $slide['image'];
+    log_carousel_msg("Reading local file: $local_path");
+
+    // Check if file exists locally.
+    if (!file_exists($local_path)) {
+      log_carousel_msg("Local file not found: $local_path");
+      continue;
+    }
+
+    // Read the local file.
+    $data = file_get_contents($local_path);
+    if ($data === FALSE) {
+      log_carousel_msg("Failed to read local file: $local_path");
+      continue;
+    }
+
+    $basename = basename($local_path);
+    $dest = $destination_dir . '/' . $basename;
+
+    // Save file entity (file_save_data will create the managed file).
+    $file = file_save_data($data, $dest, FILE_EXISTS_RENAME);
+    if ($file instanceof \Drupal\file\Entity\File) {
+      $file->setPermanent();
+      $file->save();
+      // Record file usage so it isn't removed by garbage collection.
+      $file_usage->add($file, 'sacda', 'theme', 1);
+
+      $carousel_slides[] = [
+        'image_fid' => $file->id(),
+        'title' => $slide['title'],
+        'subtitle' => $slide['subtitle'],
+        'link' => $slide['link'],
+      ];
+
+      log_carousel_msg("Imported carousel slide {$slide['title']} -> fid {$file->id()}");
+    }
+    else {
+      log_carousel_msg("Failed to save file entity for: {$slide['title']}");
+    }
+  }
+
+  if (!empty($carousel_slides)) {
+    $editable->set('carousel_slides', $carousel_slides)->save();
+    log_carousel_msg('Updated sacda.settings: carousel_slides set.');
+  }
+  else {
+    log_carousel_msg('No carousel slides were imported; carousel_slides not updated.');
+  }
+
+  log_carousel_msg('Done importing carousel slides. Verify with: drush cget sacda.settings');
+}
+
