@@ -11,7 +11,7 @@
 		id="page">
 
 		{# HEADER #}
-		{% include '@sacda/navigation/header.html.twig' %}
+		{% include '@sacda/navigation/header.html.twig' with { is_front: is_front } %}
 
 		{# MAIN CONTENT - Override this block in child templates #}
 		{% block main %}

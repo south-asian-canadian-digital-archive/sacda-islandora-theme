@@ -465,6 +465,7 @@ function sacda_preprocess_page(array &$variables): void {
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
   $variables['current_year'] = date('Y');
   $variables['logo'] = '/' . \Drupal::theme()->getActiveTheme()->getPath() . '/logo.svg';
+  $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
 
   $partners = theme_get_setting('footer_partners') ?: [];
   $variables['footer_partners'] = [];

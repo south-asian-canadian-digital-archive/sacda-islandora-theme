@@ -8,7 +8,7 @@ import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from "em
 import Autoplay from "embla-carousel-autoplay";
 
 interface CarouselElement extends HTMLElement {
-	dataset: DOMStringMap & { autoplayDelay?: string };
+	dataset: DOMStringMap & { autoplayDelay?: string; slidesPerView?: string };
 }
 
 class SacdaCarousel {
@@ -35,9 +35,12 @@ class SacdaCarousel {
 	}
 
 	private init(): void {
+		const slidesPerView = parseInt(this.root.dataset.slidesPerView || "1", 10);
+
 		const options: EmblaOptionsType = {
 			loop: true,
 			align: "start",
+			slidesToScroll: slidesPerView > 1 ? slidesPerView : 1, // Scroll by group if multiple slides
 		};
 
 		const autoplayPlugin = Autoplay({

@@ -1,9 +1,5 @@
-/**
- * @file
- * GSAP-powered scroll-driven header animation (Vercel-style).
- * Uses ScrollTrigger to interpolate header shrink/expand based on scroll position.
- */
 
+// @ts-nocheck
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -16,7 +12,7 @@ const CONFIG = {
 
 	// Smoothing factor (0 = instant, 0.5 = slight lag, 1+ = more lag)
 	// Higher values reduce jitter but feel less responsive
-	scrubSmoothing: 0.5,
+	scrubSmoothing: 0,
 
 	// Container padding when collapsed (CSS value)
 	collapsedPaddingY: "0.05rem",
@@ -32,7 +28,7 @@ const CONFIG = {
 
 	// Nav vertical shift when collapsed (negative = up)
 	navY: -25,
-	
+
 	// Login region vertical shift when collapsed (negative = up)
 	loginY: 25,
 
@@ -43,87 +39,93 @@ const CONFIG = {
 
 gsap.registerPlugin(ScrollTrigger);
 
-function initHeaderAnimation(): void {
-	const header = document.getElementById("sacda-header");
-	const headerContainer = document.getElementById("sacda-header-container");
-	const headerLogo = document.getElementById("sacda-header-logo");
-	const headerNav = document.getElementById("sacda-header-nav");
-	const menuTop = document.getElementById("sacda-menu-top");
+((Drupal) => {
+	Drupal.behaviors.sacdaHeader = {
+		attach: (context) => {
+			if (context !== document) return;
 
-	if (!header || !headerContainer) return;
+			// console.log("Sacda: Initializing Header Animation...");
 
-	const tl = gsap.timeline({
-		scrollTrigger: {
-			trigger: "body",
-			start: "top top",
-			end: `+=${CONFIG.scrollDistance}`,
-			scrub: CONFIG.scrubSmoothing,
-		},
-	});
+			const header = document.getElementById("sacda-header");
+			const headerContainer = document.getElementById("sacda-header-container");
+			const headerLogo = document.getElementById("sacda-header-logo");
+			const headerNav = document.getElementById("sacda-header-nav");
 
-	// Shrink container padding and height
-	tl.to(headerContainer, {
-		paddingTop: CONFIG.collapsedPaddingY,
-		paddingBottom: CONFIG.collapsedPaddingY,
-		height: CONFIG.collapsedHeight,
-		ease: "none",
-	}, 0);
+			if (!header || !headerContainer) {
+				console.warn("Sacda: Header elements not found", { header, headerContainer });
+				return;
+			}
 
-	// Scale down logo
-	if (headerLogo) {
-		tl.to(headerLogo, {
-			scale: CONFIG.logoScale,
-			ease: "none",
-		}, 0);
-	}
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: "body",
+					start: "top top",
+					end: `+=${CONFIG.scrollDistance}`,
+					scrub: CONFIG.scrubSmoothing,
+					// markers: true, // Uncomment for debug markers
+				},
+			});
 
-	// Shift nav left and up
-	if (headerNav) {
-		tl.to(headerNav, {
-			x: CONFIG.navX,
-			y: CONFIG.navY,
-			ease: "none",
-		}, 0);
-	}
+			// console.log("Sacda: GSAP Timeline created");
 
-	// Scroll up the search/menu-top naturally (login region stays in place)
-	const menuScrollable = document.getElementById("sacda-menu-scrollable");
-	const menuWrapper = document.getElementById("sacda-menu-scrollable-wrapper");
+			// Shrink container padding and height
+			tl.to(headerContainer, {
+				paddingTop: CONFIG.collapsedPaddingY,
+				paddingBottom: CONFIG.collapsedPaddingY,
+				height: CONFIG.collapsedHeight,
+				ease: "none",
+			}, 0);
 
-	if (menuScrollable) {
-		tl.to(menuScrollable, {
-			yPercent: -100,  // Scroll up by 100% of its own height
-			ease: "none",
-		}, 0);
-	}
+			// Scale down logo
+			if (headerLogo) {
+				tl.to(headerLogo, {
+					scale: CONFIG.logoScale,
+					ease: "none",
+				}, 0);
+			}
 
-	// Collapse the wrapper so it takes no space
-	if (menuWrapper) {
-		tl.to(menuWrapper, {
-			height: 0,
-			ease: "none",
-		}, 0);
-	}
+			// Shift nav left and up
+			if (headerNav) {
+				tl.to(headerNav, {
+					x: CONFIG.navX,
+					y: CONFIG.navY,
+					ease: "none",
+				}, 0);
+			}
 
-	// Move login region up
-	const loginRegion = document.getElementById("sacda-login-region");
-	if (loginRegion) {
-		tl.to(loginRegion, {
-			y: CONFIG.loginY,
-			ease: "none",
-		}, 0);
-	}
+			// Scroll up the search/menu-top naturally (login region stays in place)
+			const menuScrollable = document.getElementById("sacda-menu-scrollable");
+			const menuWrapper = document.getElementById("sacda-menu-scrollable-wrapper");
 
-	// Add shadow when scrolled
-	tl.to(header, {
-		boxShadow: CONFIG.boxShadow,
-		ease: "none",
-	}, 0);
-}
+			if (menuScrollable) {
+				tl.to(menuScrollable, {
+					yPercent: -100,  // Scroll up by 100% of its own height
+					ease: "none",
+				}, 0);
+			}
 
-// Initialize on DOM ready
-if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", initHeaderAnimation);
-} else {
-	initHeaderAnimation();
-}
+			// Collapse the wrapper so it takes no space
+			if (menuWrapper) {
+				tl.to(menuWrapper, {
+					height: 0,
+					ease: "none",
+				}, 0);
+			}
+
+			// Move login region up
+			const loginRegion = document.getElementById("sacda-login-region");
+			if (loginRegion) {
+				tl.to(loginRegion, {
+					y: CONFIG.loginY,
+					ease: "none",
+				}, 0);
+			}
+
+			// Add shadow when scrolled
+			tl.to(header, {
+				boxShadow: CONFIG.boxShadow,
+				ease: "none",
+			}, 0);
+		}
+	};
+})(Drupal);

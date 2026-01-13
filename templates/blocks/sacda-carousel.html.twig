@@ -7,18 +7,24 @@
  * Usage:
  *   {% include '@sacda/blocks/sacda-carousel.html.twig' with {
  *     slides: carousel_slides,
- *     autoplay_speed: carousel_autoplay_speed
+ *     autoplay_speed: carousel_autoplay_speed,
+ *     slides_per_view: 1,
+ *     full_height: true
  *   } %}
  *
  * Variables:
  *   - slides: Array of slide objects with image_url, title, subtitle, link
  *   - autoplay_speed: Autoplay delay in milliseconds (default: 5000)
+ *   - slides_per_view: Number of slides visible at once (default: 1)
+ *   - full_height: Whether carousel takes full viewport height (default: false)
  */
 #}
 
+{% set height_class = full_height|default(false) ? 'h-screen' : '' %}
+
 {% if slides|length > 0 %}
 	<div
-		data-carousel data-autoplay-delay="{{ autoplay_speed|default(5000) }}" class="sacda-carousel relative w-full">
+		data-carousel data-autoplay-delay="{{ autoplay_speed|default(5000) }}" data-slides-per-view="{{ slides_per_view|default(1) }}" class="sacda-carousel relative w-full {{ height_class }}">
 		{# Viewport - the scrollable container #}
 		<div
 			data-carousel-viewport class="overflow-hidden">
@@ -26,11 +32,12 @@
 			<div class="flex touch-pan-y -ms-4">
 				{% for slide in slides %}
 					{# Item - each slide #}
-					<div class="min-w-0 shrink-0 grow-0 basis-full ps-4">
+					{# Slide basis controlled by CSS variable set from data attribute #}
+						<div class="carousel-slide min-w-0 shrink-0 grow-0 ps-4" style="flex-basis: calc(100% / {{ slides_per_view|default(1) }});"> {% set slide_height_class = full_height|default(false) ? 'h-screen' : 'aspect-video md:aspect-21/9' %}
 						{% if slide.link %}
-							<a href="{{ slide.link }}" class="block relative aspect-video md:aspect-21/9 overflow-hidden">
+							<a href="{{ slide.link }}" class="block relative {{ slide_height_class }} overflow-hidden">
 							{% else %}
-								<div class="relative aspect-video md:aspect-21/9 overflow-hidden">
+								<div class="relative {{ slide_height_class }} overflow-hidden">
 								{% endif %}
 
 								<img src="{{ slide.image_url }}" alt="{{ slide.title ?: 'Carousel image' }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" loading="{{ loop.first ? 'eager' : 'lazy' }}"/>
@@ -58,19 +65,21 @@
 			</div>
 		</div>
 
-		{# Navigation buttons #}
+		{# Navigation buttons - bottom right, grouped together #}
 		{% if slides|length > 1 %}
-			<button data-carousel-prev type="button" class="absolute left-4 bottom-4 z-10 inline-flex items-center justify-center size-8 md:size-10 rounded-full border border-white/20 bg-background/80 backdrop-blur-sm text-foreground shadow-md transition-all hover:bg-background hover:scale-110 disabled:opacity-50 disabled:pointer-events-none" aria-label="Previous slide">
-				<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="m15 18-6-6 6-6"/>
-				</svg>
-			</button>
+			<div class="absolute bottom-6 right-6 z-10 flex items-center gap-2">
+				<button data-carousel-prev type="button" class="btn btn-sm btn-default min-h-[40px]! px-3!" aria-label="Previous slide">
+					<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="m15 18-6-6 6-6"/>
+					</svg>
+				</button>
 
-			<button data-carousel-next type="button" class="absolute right-4 bottom-4 z-10 inline-flex items-center justify-center size-8 md:size-10 rounded-full border border-white/20 bg-background/80 backdrop-blur-sm text-foreground shadow-md transition-all hover:bg-background hover:scale-110 disabled:opacity-50 disabled:pointer-events-none" aria-label="Next slide">
-				<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="m9 18 6-6-6-6"/>
-				</svg>
-			</button>
+				<button data-carousel-next type="button" class="btn btn-sm btn-default min-h-[40px]! px-3!" aria-label="Next slide">
+					<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="m9 18 6-6-6-6"/>
+					</svg>
+				</button>
+			</div>
 
 			{# Dots navigation #}
 			<div data-carousel-dots class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10" aria-label="Slide indicators"></div>
