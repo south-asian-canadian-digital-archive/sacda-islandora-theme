@@ -1,0 +1,61 @@
+/**
+ * SACDA Button Component System
+ * Based on the st-button design from the original SACDA theme
+ */
+
+@layer components {
+
+	/* Base button styles */
+	.btn {
+		@apply flex items-center justify-center min-h-[50px] px-[30px] md:px-[50px] border rounded-none uppercase text-sm font-bold transition-all duration-300 ease-out cursor-pointer w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+	}
+
+	/* Default/Dark variant - black bg, white text, hover→orange */
+	.btn-default {
+		@apply bg-foreground text-background border-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary focus:bg-primary focus:text-primary-foreground focus:border-primary;
+	}
+
+	/* Outline variant - transparent bg, dark border, hover→filled */
+	.btn-outline {
+		@apply bg-transparent text-foreground border-foreground hover:bg-foreground hover:text-background focus:bg-foreground focus:text-background;
+	}
+
+	/* Primary/Orange variant - orange bg, hover→transparent */
+	.btn-primary {
+		@apply bg-primary text-primary-foreground border-primary hover:bg-transparent hover:text-foreground hover:border-foreground focus:bg-transparent focus:text-foreground focus:border-foreground;
+	}
+
+	/* Secondary/Yellow variant */
+	.btn-secondary {
+		@apply bg-secondary text-secondary-foreground border-secondary hover:bg-transparent hover:text-foreground hover:border-foreground focus:bg-transparent focus:text-foreground focus:border-foreground;
+	}
+
+	/* Ghost variant - no background initially */
+	.btn-ghost {
+		@apply bg-transparent text-foreground border-transparent hover:bg-accent hover:text-accent-foreground hover:border-accent focus:bg-accent focus:text-accent-foreground focus:border-accent;
+	}
+
+	/* Size variants */
+	.btn-sm {
+		@apply min-h-[40px] px-[20px] md:px-[30px] text-xs;
+	}
+
+	.btn-lg {
+		@apply min-h-[60px] px-[40px] md:px-[60px] text-base;
+	}
+
+	/* Search button (navbar style) */
+	.btn-search {
+		@apply h-[40px] w-[65px] bg-foreground text-accent flex items-center justify-center transition-colors duration-300 border-none hover:bg-primary hover:text-primary-foreground;
+	}
+
+	/* Icon button */
+	.btn-icon {
+		@apply p-0 min-h-[40px] w-[40px] flex items-center justify-center;
+	}
+
+	/* Full width modifier */
+	.btn-full {
+		@apply w-full;
+	}
+}

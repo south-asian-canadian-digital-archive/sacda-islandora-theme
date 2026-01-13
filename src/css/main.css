@@ -3,6 +3,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./_base.css";
+@import "./_buttons.css";
 
 @source "../templates/**/*.twig";
 @source "../templates/**/*.html";

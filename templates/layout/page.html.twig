@@ -10,50 +10,45 @@
 	<div
 		id="page">
 
-		{# =====================================================
-		       CUSTOM HEADER - Replaces Olivero's header
-		 ===================================================== #}
+		{# HEADER #}
 		{% include '@sacda/navigation/header.html.twig' %}
 
-		{# =====================================================
-		       MAIN CONTENT - Kept from Olivero
-		 ===================================================== #}
-		<div id="main-wrapper" class="layout-main-wrapper layout-container">
-			<div id="main" class="layout-main">
-				<div class="main-content">
-					<a id="main-content" tabindex="-1"></a>
-					{{ page.hero }}
-					<div class="main-content__container container">
-						{{ page.highlighted }}
-						{{ page.breadcrumb }}
+		{# MAIN CONTENT - Override this block in child templates #}
+		{% block main %}
+			<div id="main-wrapper" class="layout-main-wrapper layout-container">
+				<div id="main" class="layout-main">
+					<div class="main-content">
+						<a id="main-content" tabindex="-1"></a>
+						{{ page.hero }}
+						<div class="main-content__container container">
+							{{ page.highlighted }}
+							{{ page.breadcrumb }}
 
-						{% if page.sidebar %}
-							<div class="sidebar-grid grid-full">
-								<main role="main" class="site-main pt-10">
+							{% if page.sidebar %}
+								<div class="sidebar-grid grid-full">
+									<main role="main" class="site-main pt-10">
+										{{ page.content_above }}
+										{{ page.content }}
+									</main>
+									{{ page.sidebar }}
+								</div>
+							{% else %}
+								<main role="main">
 									{{ page.content_above }}
 									{{ page.content }}
 								</main>
-
-								{{ page.sidebar }}
-							</div>
-						{% else %}
-							<main role="main">
-								{{ page.content_above }}
-								{{ page.content }}
-							</main>
-						{% endif %}
-						{{ page.content_below }}
+							{% endif %}
+							{{ page.content_below }}
+						</div>
+					</div>
+					<div class="social-bar">
+						{{ page.social }}
 					</div>
 				</div>
-				<div class="social-bar">
-					{{ page.social }}
-				</div>
 			</div>
-		</div>
+		{% endblock %}
 
-		{# =====================================================
-		       CUSTOM FOOTER - Replaces Olivero's footer
-		 ===================================================== #}
+		{# FOOTER #}
 		{% include '@sacda/navigation/footer.html.twig' %}
 
 		<div class="overlay" data-drupal-selector="overlay"></div>

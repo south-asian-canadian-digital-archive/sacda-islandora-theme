@@ -1,0 +1,63 @@
+{#
+/**
+ * SACDA Button Macros
+ * 
+ * Usage:
+ *   {% import '@sacda/macros/button.twig' as btn %}
+ *   {{ btn.button('Submit', { variant: 'primary' }) }}
+ *   {{ btn.link('Learn More', '/about', { variant: 'outline', size: 'lg' }) }}
+ *   {{ btn.search() }}
+ */
+#}
+
+{% macro button(text, options = {}) %}
+	{%- set classes = ['btn', 'btn-' ~ (options.variant|default('default'))] -%}
+	{%- if options.size %}
+		{%- set classes = classes|merge(['btn-' ~ options.size]) -%}
+	{%- endif -%}
+	{%- if options.full_width %}
+		{%- set classes = classes|merge(['btn-full']) -%}
+	{%- endif -%}
+	{%- if options.class %}
+		{%- set classes = classes|merge([options.class]) -%}
+	{%- endif -%}
+	<button type="{{ options.type|default('button') }}" class="{{ classes|join(' ') }}" {{ options.disabled ? ' disabled' : '' }}>
+		{%- if options.icon and options.icon_position|default('left') == 'left' %}
+			<span class="mr-2">{{ options.icon|raw }}</span>
+		{%- endif -%}
+		{{ text }}
+		{%- if options.icon and options.icon_position == 'right' %}
+			<span class="ml-2">{{ options.icon|raw }}</span>
+		{%- endif -%}
+	</button>
+{% endmacro %}
+
+{% macro link(text, url, options = {}) %}
+	{%- set classes = ['btn', 'btn-' ~ (options.variant|default('default'))] -%}
+	{%- if options.size %}
+		{%- set classes = classes|merge(['btn-' ~ options.size]) -%}
+	{%- endif -%}
+	{%- if options.full_width %}
+		{%- set classes = classes|merge(['btn-full']) -%}
+	{%- endif -%}
+	{%- if options.class %}
+		{%- set classes = classes|merge([options.class]) -%}
+	{%- endif -%}
+	<a href="{{ url }}" class="{{ classes|join(' ') }}" {{ options.new_tab ? ' target="_blank" rel="noopener noreferrer"' : '' }}>
+		{%- if options.icon and options.icon_position|default('left') == 'left' %}
+			<span class="mr-2">{{ options.icon|raw }}</span>
+		{%- endif -%}
+		{{ text }}
+		{%- if options.icon and options.icon_position == 'right' %}
+			<span class="ml-2">{{ options.icon|raw }}</span>
+		{%- endif -%}
+	</a>
+{% endmacro %}
+
+{% macro search(options = {}) %}
+	<button type="{{ options.type|default('submit') }}" class="btn-search {{ options.class|default('') }}" aria-label="{{ options.label|default('Search') }}">
+		<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+		</svg>
+	</button>
+{% endmacro %}
