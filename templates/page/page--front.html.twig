@@ -12,11 +12,11 @@
 		<a id="main-content" tabindex="-1"></a>
 
 		{# Full-viewport carousel with negative margin to go under header #}
-		<div class="w-full -mt-[104px] md:-mt-[128px]">
+		<div class="w-full -mt-[104px] md:-mt-[128px] min-h-[40vh]">
 			{% include '@sacda/blocks/sacda-carousel.html.twig' with {
 			slides: carousel_slides,
 			autoplay_speed: carousel_autoplay_speed,
-			slides_per_view: 1,
+			slides_per_view: 3,
 			full_height: true
 		} %}
 		</div>
