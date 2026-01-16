@@ -61,7 +61,9 @@ gsap.registerPlugin(ScrollTrigger);
 					trigger: "body",
 					start: "top top",
 					end: `+=${CONFIG.scrollDistance}`,
-					scrub: CONFIG.scrubSmoothing,
+					scrub: true, // true = instant response, no smoothing/rubberbanding
+					fastScrollEnd: true, // Snap to end state on fast scroll
+					preventOverlaps: true, // Prevent animation conflicts
 					// markers: true, // Uncomment for debug markers
 				},
 			});

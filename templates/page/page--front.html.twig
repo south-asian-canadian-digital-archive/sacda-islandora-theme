@@ -21,10 +21,210 @@
 		} %}
 		</div>
 
-		{# Content with container #}
-		<div class="container mx-auto px-4 py-12">
-			{{ page.content }}
-		</div>
+		{# 1. Hero Search & Mission Section #}
+		<section class="relative my-6 px-4 py-10 md:px-6 md:py-16 bg-light md:bg-[url('{{ theme_path }}/static/homepage/bg-circles.svg')] md:bg-repeat-x md:bg-bottom md:bg-[length:60%]">
+			<div class="container mx-auto">
+				<div class="flex flex-wrap mb-8">
+					<div class="hidden md:block w-1/3 pr-4">
+						<h2 class="text-3xl uppercase font-bold text-secondary">SEARCH</h2>
+					</div>
+					<div class="w-full md:w-2/3">
+						<form action="/search" method="get" class="flex items-center border-b border-secondary pt-2">
+							<input type="text" name="q" placeholder="Search" class="flex-grow min-h-[50px] bg-transparent border-none text-lg font-light text-secondary focus:ring-0 focus:outline-none placeholder-secondary/70" id="frontSearchInput">
+							<button type="submit" class="h-[50px] w-[60px] border border-secondary bg-transparent hover:bg-primary hover:border-primary hover:text-white transition-colors duration-300 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed" id="frontSearchButton" disabled>
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+								</svg>
+							</button>
+						</form>
+					</div>
+				</div>
+
+				<div class="flex flex-wrap">
+					<div class="hidden md:block w-1/3 pr-4">
+						<h2 class="text-3xl uppercase font-bold text-secondary">EXPLORE THE JOURNEY</h2>
+					</div>
+					<div class="w-full md:w-2/3 text-secondary">
+						<p class="hidden md:block mb-8 text-lg leading-relaxed">
+							Engage with the rich history of the South Asian Canadian diaspora. Explore stories of immigration, community building, cultural preservation, and the enduring contributions of South Asian Canadians to the fabric of our nation.
+						</p>
+						<div class="flex flex-col md:flex-row gap-5 mt-10 md:mt-14">
+							<a href="/about" class="flex justify-center items-center h-[50px] px-8 border border-secondary text-secondary font-bold uppercase text-sm hover:bg-secondary hover:text-white transition-colors duration-300 w-full md:w-auto">
+								ABOUT
+							</a>
+							<a href="/search/advanced" class="flex justify-center items-center h-[50px] px-8 border border-secondary text-secondary font-bold uppercase text-sm hover:bg-secondary hover:text-white transition-colors duration-300 w-full md:w-auto">
+								ADVANCED SEARCH
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		{# 2. Land Acknowledgement #}
+		<section class="bg-primary/60 text-center px-6 py-10 md:py-16 lg:py-24 my-6 md:my-0">
+			<div class="container mx-auto">
+				<div class="mb-4">
+					<h2 class="text-3xl uppercase font-bold text-secondary">LAND ACKNOWLEDGEMENT</h2>
+				</div>
+				<div class="max-w-4xl mx-auto">
+					<p class="text-secondary text-lg leading-relaxed">
+						We respectfully acknowledge that the South Asian Canadian Digital Archive at the South Asian Studies Institute is located on the traditional, ancestral, and unceded territory of the Stó:lō peoples. We are grateful for the opportunity to live, work, and learn on these lands.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		{# 3. Featured Exhibits #}
+		<section class="py-10 px-4 md:px-24">
+			<div class="hidden md:block w-full mb-8">
+				<h2 class="text-3xl uppercase font-bold text-secondary">Featured Exhibits</h2>
+			</div>
+
+			<div class="hidden md:grid grid-cols-3 gap-4">
+				{% set exhibits = [
+					{ title: 'Komagata Maru Exhibit', link: '/exhibits/komagata-maru', image: theme_path ~ '/static/homepage/Komogata-Maru-Exhibit_South-Asian-Canadian.jpg' },
+					{ title: 'Labour History Exhibit', link: '/exhibits/labour-history', image: theme_path ~ '/static/homepage/Labour-History-Exhibit_South-Asian-Canadian.jpg' },
+					{ title: 'The Vote Exhibit', link: '/exhibits/the-vote', image: theme_path ~ '/static/homepage/The-Vote-Exhibit_South-Asian-Canadian.jpg' }
+				] %}
+
+				{% for exhibit in exhibits %}
+					<div class="group relative overflow-hidden flex flex-col h-full">
+						<a href="{{ exhibit.link }}" class="block h-full flex flex-col">
+							<div class="relative w-full h-[33vw] lg:h-[calc((100vw-230px)/3)]">
+								<div class="absolute left-[25px] right-[25px] top-[85px] bottom-0 bg-primary/30 z-0"></div>
+								<img src="{{ exhibit.image }}" alt="{{ exhibit.title }}" class="relative z-10 w-full h-full object-cover origin-bottom transition-transform duration-500 group-hover:scale-105">
+							</div>
+							<div class="mx-[25px] p-6 pb-9 bg-primary/30 flex-grow flex items-center justify-center">
+								<h3 class="relative text-center font-bold text-base lg:text-lg uppercase text-secondary after:content-[''] after:absolute after:left-1/2 after:-bottom-2 after:h-[2px] after:w-[60%] after:bg-primary after:-translate-x-1/2">
+									{{ exhibit.title }}
+								</h3>
+							</div>
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+
+			{# Mobile version #}
+			<div class="md:hidden flex flex-col gap-4">
+				{% for exhibit in exhibits %}
+					<a href="{{ exhibit.link }}" class="relative overflow-hidden h-48">
+						<img src="{{ exhibit.image }}" alt="{{ exhibit.title }}" class="w-full h-full object-cover">
+						<div class="absolute bottom-4 left-4 right-4 bg-primary p-3">
+							<h3 class="font-bold text-sm uppercase text-secondary text-center">{{ exhibit.title }}</h3>
+						</div>
+					</a>
+				{% endfor %}
+			</div>
+		</section>
+
+		{# 4. Explore Themes (Asymmetric Grid) #}
+		<section class="py-10 px-4 md:px-32">
+			<div class="hidden md:block mb-8 text-center">
+				<h2 class="text-3xl font-bold text-secondary uppercase mb-4">Explore Themes</h2>
+				<p class="text-lg text-secondary">Navigate the digital archives through curated thematic collections.</p>
+			</div>
+
+			{% set themes = [
+				{ title: 'Advocacy', link: '/themes/advocacy', image: theme_path ~ '/static/homepage/Advocacy-Theme_South-Asian-Canadian.jpg', colspan: 2, rowspan: 1 },
+				{ title: 'Arts and Culture', link: '/themes/arts-culture', image: theme_path ~ '/static/homepage/Arts-Culture_South-Asian-Canadian.jpg', colspan: 1, rowspan: 2 },
+				{ title: 'Migration', link: '/themes/migration', image: theme_path ~ '/static/homepage/Migration-theme_South-Asian-Canadian.jpg', colspan: 1, rowspan: 1 },
+				{ title: 'Family', link: '/themes/family', image: theme_path ~ '/static/homepage/Family_South-Asian-Canadian.jpg', colspan: 1, rowspan: 1 }
+			] %}
+
+			<div class="hidden md:grid grid-cols-3 grid-rows-[25vw_25vw] gap-4">
+				{% for theme in themes %}
+					<div class="relative overflow-hidden group {% if theme.colspan == 2 %}col-span-2{% endif %} {% if theme.rowspan == 2 %}row-span-2{% endif %}">
+						<a href="{{ theme.link }}" class="block w-full h-full">
+							<img src="{{ theme.image }}" alt="{{ theme.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+							<div class="absolute top-0 left-0 flex justify-center items-center min-w-[250px] lg:min-w-[300px] min-h-[60px] p-4 bg-primary">
+								<h3 class="font-bold text-base lg:text-lg uppercase text-secondary">{{ theme.title }}</h3>
+							</div>
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+
+			{# Mobile version #}
+			<div class="md:hidden">
+				<h2 class="text-2xl font-bold text-secondary uppercase mb-4 text-center">Explore Themes</h2>
+				<div class="flex flex-col gap-4">
+					{% for theme in themes %}
+						<a href="{{ theme.link }}" class="relative overflow-hidden h-48">
+							<img src="{{ theme.image }}" alt="{{ theme.title }}" class="w-full h-full object-cover">
+							<div class="absolute top-0 left-0 bg-primary p-3">
+								<h3 class="font-bold text-sm uppercase text-secondary">{{ theme.title }}</h3>
+							</div>
+						</a>
+					{% endfor %}
+				</div>
+			</div>
+		</section>
+
+		{# 5. Walk Through History (Recently Added) #}
+		<section class="py-10 px-4 md:px-40 pb-16 md:pb-36">
+			<div class="flex flex-wrap mb-8">
+				<div class="w-full md:w-1/3">
+					<h2 class="text-3xl font-bold uppercase text-secondary">WALK THROUGH HISTORY</h2>
+				</div>
+				<div class="w-full md:w-2/3 mt-4 md:mt-0">
+					<p class="text-lg text-secondary">For over 100 years, the contributions of South Asian Canadians have shaped the cultural, economic, and social landscape of Canada. Explore our growing collection of historical artifacts.</p>
+				</div>
+			</div>
+
+			{% set recent_items = [
+				{ title: 'Chandra Bodalia Collection', link: '/collections/chandra-bodalia', image: theme_path ~ '/static/homepage/Chandra-Bodalia-Collection_South-Asian-Canadian.jpg' },
+				{ title: 'Del Monte Collection', link: '/collections/del-monte', image: theme_path ~ '/static/homepage/delmonte.jpg' },
+				{ title: 'Joan Mayo Fonds', link: '/collections/joan-mayo', image: theme_path ~ '/static/homepage/joanmayofonds.jpg' }
+			] %}
+
+			<div class="hidden md:grid grid-cols-3 gap-6 h-[25vw]">
+				{% for item in recent_items %}
+					<div class="relative overflow-hidden group h-full">
+						<a href="{{ item.link }}" class="block w-full h-full">
+							<img src="{{ item.image }}" alt="{{ item.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+							<div class="absolute bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-30px)] lg:w-[calc(100%-80px)] min-h-[60px] flex justify-center items-center bg-primary p-4">
+								<h3 class="font-bold text-base lg:text-lg uppercase text-secondary m-0 text-center">{{ item.title }}</h3>
+							</div>
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+
+			{# Mobile version #}
+			<div class="md:hidden flex flex-col gap-4">
+				{% for item in recent_items %}
+					<a href="{{ item.link }}" class="relative overflow-hidden h-48">
+						<img src="{{ item.image }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+						<div class="absolute bottom-4 left-4 right-4 bg-primary p-3">
+							<h3 class="font-bold text-sm uppercase text-secondary text-center">{{ item.title }}</h3>
+						</div>
+					</a>
+				{% endfor %}
+			</div>
+		</section>
+
+		{# 6. Help Tell Our Story (CTA) #}
+		<section class="bg-light py-10 px-4 md:py-32 md:px-36 text-center">
+			<div class="max-w-4xl mx-auto">
+				<h2 class="text-3xl md:text-5xl font-bold uppercase text-secondary mb-4">HELP TELL OUR STORY</h2>
+				<p class="text-lg text-secondary mb-8">
+					Do you have access to materials and/or oral histories of significance you could contribute to our digital archives?
+				</p>
+				<div class="flex justify-center">
+					<a href="/contribute" class="flex justify-center items-center h-[50px] px-8 border border-secondary text-secondary font-bold uppercase text-sm hover:bg-secondary hover:text-white transition-colors duration-300">
+						CONTRIBUTE TO SACDA
+					</a>
+				</div>
+			</div>
+		</section>
+
+		{# Dynamic Drupal content if any #}
+		{% if page.content %}
+			<div class="container mx-auto px-4 py-12 *:min-h-0!">
+				{{ page.content }}
+			</div>
+		{% endif %}
 
 	</main>
 {% endblock %}

@@ -4,7 +4,9 @@ global:
     dist/carousel.js: {}
     dist/header.js: {}
     dist/search.util.js: {}
+    dist/frontpage.js: {}
   css:
     theme:
       dist/main.css: {}
       dist/styles.css: {}
+

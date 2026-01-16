@@ -31,18 +31,18 @@
 	--primary: oklch(0.748 0.176 65.4);
 	--primary-foreground: oklch(1 0 0);
 
-	/* Secondary: Yellow #ffce34 */
-	--secondary: oklch(0.887 0.165 85.9);
-	--secondary-foreground: oklch(0.395 0.002 286.6);
+	/* Secondary: Yellow #ffce34 (used as secondary accent) */
+	--secondary: oklch(0.395 0.002 286.6);
+	--secondary-foreground: oklch(1 0 0);
 
 	/* Muted: Light Grey #f1f2f2 */
 	--muted: oklch(0.957 0.002 199.6);
 	--muted-foreground: oklch(0.428 0.015 258.4);
-	/* Grey #474c55 */
 
-	/* Accent: Light Yellow #ffedc2 */
+	/* Accent/Light: Light Yellow #ffedc2 */
 	--accent: oklch(0.951 0.052 87.6);
 	--accent-foreground: oklch(0.395 0.002 286.6);
+	--light: oklch(0.951 0.052 87.6);
 
 	/* Destructive (Default Red) */
 	--destructive: oklch(0.577 0.245 27.325);
@@ -54,6 +54,22 @@
 
 	/* Ring: Orange */
 	--ring: oklch(0.748 0.176 65.4);
+
+	/* Teal Colors (for buttons, links) */
+	/* #11808d */
+	--teal: oklch(0.57 0.12 216.5);
+	/* #134959 */
+	--teal-dark: oklch(0.39 0.09 220.5);
+	/* #1FAA99 */
+	--teal-light: oklch(0.68 0.16 190.5);
+
+	/* Alert Colors */
+	/* Info Blue (#3a87ad / #edf8fd) */
+	--info: oklch(0.62 0.14 245.5);
+	--info-bg: oklch(0.96 0.03 230.5);
+	/* Warning Yellow (#c09853 / #fcf8e3) */
+	--warning: oklch(0.71 0.14 75.5);
+	--warning-bg: oklch(0.98 0.04 85.5);
 
 	/* Chart Colors (Defaults) */
 	--chart-1: oklch(0.646 0.222 41.116);
@@ -132,10 +148,23 @@
 	--color-muted-foreground: var(--muted-foreground);
 	--color-accent: var(--accent);
 	--color-accent-foreground: var(--accent-foreground);
+	--color-light: var(--light);
 	--color-destructive: var(--destructive);
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
+
+	/* Teal Colors */
+	--color-teal: var(--teal);
+	--color-teal-dark: var(--teal-dark);
+	--color-teal-light: var(--teal-light);
+
+	/* Alert Colors */
+	--color-info: var(--info);
+	--color-info-bg: var(--info-bg);
+	--color-warning: var(--warning);
+	--color-warning-bg: var(--warning-bg);
+
 	--color-chart-1: var(--chart-1);
 	--color-chart-2: var(--chart-2);
 	--color-chart-3: var(--chart-3);
@@ -148,15 +177,6 @@
 	--color-sidebar-accent: var(--sidebar-accent);
 	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
 	--color-sidebar-border: var(--sidebar-border);
-
-	/* SACDA Spacing */
-	/* 
-	   Gutters are defined conceptually but we use standard Tailwind spacing variables.
-	   Reference:
-	   --gutter: 25px
-	   --gutter-md: 100px
-	   --gutter-lg: 150px
-	*/
 	--color-sidebar-ring: var(--sidebar-ring);
 
 	/* Font Families */
