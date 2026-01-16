@@ -19,8 +19,9 @@
  *   - full_height: Whether carousel takes full viewport height (default: false)
  */
 #}
+{% import '@sacda/macros/button.twig' as btn %}
 
-{% set height_class = full_height|default(false) ? 'h-screen' : '' %}
+{% set height_class = full_height|default(false) ? 'h-screen' : 'h-[50vh]' %}
 
 {% if slides|length > 0 %}
 	<div
@@ -33,30 +34,30 @@
 				{% for slide in slides %}
 					{# Item - each slide #}
 					{# Slide basis controlled by CSS variable set from data attribute #}
-						<div class="carousel-slide min-w-0 shrink-0 grow-0 ps-4" style="flex-basis: calc(100% / {{ slides_per_view|default(1) }});"> {% set slide_height_class = full_height|default(false) ? 'h-screen' : 'aspect-video md:aspect-21/9' %}
-						{% if slide.link %}
-							<a href="{{ slide.link }}" class="block relative {{ slide_height_class }} overflow-hidden">
-						{% else %}
-							<div class="relative {{ slide_height_class }} overflow-hidden">
-						{% endif %}
-						
-						<img src="{{ slide.image_url }}" alt="{{ slide.title ?: 'Carousel image' }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" loading="{{ loop.first ? 'eager' : 'lazy' }}"/>
+						<div class="carousel-slide min-w-0 shrink-0 grow-0 ps-4" style="flex-basis: calc(100% / {{ slides_per_view|default(1) }});"> {% if slide.link %}
+							<a href="{{ slide.link }}" class="block relative {{ height_class }} overflow-hidden">
+							{% else %}
+								<div class="relative {{ height_class }} overflow-hidden">
+								{% endif %}
 
-						{# {% if slide.title or slide.subtitle %}
-							<div class="absolute inset-0 flex items-end bg-linear-to-t from-black/80 via-black/20 to-transparent">
-								<div class="p-6 md:p-10 w-full">
-									{% if slide.title %}
-										<h2 class="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-2 drop-shadow-lg">{{ slide.title }}</h2>
-									{% endif %}
-									{% if slide.subtitle %}
-										<p class="text-sm md:text-lg text-white/90 drop-shadow-md max-w-2xl">{{ slide.subtitle }}</p>
-									{% endif %}
-								</div>
-							</div>
-						{% endif %} #}
+								<img
+								src="{{ slide.image_url }}" alt="{{ slide.title ?: 'Carousel image' }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" loading="{{ loop.first ? 'eager' : 'lazy' }}"/>
 
-						{% if slide.link %}
-							</a>
+								{# {% if slide.title or slide.subtitle %}
+															<div class="absolute inset-0 flex items-end bg-linear-to-t from-black/80 via-black/20 to-transparent">
+																<div class="p-6 md:p-10 w-full">
+																	{% if slide.title %}
+																		<h2 class="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-2 drop-shadow-lg">{{ slide.title }}</h2>
+																	{% endif %}
+																	{% if slide.subtitle %}
+																		<p class="text-sm md:text-lg text-white/90 drop-shadow-md max-w-2xl">{{ slide.subtitle }}</p>
+																	{% endif %}
+																</div>
+															</div>
+														{% endif %} #}
+
+								{% if slide.link %}
+								</a>
 						{% else %}
 							</div>
 						{% endif %}
@@ -68,17 +69,10 @@
 		{# Navigation buttons - bottom right, grouped together #}
 		{% if slides|length > 1 %}
 			<div class="absolute bottom-6 right-6 z-10 flex items-center gap-2">
-				<button data-carousel-prev type="button" class="btn btn-sm btn-default min-h-[40px]! px-3!" aria-label="Previous slide">
-					<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<path d="m15 18-6-6 6-6"/>
-					</svg>
-				</button>
-
-				<button data-carousel-next type="button" class="btn btn-sm btn-default min-h-[40px]! px-3!" aria-label="Next slide">
-					<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<path d="m9 18 6-6-6-6"/>
-					</svg>
-				</button>
+				{% set prev_icon = '<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>' %}
+				{% set next_icon = '<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' %}
+				<span data-carousel-prev>{{ btn.button('', { variant: 'default', size: 'sm', icon: prev_icon, class: 'min-h-[40px]! px-3!' }) }}</span>
+				<span data-carousel-next>{{ btn.button('', { variant: 'default', size: 'sm', icon: next_icon, class: 'min-h-[40px]! px-3!' }) }}</span>
 			</div>
 
 			{# Dots navigation #}

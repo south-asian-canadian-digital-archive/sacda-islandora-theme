@@ -35,6 +35,11 @@
 		@apply bg-transparent text-foreground border-transparent hover:bg-accent hover:text-accent-foreground hover:border-accent focus:bg-accent focus:text-accent-foreground focus:border-accent;
 	}
 
+	/* Text variant - minimal styling for inline text links */
+	.btn-text {
+		@apply bg-transparent text-current border-none min-h-0 px-0 w-auto inline font-normal normal-case text-inherit no-underline transition-colors duration-200;
+	}
+
 	/* Size variants */
 	.btn-sm {
 		@apply min-h-[40px] px-[20px] md:px-[30px] text-xs;

@@ -4,7 +4,7 @@
  * Custom header template for SACDA theme.
  */
 #}
-
+{% import '@sacda/macros/search.twig' as search %}
 
 <header id="sacda-header" role="navigation" aria-label="Main navigation" class="sacda-header sticky top-0 z-50 bg-white/95 backdrop-blur-sm text-foreground shadow-lg transition-shadow duration-200">
 	<div id="sacda-header-container" class="mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-10 py-4 md:py-6">
@@ -42,14 +42,7 @@
 						id="sacda-menu-scrollable" class="flex items-center gap-4">
 						{# Search form - scrolls up #}
 						<form class="flex" role="search" id="sacda-header-search">
-							<div class="flex border border-foreground">
-								<input type="text" class="w-48 h-10 px-3 bg-transparent text-foreground placeholder:text-muted-foreground outline-none" id="sacda-search-input" placeholder="Search" name="search" autocomplete="off">
-								<button type="submit" class="h-10 w-10 flex items-center justify-center bg-foreground text-primary cursor-pointer">
-									<svg class="w-5 h-5" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-									</svg>
-								</button>
-							</div>
+							{{ search.input({ width: 'w-48', id: 'sacda-search-input' }) }}
 						</form>
 						{{ page.menu_top }}
 					</div>

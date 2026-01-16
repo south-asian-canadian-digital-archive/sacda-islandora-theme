@@ -1,0 +1,65 @@
+{#
+/**
+ * SACDA Search Macros
+ * 
+ * Usage:
+ *   {% import '@sacda/macros/search.twig' as search %}
+ *   {{ search.input() }}                           {# Default header style #}
+*
+{{ search.input({ variant: 'hero' }) }}
+{# Hero/landing page style #}
+*
+{{ search.input({ width: 'w-64' }) }}
+{# Custom width #}
+* 
+ * Variants:
+ *   - default: Header search (compact, dark button)
+ *   - hero: Landing page search (larger, outline button, underline border)
+ * 
+ * Options:
+ *   - variant: 'default' or 'hero'
+ *   - width: Custom width class (default varies by variant)
+ *   - id: Input ID
+ *   - name: Input name attribute
+ *   - placeholder: Placeholder text
+ */
+#}
+
+{% macro input(options = {}) %}
+	{%- set variant = options.variant|default('default') -%}
+
+	{# Variant-specific defaults #}
+	{%- if variant == 'hero' -%}
+		{%- set width = options.width|default('flex-1') -%}
+		{%- set height = 'min-h-[50px]' -%}
+		{%- set border_class = 'border-b border-secondary' -%}
+		{%- set input_class = 'text-lg font-light text-secondary placeholder-secondary/70' -%}
+		{%- set button_width = 'w-[60px]' -%}
+		{%- set button_class = 'border border-secondary bg-transparent text-secondary hover:bg-primary hover:border-primary hover:text-white' -%}
+	{%- else -%}
+		{%- set width = options.width|default('w-48') -%}
+		{%- set height = 'h-10' -%}
+		{%- set border_class = 'border border-foreground' -%}
+		{%- set input_class = 'text-foreground placeholder:text-muted-foreground' -%}
+		{%- set button_width = 'w-10' -%}
+		{%- set button_class = 'bg-foreground text-primary hover:bg-primary hover:text-primary-foreground' -%}
+	{%- endif -%}
+
+	<div class="flex {{ border_class }}">
+		<input type="text" class="{{ width }} {{ height }} px-3 bg-transparent outline-none {{ input_class }}" id="{{ options.id|default('sacda-search-input') }}" placeholder="{{ options.placeholder|default('Search') }}" name="{{ options.name|default('search') }}" autocomplete="off">
+		<button type="submit" class="{{ height }} {{ button_width }} flex items-center justify-center cursor-pointer transition-colors duration-300 {{ button_class }}">
+			<svg class="w-5 h-5" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</button>
+	</div>
+{% endmacro %}
+
+{# Standalone search button (icon only) #}
+{% macro button(options = {}) %}
+	<button type="{{ options.type|default('submit') }}" class="btn-search {{ options.class|default('') }}" aria-label="{{ options.label|default('Search') }}">
+		<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+		</svg>
+	</button>
+{% endmacro %}
