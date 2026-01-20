@@ -1,34 +1,102 @@
 /**
- * Base Typography Styles (Tailwind version)
- * Based on shadcn/ui typography patterns
- * https://ui.shadcn.com/docs/components/typography
+ * Base Typography Styles
+ * Based on SACDA original main.css typography specification
+ * Font: brandon-grotesque (from Adobe Typekit)
  */
 
 @layer base {
   /* =====================================================
-     Headings
+     Global Body Typography
      ===================================================== */
 
-  h1 {
-    @apply scroll-m-20 text-4xl font-extrabold tracking-tight text-balance lg:text-5xl;
-  }
-
-  /* Prevent overscroll bounce at top/bottom */
   html,
   body {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    color: var(--foreground);
+    font-size: 18px;
     overscroll-behavior-y: none;
+    height: 100%;
+    margin: 0;
+    padding: 0;
   }
 
+  @media (min-width: 768px) {
+
+    html,
+    body {
+      font-size: 22px;
+    }
+  }
+
+  /* =====================================================
+     Headings (H1-H6)
+     All: brandon-grotesque, weight 900, margin 1em 0
+     ===================================================== */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading) !important;
+    font-weight: 900 !important;
+    color: var(--foreground) !important;
+    border-bottom: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* H1: 40px mobile, 60px @960px, uppercase, top margin 0 */
+  h1 {
+    font-size: 40px !important;
+    text-transform: uppercase !important;
+    line-height: 1.2 !important;
+  }
+
+  @media (min-width: 960px) {
+    h1 {
+      font-size: 60px !important;
+    }
+  }
+
+  /* H2: 30px mobile, 50px @1280px */
   h2 {
-    @apply mt-10 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
+    font-size: 30px !important;
+    line-height: 1.3 !important;
   }
 
+  @media (min-width: 1280px) {
+    h2 {
+      font-size: 50px !important;
+    }
+  }
+
+  /* H3: 16px, uppercase */
   h3 {
-    @apply mt-8 scroll-m-20 text-2xl font-semibold tracking-tight;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+    line-height: 1.4 !important;
   }
 
+  /* H4: 18px, line-height 135% */
   h4 {
-    @apply scroll-m-20 text-xl font-semibold tracking-tight;
+    font-size: 18px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* H5: 14px */
+  h5 {
+    font-size: 14px;
+  }
+
+  /* H6: 12px, uppercase, custom margins */
+  h6 {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #454545;
+    margin: 10px 0 5px 0;
   }
 
   /* =====================================================
@@ -36,28 +104,127 @@
      ===================================================== */
 
   p {
-    @apply leading-7 [&:not(:first-child)]:mt-6;
+    line-height: calc(45 / 22);
+    /* ~2.04 */
+  }
+
+  p:not(:first-child) {
+    margin-top: 1.5em;
   }
 
   /* Lead text - larger intro paragraphs */
   .lead {
-    @apply text-muted-foreground text-xl;
+    @apply text-muted-foreground;
+    font-size: 1.15em;
   }
 
   /* Large text */
   .text-large {
-    @apply text-lg font-semibold;
+    font-size: 1.1em;
+    font-weight: 600;
   }
 
   /* Small text */
   small,
   .text-small {
-    @apply text-sm leading-none font-medium;
+    font-size: 0.875em;
+    line-height: 1.2;
+    font-weight: 500;
   }
 
   /* Muted text */
   .text-muted {
-    @apply text-muted-foreground text-sm;
+    @apply text-muted-foreground;
+    font-size: 0.875em;
+  }
+
+  /* =====================================================
+     Specialized Text Classes
+     ===================================================== */
+
+  /* Labels: 11px, uppercase, normal weight */
+  .label,
+  label {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* Captions: 11px, #454545 */
+  .caption {
+    font-size: 11px;
+    color: #454545;
+    padding-top: 5px;
+  }
+
+  /* Subtitle style for large H2 (is-style-large) */
+  .is-style-large h2,
+  h2.is-style-large {
+    font-size: 18px;
+  }
+
+  @media (min-width: 960px) {
+
+    .is-style-large h2,
+    h2.is-style-large {
+      font-size: 30px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+
+    .is-style-large h2,
+    h2.is-style-large {
+      font-size: 50px;
+    }
+  }
+
+  /* =====================================================
+     Front Page Specific Overrides
+     ===================================================== */
+
+  /* Hero H1 on front page */
+  .front h1,
+  .front-page h1,
+  .front-h1 {
+    line-height: 1.3;
+    text-transform: none;
+  }
+
+  @media (min-width: 768px) {
+
+    .front h1,
+    .front-page h1,
+    .front-h1 {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      font-size: 28px;
+      padding-top: 15px;
+    }
+  }
+
+  /* =====================================================
+     Timeline Styles
+     ===================================================== */
+
+  .timeline-headline,
+  .timeline h2 {
+    font-family: var(--font-heading);
+    font-size: 38px;
+    font-weight: 400;
+    text-transform: none;
+  }
+
+  .timeline-body,
+  .timeline p {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    color: #454545;
+  }
+
+  .timeline em {
+    font-family: var(--font-heading);
   }
 
   /* =====================================================
@@ -85,13 +252,37 @@
      ===================================================== */
 
   a {
-    @apply text-inherit no-underline;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease-out;
+  }
+
+  a:hover {
+    color: var(--primary);
+  }
+
+  a:active,
+  a:focus {
+    text-decoration: none;
   }
 
   /* Prose links - use this class for article/documentation content */
   .prose a,
   article a {
     @apply text-primary font-medium underline underline-offset-4;
+  }
+
+  /* =====================================================
+     Form Inputs
+     ===================================================== */
+
+  .form-control,
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  textarea {
+    font-size: 15px;
+    color: var(--foreground);
   }
 
   /* =====================================================

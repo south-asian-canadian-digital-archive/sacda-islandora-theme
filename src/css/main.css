@@ -40,7 +40,7 @@
 	--muted-foreground: oklch(0.428 0.015 258.4);
 
 	/* Accent/Light: Light Yellow #ffedc2 */
-	--accent: oklch(0.951 0.052 87.6);
+	--accent: oklch(0.8705 0.1651 89.64);
 	--accent-foreground: oklch(0.395 0.002 286.6);
 	--light: oklch(0.951 0.052 87.6);
 
@@ -89,7 +89,7 @@
 	--sidebar-ring: oklch(0.748 0.176 65.4);
 
 	--font-family-heading: "brandon-grotesque", sans-serif;
-	--font-family-body: "Lato", "brandon grotesque", sans-serif;
+	--font-family-body: "brandon-grotesque", "Lato", sans-serif;
 }
 
 .dark {
@@ -245,5 +245,167 @@
 @media (min-width: 48rem) {
 	.md\:hidden {
 		display: none !important;
+	}
+}
+
+
+/* Landing page exhibits grid */
+/* Base Section Spacing */
+.home-collection {
+	/* Spacing handled by section padding */
+}
+
+/* Link Container */
+.home-exhibits-item>a,
+.home-exhibits>div>a {
+	display: block;
+	position: relative;
+	text-decoration: none !important;
+}
+
+.home-exhibits-item>a:before,
+.home-exhibits>div>a:before {
+	content: "";
+	position: absolute;
+	left: 25px;
+	right: 25px;
+	top: 85px;
+	height: calc(77vw - 85px);
+	background-color: rgba(255, 206, 52, 0.3);
+}
+
+.home-exhibits-item img,
+.home-exhibits>div img {
+	position: relative;
+	object-fit: cover;
+	width: 100%;
+	height: 77vw;
+	transform-origin: center bottom;
+	transition: 0.5s ease-out;
+	z-index: -1;
+	/* Pushes image behind the text content */
+}
+
+/* The Title Text Box */
+.home-exhibits-title {
+	margin-left: 25px;
+	margin-right: 25px;
+	padding: var(--gutter, 20px);
+	padding-bottom: 35px;
+	background-color: rgba(255, 206, 52, 0.3);
+	/* Matches the pseudo-element color */
+}
+
+.home-exhibits-title h2,
+.home-exhibits-title h3 {
+	margin: 0;
+	text-align: center;
+	font-size: 14px !important;
+	font-weight: 700 !important;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--foreground);
+	text-decoration: none !important;
+}
+
+@media screen and (min-width: 768px) {
+
+	.home-collection {
+		margin-bottom: 0;
+		text-align: center;
+	}
+
+	.home-collection h2 {
+		margin: 80px 0;
+		text-align: center;
+		font-size: 31px;
+		letter-spacing: 0.25em;
+		text-transform: uppercase;
+	}
+
+	/* 3-Column Grid Setup */
+	.home-exhibits {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-gap: 15px;
+	}
+
+	.home-exhibits>div>a {
+		display: flex !important;
+		flex-direction: column;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	/* Hover Effect: Zoom Image */
+	.home-exhibits>div>a:hover img {
+		transform: scale(1.05);
+	}
+
+	/* Adjust the Yellow Box Height for Desktop */
+	.home-exhibits>div>a:before {
+		height: calc(33vw - 85px);
+	}
+
+	.home-exhibits>div:first-of-type a:before {
+		right: 0;
+	}
+
+	.home-exhibits>div:first-of-type .home-exhibits-title {
+		margin-right: 0;
+	}
+
+	.home-exhibits>div:last-of-type a:before {
+		left: 0;
+	}
+
+	.home-exhibits>div:last-of-type .home-exhibits-title {
+		margin-left: 0;
+	}
+
+	/* Flex centering for the title container */
+	.home-exhibits .home-exhibits-title {
+		flex-grow: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	/* The Orange Underline on Titles */
+	.home-exhibits h3 {
+		position: relative;
+		font-size: 14px;
+		word-break: break-word;
+		font-weight: 700;
+	}
+
+	.home-exhibits h3:after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		bottom: -10px;
+		height: 2px;
+		width: 60%;
+		background-color: var(--primary);
+		/* #f99d2a */
+		/* #f99d2a */
+		transform: translateX(-50%);
+	}
+
+	.home-exhibits>div img {
+		height: 33vw;
+	}
+}
+
+@media screen and (min-width: 1280px) {
+	/* Section padding now handled externally */
+
+	/* Recalculate heights based on new padding */
+	.home-exhibits>div>a:before {
+		height: calc((100vw - 230px) / 3 - 85px);
+	}
+
+	.home-exhibits>div img {
+		height: calc((100vw - 230px) / 3);
 	}
 }

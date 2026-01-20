@@ -29,6 +29,7 @@ regions:
   login_region: "Login region"
 
   # breadcrumb: "Breadcrumb"
+  content_top: "Content top"
   content: "Content"
 
   # sidebar_first: "Sidebar first"

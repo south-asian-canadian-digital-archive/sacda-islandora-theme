@@ -8,29 +8,29 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // ============================================
 const CONFIG = {
 	// How many pixels to scroll before animation completes
-	scrollDistance: 100,
+	scrollDistance: 200,
 
 	// Smoothing factor (0 = instant, 0.5 = slight lag, 1+ = more lag)
 	// Higher values reduce jitter but feel less responsive
 	scrubSmoothing: 0,
 
-	// Container padding when collapsed (CSS value)
-	collapsedPaddingY: "0.05rem",
+	// Container padding when collapsed (use fixed px to avoid font-size scaling)
+	collapsedPaddingY: "1px",
 
 	// Container height when collapsed (CSS value, e.g. "50px" or "auto")
-	collapsedHeight: "60px",
+	collapsedHeight: "5vh",
 
 	// Logo scale when collapsed (1 = 100%, 0.65 = 65%)
-	logoScale: 0.65,
+	logoScale: 0.50,
 
 	// Nav horizontal shift when collapsed (negative = left)
-	navX: -60,
+	navX: -100,
 
 	// Nav vertical shift when collapsed (negative = up)
-	navY: -25,
+	navY: -40,
 
 	// Login region vertical shift when collapsed (negative = up)
-	loginY: 25,
+	loginY: 30,
 
 	// Shadow when scrolled
 	boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",

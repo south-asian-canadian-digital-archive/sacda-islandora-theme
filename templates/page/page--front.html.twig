@@ -13,8 +13,7 @@
 	<main role="main" class="front-page w-full">
 		<a id="main-content" tabindex="-1"></a>
 
-		{# Full-viewport carousel with negative margin to go under header #}
-		<div class="w-full min-h-[40vh]">
+		<div class="w-full min-h-[40vh] pt-4">
 			{% include '@sacda/blocks/sacda-carousel.html.twig' with {
 			slides: carousel_slides,
 			autoplay_speed: carousel_autoplay_speed,
@@ -22,35 +21,43 @@
 		} %}
 		</div>
 
+		{{ page.content_top }}
+
 		{# 1. Hero Search & Mission Section #}
-		<section class="relative my-6 px-4 py-10 md:px-6 md:py-16 bg-light md:bg-[url('{{ theme_path }}/static/homepage/bg-circles.svg')] md:bg-repeat-x md:bg-bottom md:bg-[length:60%]">
-			<div class="container mx-auto">
-				<div class="flex flex-wrap mb-8">
-					<div class="hidden md:block w-1/3 pr-4">
-						<h2 class="text-3xl uppercase font-bold text-secondary">SEARCH</h2>
-					</div>
-					<div class="w-full md:w-2/3">
-						<form action="/search" method="get" class="flex items-center pt-2">
-							{{ search.input({
+		<section
+			class="relative my-6 py-10 md:py-16 bg-light overflow-hidden">
+			{# Background circles - positioned at bottom as HTML img #}
+			<img src="{{ theme_path }}/static/homepage/bg-circles.svg" alt="" class="hidden md:block absolute bottom-0 left-0 w-full h-auto pointer-events-none select-none" aria-hidden="true">
+
+			<div class="relative z-10 px-4 md:px-24">
+				<div class="container mx-auto">
+					<div class="flex flex-wrap mb-16 md:pb-20 border-b border-b-secondary">
+						<div class="hidden md:block w-1/3 pr-4">
+							<h2 class="text-3xl uppercase font-bold text-secondary">SEARCH</h2>
+						</div>
+						<div class="w-full md:w-2/3">
+							<form action="/search" method="get" class="flex items-center pt-2 w-full">
+								{{ search.input({
 								id: 'frontSearchInput',
 								variant: 'hero',
 							}) }}
-						</form>
+							</form>
+						</div>
 					</div>
-				</div>
 
-				<div class="flex flex-wrap">
-					<div class="hidden md:block w-1/3 pr-4">
-						<h2 class="text-3xl uppercase font-bold text-secondary">EXPLORE THE JOURNEY</h2>
-					</div>
-					<div class="w-full md:w-2/3 text-secondary">
-						<p class="hidden md:block mb-8 text-lg leading-relaxed">
-							Engage with the rich history of the South Asian Canadian diaspora. Explore stories of immigration, community building, cultural preservation, and the enduring contributions of South Asian Canadians to the fabric of our nation.
-						</p>
-						<div class="flex flex-col md:flex-row gap-5 mt-10 md:mt-14">
+					<div class="flex flex-wrap">
+						<div class="hidden md:block w-1/3 pr-4">
+							<h2 class="text-3xl uppercase font-bold text-secondary">EXPLORE THE JOURNEY</h2>
+						</div>
+						<div class="w-full md:w-2/3 text-secondary">
+							<p class="hidden md:block mb-8 text-lg leading-relaxed">
+								Engage with the rich history of the South Asian Canadian diaspora. Explore stories of immigration, community building, cultural preservation, and the enduring contributions of South Asian Canadians to the fabric of our nation.
+							</p>
+							<div class="flex flex-col md:flex-row gap-5 mt-10 md:mt-14">
 
-							{{ btn.link('About', '/about', { variant: 'outline', class: 'w-full md:w-auto' }) }}
-							{{ btn.link('Advanced Search', '/search/advanced', { variant: 'outline', class: 'w-full md:w-auto' }) }}
+								{{ btn.link('About', '/about', { variant: 'outline', class: 'w-full md:w-auto' }) }}
+								{{ btn.link('Advanced Search', '/search/advanced', { variant: 'outline', class: 'w-full md:w-auto' }) }}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -58,8 +65,8 @@
 		</section>
 
 		{# 2. Land Acknowledgement #}
-		<section class="bg-primary/60 text-center px-6 py-10 md:py-16 lg:py-24 my-6 md:my-0">
-			<div class="container mx-auto">
+		<section class="bg-primary/60 text-center py-10 md:py-16 lg:py-24 my-6 md:my-0">
+			<div class="px-4 md:px-24 mx-auto">
 				<div class="mb-4">
 					<h2 class="text-3xl uppercase font-bold text-secondary">LAND ACKNOWLEDGEMENT</h2>
 				</div>
@@ -72,12 +79,10 @@
 		</section>
 
 		{# 3. Featured Exhibits #}
-		<section class="py-10 px-4 md:px-24">
-			<div class="hidden md:block w-full mb-8">
-				<h2 class="text-3xl uppercase font-bold text-secondary">Featured Exhibits</h2>
-			</div>
+		<section class="home-collection px-4 md:px-24 py-10">
+			<h2>Featured Exhibits</h2>
 
-			<div class="hidden md:grid grid-cols-3 gap-4">
+			<div class="home-exhibits">
 				{% set exhibits = [
 					{ title: 'Komagata Maru Exhibit', link: '/exhibits/komagata-maru', image: theme_path ~ '/static/homepage/Komogata-Maru-Exhibit_South-Asian-Canadian.jpg' },
 					{ title: 'Labour History Exhibit', link: '/exhibits/labour-history', image: theme_path ~ '/static/homepage/Labour-History-Exhibit_South-Asian-Canadian.jpg' },
@@ -85,37 +90,20 @@
 				] %}
 
 				{% for exhibit in exhibits %}
-					<div class="group relative overflow-hidden flex flex-col h-full">
-						<a href="{{ exhibit.link }}" class="block h-full flex flex-col">
-							<div class="relative w-full h-[33vw] lg:h-[calc((100vw-230px)/3)]">
-								<div class="absolute left-[25px] right-[25px] top-[85px] bottom-0 bg-primary/30 z-0"></div>
-								<img src="{{ exhibit.image }}" alt="{{ exhibit.title }}" class="relative z-10 w-full h-full object-cover origin-bottom transition-transform duration-500 group-hover:scale-105">
-							</div>
-							<div class="mx-[25px] p-6 pb-9 bg-primary/30 flex-grow flex items-center justify-center">
-								<h3 class="relative text-center font-bold text-base lg:text-lg uppercase text-secondary after:content-[''] after:absolute after:left-1/2 after:-bottom-2 after:h-[2px] after:w-[60%] after:bg-primary after:-translate-x-1/2">
-									{{ exhibit.title }}
-								</h3>
+					<div class="home-exhibits-item">
+						<a href="{{ exhibit.link }}">
+							<img src="{{ exhibit.image }}" alt="{{ exhibit.title }}">
+							<div class="home-exhibits-title">
+								<h3>{{ exhibit.title }}</h3>
 							</div>
 						</a>
 					</div>
 				{% endfor %}
 			</div>
-
-			{# Mobile version #}
-			<div class="md:hidden flex flex-col gap-4">
-				{% for exhibit in exhibits %}
-					<a href="{{ exhibit.link }}" class="relative overflow-hidden h-48">
-						<img src="{{ exhibit.image }}" alt="{{ exhibit.title }}" class="w-full h-full object-cover">
-						<div class="absolute bottom-4 left-4 right-4 bg-primary p-3">
-							<h3 class="font-bold text-sm uppercase text-secondary text-center">{{ exhibit.title }}</h3>
-						</div>
-					</a>
-				{% endfor %}
-			</div>
 		</section>
 
 		{# 4. Explore Themes (Asymmetric Grid) #}
-		<section class="py-10 px-4 md:px-32">
+		<section class="py-10 px-4 md:px-24">
 			<div class="hidden md:block mb-8 text-center">
 				<h2 class="text-3xl font-bold text-secondary uppercase mb-4">Explore Themes</h2>
 				<p class="text-lg text-secondary">Navigate the digital archives through curated thematic collections.</p>
@@ -158,7 +146,7 @@
 		</section>
 
 		{# 5. Walk Through History (Recently Added) #}
-		<section class="py-10 px-4 md:px-40 pb-16 md:pb-36">
+		<section class="py-10 px-4 md:px-24 pb-16 md:pb-36">
 			<div class="flex flex-wrap mb-8">
 				<div class="w-full md:w-1/3">
 					<h2 class="text-3xl font-bold uppercase text-secondary">WALK THROUGH HISTORY</h2>
@@ -201,8 +189,8 @@
 		</section>
 
 		{# 6. Help Tell Our Story (CTA) #}
-		<section class="bg-light py-10 px-4 md:py-32 md:px-36 text-center">
-			<div class="max-w-4xl mx-auto">
+		<section class="bg-light py-10 md:py-32 text-center">
+			<div class="px-4 md:px-24 max-w-4xl mx-auto">
 				<h2 class="text-3xl md:text-5xl font-bold uppercase text-secondary mb-4">HELP TELL OUR STORY</h2>
 				<p class="text-lg text-secondary mb-8">
 					Do you have access to materials and/or oral histories of significance you could contribute to our digital archives?

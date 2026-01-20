@@ -43,7 +43,7 @@
 	</div>
 
 	<div class="flex flex-col gap-4 text-background md:w-fit lg:w-fit">
-		<p class="w-fit border-b border-b-secondary pb-1 text-lg font-bold uppercase self-center md:self-end">
+		<p class="w-fit border-b border-b-accent pb-1 text-lg font-bold uppercase self-center md:self-end">
 			GET IN TOUCH
 		</p>
 
@@ -51,7 +51,7 @@
 			{% if footer_social_links is not empty %}
 				{% for social in footer_social_links %}
 					{% if social.link %}
-						<a href="{{ social.link }}" target="_blank" rel="noopener noreferrer" class="flex h-12 w-12 items-center justify-center rounded-full text-lg text-background border border-secondary hover:text-secondary transition-colors" title="{{ social.title|default('') }}">
+						<a href="{{ social.link }}" target="_blank" rel="noopener noreferrer" class="flex h-12 w-12 items-center justify-center rounded-full text-lg text-background border border-accent hover:text-secondary transition-colors" title="{{ social.title|default('') }}">
 							{{ social_icons[social.icon]|default(social_icons['website'])|raw }}
 						</a>
 					{% endif %}
