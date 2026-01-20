@@ -1,59 +1,43 @@
 {#
 /**
  * @file
- * Custom header template for SACDA theme.
+ * Desktop header template for SACDA theme.
+ * This header has GSAP scroll animations and is only visible on desktop (>= 768px).
+ * Mobile devices use the separate mobile-header.html.twig instead.
  */
 #}
 {% import '@sacda/macros/search.twig' as search %}
 
-<header id="sacda-header" role="navigation" aria-label="Main navigation" class="sacda-header sticky top-0 z-50 bg-white/95 backdrop-blur-sm text-foreground shadow-lg transition-shadow duration-200">
-	<div id="sacda-header-container" class="mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-10 py-4 md:py-6">
-		<div class="w-full md:w-fit flex justify-between items-center">
+<header id="sacda-header" role="navigation" aria-label="Main navigation" class="sacda-header hidden md:block sticky top-0 z-50 bg-white/95 backdrop-blur-sm text-foreground shadow-lg transition-shadow duration-200">
+	<div id="sacda-header-container" class="mx-auto flex flex-row items-center justify-between px-10 py-6">
+		<div class="w-fit flex justify-between items-center">
 			<a id="sacda-header-logo" href="{{ path('<front>') }}" class="origin-left">
 				{% if logo %}
-					<img src="{{ logo }}" alt="{{ site_name }}" class="w-48 md:w-64"/>
+					<img src="{{ logo }}" alt="{{ site_name }}" class="w-64"/>
 				{% else %}
 					<span class="text-xl font-bold">{{ site_name }}</span>
 				{% endif %}
 			</a>
-
-			<button class="sacda-mobile-nav-toggle bg-primary text-primary-foreground flex items-center justify-center w-14 h-14 md:sacda-hide border-none cursor-pointer" aria-expanded="false" aria-controls="sacda-nav-content" id="sacda-mobile-toggle" type="button">
-				<span class="sr-only">Toggle navigation</span>
-				<svg class="sacda-toggle-icon icon-menu w-6 h-6" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-					<path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-					<path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-				</svg>
-				<svg class="sacda-toggle-icon icon-close w-6 h-6 sacda-hide" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-					<path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-				</svg>
-			</button>
 		</div>
 
 		<div
-			id="sacda-nav-content" class="sacda-nav-content w-full md:w-auto flex flex-col items-start md:items-end gap-6 md:gap-4 pt-6 md:pt-0">
-			{# Top row: scrollable search/menu + fixed login #}
+			id="sacda-nav-content" class="w-auto flex flex-col items-end gap-4">
 			<div
 				class="sacda-menu-top flex items-center gap-4">
-				{# Wrapper for scrollable content (clips overflow) #}
 				<div id="sacda-menu-scrollable-wrapper" class="overflow-hidden">
 					<div
 						id="sacda-menu-scrollable" class="flex items-center gap-4">
-						{# Search form - scrolls up #}
 						<form class="flex" role="search" id="sacda-header-search">
 							{{ search.input({ width: 'w-48', id: 'sacda-search-input' }) }}
 						</form>
 						{{ page.menu_top }}
 					</div>
 				</div>
-				{# Login region - stays in place #}
-				<div id="sacda-login-region">
+				<div id="sacda-login-region" class="relative z-50">
 					{{ page.login_region }}
 				</div>
 			</div>
-			{# Main navigation - slides left on scroll #}
-			<div id="sacda-header-nav" class="sacda-menu-bottom flex flex-col md:flex-row">{{ page.menu_bottom }}</div>
+			<div id="sacda-header-nav" class="sacda-menu-bottom flex flex-row relative z-49">{{ page.menu_bottom }}</div>
 		</div>
 	</div>
 </header>
@@ -61,59 +45,7 @@
 <style>
 	@source "../../css/main.css";
 
-	.sacda-hide {
-		display: none !important;
-	}
-	.sacda-show {
-		display: flex !important;
-	}
-
-	#sacda-nav-content {
-		max-height: 0;
-		overflow: hidden;
-		transition: max-height 0.25s ease-out, padding 0.25s ease-out, opacity 0.25s ease-out;
-		padding-top: 0;
-		opacity: 0;
-	}
-
-	#sacda-nav-content.is-open {
-		max-height: 600px;
-		overflow: visible;
-		padding-top: 1.5rem;
-		opacity: 1;
-	}
-
-	@media(min-width: 48rem) {
-		#sacda-nav-content {
-			max-height: none !important;
-			overflow: visible !important;
-			padding-top: 0 !important;
-			opacity: 1 !important;
-		}
-		.sacda-mobile-nav-toggle {
-			display: none !important;
-		}
-		.sacda-account-icon {
-			display: none !important;
-		}
-	}
-
-	@media(max-width: 47.99rem) {
-		.sacda-nav-content .sacda-nav-link,
-		.sacda-nav-content .sacda-main-menu a {
-			font-size: 1.125rem !important;
-			font-weight: 700 !important;
-			text-transform: uppercase !important;
-			padding: 0.5rem 0 !important;
-			border-bottom: none !important;
-		}
-		.sacda-nav-content .sacda-nav-list,
-		.sacda-nav-content .sacda-main-menu {
-			flex-direction: column !important;
-			align-items: flex-start !important;
-		}
-	}
-
+	/* Desktop nav link styles */
 	.sacda-header .sacda-nav-list .sacda-nav-item .sacda-nav-link {
 		@apply border-b-2 border-transparent pb-1 transition-all duration-200 ease-in-out no-underline inline-block text-foreground font-semibold;
 	}
@@ -122,7 +54,7 @@
 		@apply border-b-2 border-primary;
 	}
 
-	/* temp, to overide olivero styles */
+	/* Olivero override */
 	#sacda-search-input {
 		width: 12rem;
 		max-width: none;
@@ -139,38 +71,21 @@
 
 	/* Offset header for Drupal admin toolbar when logged in */
 	body.toolbar-fixed #sacda-header {
-		top: 39px; /* Height of horizontal toolbar */
+		top: 39px;
 	}
 	body.toolbar-fixed.toolbar-horizontal.toolbar-tray-open #sacda-header {
-		top: 79px; /* Toolbar + open tray */
+		top: 79px;
 	}
 	body.toolbar-fixed.toolbar-vertical #sacda-header {
 		top: 39px;
 	}
 	body.toolbar-fixed.toolbar-vertical.toolbar-tray-open #sacda-header {
-		top: 39px; /* Vertical tray doesn't add height, just width */
+		top: 39px;
 	}
 </style>
 
 <script>
 	(function () {
-var toggle = document.getElementById('sacda-mobile-toggle');
-var nav = document.getElementById('sacda-nav-content');
-var iconMenu = toggle ? toggle.querySelector('.icon-menu') : null;
-var iconClose = toggle ? toggle.querySelector('.icon-close') : null;
-
-if (toggle && nav) {
-toggle.addEventListener('click', function () {
-var expanded = this.getAttribute('aria-expanded') === 'true';
-this.setAttribute('aria-expanded', String(! expanded));
-nav.classList.toggle('is-open');
-if (iconMenu && iconClose) {
-iconMenu.classList.toggle('sacda-hide');
-iconClose.classList.toggle('sacda-hide');
-}
-});
-}
-
 var searchForm = document.getElementById('sacda-header-search');
 var searchInput = document.getElementById('sacda-search-input');
 

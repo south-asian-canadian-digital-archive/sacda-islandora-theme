@@ -2,45 +2,117 @@
  * @file
  * Embla Carousel component (shadcn-style)
  * Uses Embla Carousel with autoplay plugin
+ * Supports responsive slidesPerView via data attributes
  */
 
 import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from "embla-carousel";
 import Autoplay from "embla-carousel-autoplay";
 
 interface CarouselElement extends HTMLElement {
-	dataset: DOMStringMap & { autoplayDelay?: string; slidesPerView?: string };
+	dataset: DOMStringMap & { 
+		autoplayDelay?: string; 
+		slidesPerView?: string;
+		slidesTablet?: string;
+		slidesMobile?: string;
+	};
 }
 
+// Breakpoint definitions (matches Tailwind defaults)
+const BREAKPOINTS = {
+	mobile: 640,  // < 640px = mobile
+	tablet: 1024, // 640-1024px = tablet
+	// > 1024px = desktop
+};
+
 class SacdaCarousel {
-	private root: HTMLElement;
+	private root: CarouselElement;
 	private viewport: HTMLElement | null;
 	private embla: EmblaCarouselType | null = null;
-	private prevBtn: HTMLButtonElement | null;
-	private nextBtn: HTMLButtonElement | null;
+	private prevBtns: NodeListOf<HTMLButtonElement>;
+	private nextBtns: NodeListOf<HTMLButtonElement>;
 	private dotsContainer: HTMLElement | null;
 	private dots: HTMLButtonElement[] = [];
 	private autoplayDelay: number;
+	private currentBreakpoint: 'mobile' | 'tablet' | 'desktop' = 'desktop';
+	private mediaQueryMobile: MediaQueryList;
+	private mediaQueryTablet: MediaQueryList;
 
-	constructor(element: HTMLElement) {
+	constructor(element: CarouselElement) {
 		this.root = element;
 		this.viewport = element.querySelector("[data-carousel-viewport]");
-		this.prevBtn = element.querySelector("[data-carousel-prev]");
-		this.nextBtn = element.querySelector("[data-carousel-next]");
+		this.prevBtns = element.querySelectorAll("[data-carousel-prev]");
+		this.nextBtns = element.querySelectorAll("[data-carousel-next]");
 		this.dotsContainer = element.querySelector("[data-carousel-dots]");
 		this.autoplayDelay = parseInt(element.dataset.autoplayDelay || "5000", 10);
+
+		// Setup media queries
+		this.mediaQueryMobile = window.matchMedia(`(max-width: ${BREAKPOINTS.mobile - 1}px)`);
+		this.mediaQueryTablet = window.matchMedia(`(min-width: ${BREAKPOINTS.mobile}px) and (max-width: ${BREAKPOINTS.tablet - 1}px)`);
 
 		if (!this.viewport) return;
 
 		this.init();
+		this.setupBreakpointListeners();
+	}
+
+	private getCurrentBreakpoint(): 'mobile' | 'tablet' | 'desktop' {
+		if (this.mediaQueryMobile.matches) return 'mobile';
+		if (this.mediaQueryTablet.matches) return 'tablet';
+		return 'desktop';
+	}
+
+	private getSlidesPerView(): number {
+		const breakpoint = this.getCurrentBreakpoint();
+		
+		if (breakpoint === 'mobile') {
+			return parseInt(this.root.dataset.slidesMobile || "1", 10);
+		}
+		if (breakpoint === 'tablet') {
+			return parseInt(this.root.dataset.slidesTablet || this.root.dataset.slidesPerView || "1", 10);
+		}
+		return parseInt(this.root.dataset.slidesPerView || "1", 10);
+	}
+
+	private updateSlideBasis(slidesPerView: number): void {
+		const slides = this.root.querySelectorAll<HTMLElement>('.carousel-slide');
+		slides.forEach(slide => {
+			slide.style.flexBasis = `calc(100% / ${slidesPerView})`;
+		});
+	}
+
+	private setupBreakpointListeners(): void {
+		const handleBreakpointChange = () => {
+			const newBreakpoint = this.getCurrentBreakpoint();
+			if (newBreakpoint !== this.currentBreakpoint) {
+				this.currentBreakpoint = newBreakpoint;
+				this.reinit();
+			}
+		};
+
+		this.mediaQueryMobile.addEventListener('change', handleBreakpointChange);
+		this.mediaQueryTablet.addEventListener('change', handleBreakpointChange);
+	}
+
+	private reinit(): void {
+		// Destroy existing instance
+		if (this.embla) {
+			this.embla.destroy();
+		}
+		// Reinitialize with new settings
+		this.init();
 	}
 
 	private init(): void {
-		const slidesPerView = parseInt(this.root.dataset.slidesPerView || "1", 10);
+		const slidesPerView = this.getSlidesPerView();
+		this.currentBreakpoint = this.getCurrentBreakpoint();
+
+		// Update slide flex-basis for current breakpoint
+		this.updateSlideBasis(slidesPerView);
 
 		const options: EmblaOptionsType = {
 			loop: true,
 			align: "start",
-			slidesToScroll: slidesPerView > 1 ? slidesPerView : 1, // Scroll by group if multiple slides
+			slidesToScroll: slidesPerView > 1 ? slidesPerView : 1,
 		};
 
 		const autoplayPlugin = Autoplay({
@@ -51,9 +123,13 @@ class SacdaCarousel {
 
 		this.embla = EmblaCarousel(this.viewport!, options, [autoplayPlugin]);
 
-		// Setup navigation buttons
-		this.prevBtn?.addEventListener("click", () => this.embla?.scrollPrev());
-		this.nextBtn?.addEventListener("click", () => this.embla?.scrollNext());
+		// Setup navigation buttons (all prev/next buttons)
+		this.prevBtns.forEach(btn => {
+			btn.addEventListener("click", () => this.embla?.scrollPrev());
+		});
+		this.nextBtns.forEach(btn => {
+			btn.addEventListener("click", () => this.embla?.scrollNext());
+		});
 
 		// Setup dots
 		this.setupDots();
@@ -104,20 +180,20 @@ class SacdaCarousel {
 		const canScrollPrev = this.embla.canScrollPrev();
 		const canScrollNext = this.embla.canScrollNext();
 
-		if (this.prevBtn) {
-			this.prevBtn.disabled = !canScrollPrev;
-			this.prevBtn.classList.toggle("opacity-50", !canScrollPrev);
-		}
-		if (this.nextBtn) {
-			this.nextBtn.disabled = !canScrollNext;
-			this.nextBtn.classList.toggle("opacity-50", !canScrollNext);
-		}
+		this.prevBtns.forEach(btn => {
+			btn.disabled = !canScrollPrev;
+			btn.classList.toggle("opacity-50", !canScrollPrev);
+		});
+		this.nextBtns.forEach(btn => {
+			btn.disabled = !canScrollNext;
+			btn.classList.toggle("opacity-50", !canScrollNext);
+		});
 	}
 }
 
 // Initialize all carousels on page
 function initCarousels(): void {
-	document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((el) => {
+	document.querySelectorAll<CarouselElement>("[data-carousel]").forEach((el) => {
 		new SacdaCarousel(el);
 	});
 }
@@ -127,3 +203,4 @@ if (document.readyState === "loading") {
 } else {
 	initCarousels();
 }
+

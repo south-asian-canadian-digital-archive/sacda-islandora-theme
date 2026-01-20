@@ -248,6 +248,28 @@
 	}
 }
 
+/* Mobile visibility utilities */
+@media screen and (max-width: 767px) {
+	.hide-on-mobile {
+		display: none !important;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.hide-on-desktop {
+		display: none !important;
+	}
+}
+
+/* Utility classes for toggling visibility */
+.sacda-hide {
+	display: none !important;
+}
+
+.sacda-show {
+	display: flex !important;
+}
+
 
 /* Landing page exhibits grid */
 /* Base Section Spacing */

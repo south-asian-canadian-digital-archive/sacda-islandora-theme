@@ -1,0 +1,245 @@
+{#
+/**
+ * @file
+ * Mobile header template for SACDA theme.
+ * This is a separate component from the desktop header to avoid GSAP scroll animations.
+ * Only visible on mobile devices (< 768px).
+ */
+#}
+{% import '@sacda/macros/search.twig' as search %}
+
+<header id="sacda-mobile-header" role="navigation" aria-label="Mobile navigation" class="sacda-mobile-header md:hidden sticky top-0 z-50 bg-white text-foreground shadow-md">
+	<div
+		class="flex items-center justify-between px-4 py-3 min-h-[70px]">
+		{# Logo #}
+		<a href="{{ path('<front>') }}" class="sacda-mobile-logo">
+			{% if logo %}
+				<img src="{{ logo }}" alt="{{ site_name }}" class="h-12 w-auto"/>
+			{% else %}
+				<span class="text-lg font-bold">{{ site_name }}</span>
+			{% endif %}
+		</a>
+
+		{# Right side: Search icon + Hamburger #}
+		<div
+			class="flex items-center gap-2">
+			{# Mobile search icon #}
+			<button type="button" id="sacda-mobile-search-toggle" class="flex items-center justify-center w-10 h-10 text-foreground" aria-label="Toggle search">
+				<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="11" cy="11" r="8"/>
+					<path d="m21 21-4.3-4.3"/>
+				</svg>
+			</button>
+
+			{# Hamburger button #}
+			<button class="sacda-mobile-nav-toggle bg-primary text-primary-foreground flex items-center justify-center w-12 h-12" aria-expanded="false" aria-controls="sacda-mobile-nav-content" id="sacda-mobile-toggle" type="button">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="sacda-hamburger">
+					<span class="sacda-hamburger-bar"></span>
+					<span class="sacda-hamburger-bar"></span>
+					<span class="sacda-hamburger-bar"></span>
+				</span>
+			</button>
+		</div>
+	</div>
+
+	{# Mobile search dropdown #}
+	<div id="sacda-mobile-search-dropdown" class="sacda-mobile-search-dropdown hidden px-4 pb-4 bg-white border-t border-border">
+		<form action="/search" method="get" class="flex w-full" role="search" id="sacda-mobile-search-form">
+			{{ search.input({
+				id: 'sacda-mobile-search-input',
+				variant: 'hero',
+				placeholder: 'Search the archive...'
+			}) }}
+		</form>
+	</div>
+
+	{# Mobile navigation dropdown #}
+	<nav id="sacda-mobile-nav-content" class="sacda-mobile-nav-content bg-white border-t border-border">
+		<div
+			class="px-4 py-4">
+			{# Main navigation menu #}
+			<div class="sacda-mobile-menu mb-6 text-left">
+				{{ page.menu_bottom }}
+			</div>
+
+			{# Secondary menu items #}
+			<div class="sacda-mobile-menu-secondary border-t border-border pt-4">
+				{{ page.menu_top }}
+			</div>
+
+			{# Login region #}
+			<div class="sacda-mobile-login mt-4 pt-4 border-t border-border">
+				{{ page.login_region }}
+			</div>
+		</div>
+	</nav>
+</header>
+
+<style>
+	@source "../../css/main.css";
+
+	/* Mobile header - only visible on mobile */
+	.sacda-mobile-header {
+		display: block;
+	}
+
+	@media(min-width: 48rem) {
+		.sacda-mobile-header {
+			display: none !important;
+		}
+	}
+
+	/* Hamburger button */
+	.sacda-mobile-nav-toggle {
+		border: none;
+		cursor: pointer;
+	}
+
+	/* Animated hamburger icon - bars to X */
+	.sacda-hamburger {
+		position: relative;
+		width: 20px;
+		height: 14px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.sacda-hamburger-bar {
+		display: block;
+		width: 100%;
+		height: 2px;
+		background-color: currentColor;
+		transition: transform 0.3s ease, opacity 0.3s ease;
+		transform-origin: center;
+	}
+
+	/* Animated X state */
+	.sacda-mobile-nav-toggle[aria-expanded="true"] .sacda-hamburger-bar:nth-child(1) {
+		transform: translateY(6px) rotate(45deg);
+	}
+
+	.sacda-mobile-nav-toggle[aria-expanded="true"] .sacda-hamburger-bar:nth-child(2) {
+		opacity: 0;
+	}
+
+	.sacda-mobile-nav-toggle[aria-expanded="true"] .sacda-hamburger-bar:nth-child(3) {
+		transform: translateY(-6px) rotate(-45deg);
+	}
+
+	/* Nav content - collapsed by default */
+	.sacda-mobile-nav-content {
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.3s ease-out;
+	}
+
+	.sacda-mobile-nav-content.is-open {
+		max-height: 80vh;
+		overflow-y: auto;
+	}
+
+	/* Search dropdown */
+	.sacda-mobile-search-dropdown.is-open {
+		display: block !important;
+	}
+
+	/* Mobile nav link styles */
+	.sacda-mobile-menu a,
+	.sacda-mobile-menu-secondary a {
+		display: block;
+		font-size: 1.25rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		padding: 0.75rem 0;
+		color: var(--foreground);
+		text-decoration: none;
+		border-bottom: 1px solid transparent;
+		text-align: left;
+	}
+
+	.sacda-mobile-menu a:active,
+	.sacda-mobile-menu-secondary a:active {
+		background-color: rgba(255, 237, 194, 0.5);
+	}
+
+	/* Override Drupal menu list styles */
+	.sacda-mobile-menu ul,
+	.sacda-mobile-menu-secondary ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.sacda-mobile-menu li,
+	.sacda-mobile-menu-secondary li {
+		margin: 0;
+		padding: 0;
+	}
+
+	/* Login region styling */
+	.sacda-mobile-login a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-weight: 600;
+		color: var(--foreground);
+		text-decoration: none;
+	}
+
+	/* Offset for Drupal admin toolbar */
+	body.toolbar-fixed .sacda-mobile-header {
+		top: 39px;
+	}
+	body.toolbar-fixed.toolbar-horizontal.toolbar-tray-open .sacda-mobile-header {
+		top: 79px;
+	}
+</style>
+
+<script>
+	(function () { // Mobile nav toggle
+var toggle = document.getElementById('sacda-mobile-toggle');
+var nav = document.getElementById('sacda-mobile-nav-content');
+
+if (toggle && nav) {
+toggle.addEventListener('click', function () {
+var expanded = this.getAttribute('aria-expanded') === 'true';
+this.setAttribute('aria-expanded', String(! expanded));
+nav.classList.toggle('is-open');
+});
+}
+
+// Mobile search toggle
+var searchToggle = document.getElementById('sacda-mobile-search-toggle');
+var searchDropdown = document.getElementById('sacda-mobile-search-dropdown');
+
+if (searchToggle && searchDropdown) {
+searchToggle.addEventListener('click', function () {
+searchDropdown.classList.toggle('is-open');
+// Focus the input when opened
+if (searchDropdown.classList.contains('is-open')) {
+var input = searchDropdown.querySelector('input');
+if (input) 
+input.focus();
+
+
+}
+});
+}
+
+// Mobile search form submit
+var searchForm = document.getElementById('sacda-mobile-search-form');
+var searchInput = document.getElementById('sacda-mobile-search-input');
+
+if (searchForm && searchInput) {
+searchForm.addEventListener('submit', function (e) {
+e.preventDefault();
+var term = searchInput.value.trim();
+if (term && window.sacdaSearch && window.sacdaSearch.generateIslandoraUrl) {
+window.location.href = window.sacdaSearch.generateIslandoraUrl(term);
+}
+});
+}
+})();
+</script>

@@ -18,7 +18,7 @@ const CONFIG = {
 	collapsedPaddingY: "1px",
 
 	// Container height when collapsed (CSS value, e.g. "50px" or "auto")
-	collapsedHeight: "5vh",
+	collapsedHeight: "60px",
 
 	// Logo scale when collapsed (1 = 100%, 0.65 = 65%)
 	logoScale: 0.50,

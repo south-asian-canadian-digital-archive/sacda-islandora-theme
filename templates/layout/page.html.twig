@@ -10,7 +10,10 @@
 	<div
 		id="page">
 
-		{# HEADER #}
+		{# MOBILE HEADER (shown < 768px) #}
+		{% include '@sacda/navigation/mobile-header.html.twig' with { is_front: is_front } %}
+
+		{# DESKTOP HEADER (shown >= 768px) #}
 		{% include '@sacda/navigation/header.html.twig' with { is_front: is_front } %}
 
 		{# MAIN CONTENT - Override this block in child templates #}
