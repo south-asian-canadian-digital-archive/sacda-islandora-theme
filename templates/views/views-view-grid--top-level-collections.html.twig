@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Theme override for the grid format in top_level_collections view.
+ * Renders collection items in a styled grid layout.
+ * 
+ * Available variables:
+ * - items: A list of grid items organized by row. Each item contains:
+ *   - attributes: HTML attributes for the row wrapper
+ *   - content: A list of columns with:
+ *     - attributes: HTML attributes for the column cell
+ *     - content: The rendered view row content
+ * - rows: The rendered results of the view (list of row items)
+ * - attributes: HTML attributes for the grid wrapper
+ * - title: Title for this group of rows
+ * - options: The style options (columns, alignment, etc.)
+ */
+#}
+
+{% set classes = [
+  'collection-grid',
+] %}
+
+<div{{attributes.addClass(classes)}}>
+	{% for row in items %}
+		{% for column in row.content %}
+			<div class="collection-item" {{ column.attributes }}>
+				{{ column.content }}
+			</div>
+		{% endfor %}
+	{% endfor %}
+</div>

@@ -4,6 +4,7 @@
 @import "tw-animate-css";
 @import "./_base.css";
 @import "./_buttons.css";
+@import "./_collections.css";
 
 @source "../templates/**/*.twig";
 @source "../templates/**/*.html";

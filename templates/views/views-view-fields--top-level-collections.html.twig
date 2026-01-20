@@ -1,0 +1,51 @@
+{#
+/**
+ * @file
+ * Theme override for a single row/item in the top_level_collections view.
+ * Renders each collection as a styled card with image, title, and description.
+ *
+ * Available variables:
+ * - view: The view object.
+ * - row: The raw result row.
+ * - output: The processed fields.
+ * - fields: The processed fields keyed by field ID.
+ *
+ * Field IDs from View:
+ * - did_image: The collection image
+ * - title: The collection title
+ * - field_description: Optional description
+ */
+#}
+
+{% set entity = row._entity %}
+{% set url = path('entity.node.canonical', {'node': entity.id}) %}
+
+<a
+	href="{{ url }}">
+	{# Image Container #}
+	<div class="collection-item__img">
+		{% if fields.did_image.content|striptags|trim is not empty %}
+			{{ fields.did_image.content }}
+		{% elseif fields.field_image.content|striptags|trim is not empty %}
+			{{ fields.field_image.content }}
+		{% else %}
+			{# Fallback placeholder if no image #}
+			<div class="w-full h-full bg-neutral-200 flex items-center justify-center text-neutral-400">
+				<span class="sr-only">No image available</span>
+				<svg class="w-12 h-12 opacity-20" fill="currentColor" viewbox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+			</div>
+		{% endif %}
+	</div>
+
+	{# Title Bar (Overlapping) #}
+	<div class="collection-item__title">
+		<h3>{{ entity.label() }}</h3>
+	</div>
+
+	{# Description (Mobile Only) #}
+	{% if fields.field_description.content %}
+		<div class="collection-item__description">
+			{{ fields.field_description.content }}
+		</div>
+	{% endif %}
+</a>

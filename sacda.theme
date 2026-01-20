@@ -31,14 +31,14 @@ function sacda_preprocess_html(array &$variables): void {
             file_exists(DRUPAL_ROOT . '/sites/development.services.yml');
 
   if ($is_dev) {
-    $variables['page']['#attached']['html_head'][] = [
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'script',
-        '#attributes' => ['src' => 'http://localhost:35729/livereload.js'],
-      ],
-      'livereload',
-    ];
+    // $variables['page']['#attached']['html_head'][] = [
+    //   [
+    //     '#type' => 'html_tag',
+    //     '#tag' => 'script',
+    //     '#attributes' => ['src' => 'http://localhost:35729/livereload.js'],
+    //   ],
+    //   'livereload',
+    // ];
   }
 
   $variables['page']['#attached']['html_head'][] = [

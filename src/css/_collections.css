@@ -1,0 +1,227 @@
+/**
+ * Collections Page & Block Styles
+ * Styles for /collections listing page and collection item cards
+ */
+
+/* ========================================
+   Collections Grid Layout
+   ======================================== */
+
+.collection-grid {
+	display: grid;
+	gap: 60px;
+}
+
+@media screen and (min-width: 768px) {
+	.collection-grid {
+		grid-template-columns: repeat(3, 1fr);
+		column-gap: 15px;
+		row-gap: 40px;
+	}
+}
+
+@media screen and (min-width: 1280px) {
+	.collection-grid {
+		row-gap: 20px;
+	}
+}
+
+/* Fallback: Style default Drupal views grid when used in collections */
+.view-top-level-collections .views-view-grid {
+	display: grid;
+	gap: 60px;
+}
+
+@media screen and (min-width: 768px) {
+	.view-top-level-collections .views-view-grid {
+		grid-template-columns: repeat(3, 1fr);
+		column-gap: 15px;
+		row-gap: 40px;
+	}
+}
+
+.view-top-level-collections .views-view-grid__item-inner {
+	display: block;
+}
+
+/* ========================================
+   Collection Item Card
+   ======================================== */
+
+.collection-item {
+	display: block;
+}
+
+.collection-item>a {
+	display: block;
+	text-decoration: none !important;
+}
+
+/* Image Container */
+.collection-item__img {
+	overflow: hidden;
+	width: 100%;
+	height: 125vw;
+	/* Mobile: tall portrait */
+}
+
+@media screen and (min-width: 768px) {
+	.collection-item__img {
+		height: calc(110vw / 4.5);
+		/* Desktop: calculated aspect ratio */
+	}
+}
+
+@media screen and (min-width: 1280px) {
+	.collection-item__img {
+		height: calc((100vw - 230px) / 4);
+	}
+}
+
+.collection-item__img img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: top;
+	transition: transform 0.5s ease-out;
+}
+
+/* Hover zoom effect */
+.collection-item>a:hover .collection-item__img img {
+	transform: scale(1.05);
+}
+
+/* Title Bar (Orange overlay) */
+.collection-item__title {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	min-height: 60px;
+	padding: 20px 40px;
+	width: calc(100% - 60px);
+	background-color: var(--primary);
+	text-align: left;
+	transform: translateY(-50%);
+	margin-bottom: -30px;
+	/* Compensate for the transform */
+}
+
+.collection-item__title h3 {
+	margin: 0;
+	font-weight: 700 !important;
+	font-size: 17px !important;
+	text-decoration: none !important;
+	color: var(--foreground);
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+}
+
+/* Description (visible on mobile only) */
+.collection-item__description {
+	padding: 0 20px;
+}
+
+.collection-item__description p {
+	margin: 0;
+	color: var(--foreground);
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+@media screen and (min-width: 768px) {
+	.collection-item__description {
+		display: none;
+	}
+}
+
+/* ========================================
+   Collection Hierarchy / Sidebar Browser
+   (For detail pages with finding aids)
+   ======================================== */
+
+.collections-container {
+	max-height: 500px;
+	overflow-y: auto;
+	padding: 20px 10px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+}
+
+.collections-container a {
+	display: block;
+	padding: 10px 15px;
+	text-decoration: none;
+	color: var(--foreground);
+	border-radius: var(--radius-sm);
+	transition: background-color 0.2s ease;
+}
+
+.collections-container a:hover {
+	background-color: var(--light);
+	color: var(--foreground);
+}
+
+.collections-container a.active {
+	color: white;
+	background-color: var(--secondary);
+}
+
+/* AJAX Load Area */
+.collection-load {
+	height: 500px;
+	overflow-y: auto;
+	padding: 20px;
+}
+
+@media (min-width: 768px) {
+	.collection-load {
+		border-left: 2px solid var(--secondary);
+	}
+}
+
+/* ========================================
+   Page Hero (reusable for other pages too)
+   ======================================== */
+
+.page-hero {
+	position: relative;
+	padding: 100px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	background-size: cover;
+	background-position: center;
+}
+
+.page-hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: rgba(249, 157, 42, 0.75);
+	z-index: 1;
+}
+
+.page-hero__content {
+	position: relative;
+	z-index: 2;
+	padding: 0 20px;
+}
+
+.page-hero h1 {
+	color: white;
+	text-transform: uppercase;
+	font-size: 40px;
+	font-weight: 700;
+	margin: 0;
+}
+
+@media screen and (min-width: 960px) {
+	.page-hero {
+		padding: 150px 0;
+	}
+
+	.page-hero h1 {
+		font-size: 60px;
+	}
+}

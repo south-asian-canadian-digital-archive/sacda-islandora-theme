@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * Collection Item Block Template
+ * 
+ * Renders a single collection card for use in grid layouts.
+ * Can be used standalone or within views.
+ * 
+ * Variables:
+ *   - title: Collection title
+ *   - url: Link to collection detail page
+ *   - image: Cover image URL
+ *   - image_alt: Image alt text
+ *   - description: Optional description text (shown on mobile only)
+ */
+#}
+
+{% macro item(options) %}
+	{% set defaults = {
+    title: '',
+    url: '#',
+    image: '',
+    image_alt: '',
+    description: ''
+  } %}
+	{% set opts = defaults|merge(options) %}
+
+	<div class="collection-item">
+		<a href="{{ opts.url }}">
+			<div class="collection-item__img">
+				{% if opts.image %}
+					<img src="{{ opts.image }}" alt="{{ opts.image_alt ?: opts.title }}">
+				{% else %}
+					<div class="w-full h-full bg-muted flex items-center justify-center">
+						<span class="text-muted-foreground">No Image</span>
+					</div>
+				{% endif %}
+			</div>
+
+			<div class="collection-item__title">
+				<h3>{{ opts.title }}</h3>
+			</div>
+
+			{% if opts.description %}
+				<div class="collection-item__description">
+					<p>{{ opts.description }}</p>
+				</div>
+			{% endif %}
+		</a>
+	</div>
+{% endmacro %}
+
+{# 
+ * Default block render (when used as a Drupal block)
+ * Uses content passed from preprocess 
+ #}
+{% if content %}
+	<div class="collection-item">
+		<a href="{{ url }}">
+			<div class="collection-item__img">
+				{{ content.field_image }}
+			</div>
+
+			<div class="collection-item__title">
+				<h3>{{ label }}</h3>
+			</div>
+
+			{% if content.field_description %}
+				<div class="collection-item__description">
+					{{ content.field_description }}
+				</div>
+			{% endif %}
+		</a>
+	</div>
+{% endif %}

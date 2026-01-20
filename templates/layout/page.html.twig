@@ -22,30 +22,13 @@
 				<div id="main" class="layout-main">
 					<div class="main-content">
 						<a id="main-content" tabindex="-1"></a>
-						{{ page.hero }}
+						{% block hero %}{% endblock %}
 						<div class="main-content__container container">
-							{{ page.highlighted }}
-							{{ page.breadcrumb }}
-
-							{% if page.sidebar %}
-								<div class="sidebar-grid grid-full">
-									<main role="main" class="site-main pt-10">
-										{{ page.content_above }}
-										{{ page.content }}
-									</main>
-									{{ page.sidebar }}
-								</div>
-							{% else %}
-								<main role="main">
-									{{ page.content_above }}
-									{{ page.content }}
-								</main>
-							{% endif %}
-							{{ page.content_below }}
+							{{ page.content_top }}
+							<main role="main">
+								{{ page.content }}
+							</main>
 						</div>
-					</div>
-					<div class="social-bar">
-						{{ page.social }}
 					</div>
 				</div>
 			</div>
