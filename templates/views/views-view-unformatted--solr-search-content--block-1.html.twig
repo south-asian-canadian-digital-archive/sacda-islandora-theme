@@ -1,14 +1,12 @@
 {#
 /**
  * @file
- * Theme override for Solr Search Content view - unformatted rows wrapper.
- *
- * Renders search results as a grid of cards.
+ * Theme override for Solr Search Content view - grid wrapper.
  */
 #}
-<div class="sacda-search-grid grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+<div class="search-results-grid">
 	{% for row in rows %}
-		<div{{row.attributes.addClass('sacda-search-card','group','bg-card','border','border-border','overflow-hidden','transition-shadow','hover:shadow-lg')}}>
+		<div class="search-result-item">
 			{{ row.content }}
 		</div>
 	{% endfor %}

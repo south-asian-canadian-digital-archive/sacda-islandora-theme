@@ -62,11 +62,22 @@
 	@apply text-foreground;
 }
 
+/* Hide dismiss button when messages are hidden */
+.messages-wrapper:has(.messages.hidden) .messages-dismiss,
+.messages-block:has(.messages.hidden) .messages-dismiss {
+	display: none;
+}
+
+/* Hide entire messages block when it only contains the hidden fallback (no actual messages) */
+.messages-block:has([data-drupal-messages-fallback].hidden):not(:has(.messages:not(.hidden))) {
+	display: none;
+}
+
 /* ========================================
-   SACDA Tabs Block (rectangular buttons)
+   SACDA Tabs Block (traditional tabs)
    ======================================== */
 .sacda-tabs-block ul {
-	@apply flex flex-wrap gap-2 list-none m-0 p-0;
+	@apply flex flex-wrap gap-0 list-none m-0 p-0 border-b border-border;
 }
 
 .sacda-tabs-block li {
@@ -74,13 +85,13 @@
 }
 
 .sacda-tabs-block a {
-	@apply inline-block px-5 py-2 border-2 border-foreground/20 bg-transparent text-foreground font-medium text-xs uppercase tracking-wider no-underline transition-all;
+	@apply inline-block px-4 py-2 text-sm font-medium text-muted-foreground no-underline transition-colors border-b-2 border-transparent -mb-px;
 }
 
 .sacda-tabs-block a:hover {
-	@apply border-primary text-primary;
+	@apply text-foreground border-foreground/30;
 }
 
 .sacda-tabs-block a.is-active {
-	@apply bg-teal-dark border-teal-dark text-white;
+	@apply text-primary border-primary;
 }

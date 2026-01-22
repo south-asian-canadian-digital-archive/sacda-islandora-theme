@@ -1,40 +1,15 @@
 {#
 /**
  * @file
- * Theme override for views to use the grid format.
+ * Theme override for views grid - Collections landing page.
  * 
- * Available variables:
- * - items: A list of grid items organized by row. Each item contains:
- *   - attributes: HTML attributes for the row wrapper
- *   - content: A list of columns with:
- *     - attributes: HTML attributes for the column cell
- *     - content: The rendered view row content
- * - rows: The rendered results of the view (list of row items)
- * - attributes: HTML attributes for the grid wrapper
- * - title: Title for this group of rows
- * - options: The style options (columns, alignment, etc.)
+ * Uses collection__grid and collection__item classes for legacy SACDA styling.
  */
 #}
-
-<div class="collection-grid grid gap-[60px] md:grid-cols-3 md:gap-x-[15px] md:gap-y-[40px] xl:gap-y-[20px]">
+<div class="collection__grid">
 	{% for row in items %}
 		{% for column in row.content %}
-			<div
-				class="collection-item relative group overflow-hidden bg-transparent w-full
-					                  [&_a]:block [&_a]:no-underline
-					                  [&_.views-field-did-image]:w-full [&_.views-field-did-image]:overflow-hidden [&_.views-field-did-image]:h-[125vw] md:[&_.views-field-did-image]:h-[calc(110vw/4.5)] xl:[&_.views-field-did-image]:h-[calc((100vw-230px)/4)]
-					                  [&_.views-field-field-image]:w-full [&_.views-field-field-image]:overflow-hidden [&_.views-field-field-image]:h-[125vw] md:[&_.views-field-field-image]:h-[calc(110vw/4.5)] xl:[&_.views-field-field-image]:h-[calc((100vw-230px)/4)]
-					                  [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:object-top [&_img]:transition-transform [&_img]:duration-500 [&_img]:ease-out
-					                  group-hover:[&_img]:scale-105
-					                  [&_.views-field-title]:flex [&_.views-field-title]:items-center [&_.views-field-title]:min-h-[60px] [&_.views-field-title]:px-10 [&_.views-field-title]:py-5 [&_.views-field-title]:bg-primary [&_.views-field-title]:text-left [&_.views-field-title]:-mb-[30px] [&_.views-field-title]:relative [&_.views-field-title]:z-10 [&_.views-field-title]:w-[calc(100%-60px)] [&_.views-field-title]:-translate-y-1/2
-					                  [&_.views-field-title_h3]:m-0 [&_.views-field-title_h3]:font-bold [&_.views-field-title_h3]:text-[17px] [&_.views-field-title_h3]:text-foreground [&_.views-field-title_h3]:uppercase [&_.views-field-title_h3]:tracking-wide
-					                  [&_.views-field-title_a]:no-underline [&_.views-field-title_a]:text-foreground
-					                  [&_.views-field-field-description]:px-5 [&_.views-field-field-description]:block md:[&_.views-field-field-description]:hidden
-					                  [&_.views-field-field-description_p]:m-0 [&_.views-field-field-description_p]:text-foreground [&_.views-field-field-description_p]:text-sm [&_.views-field-field-description_p]:leading-relaxed">
-				{# 
-												   We are relying on standard Views Field output here. 
-												   Arbitrary variants above handle the layout of children.
-												#}
+			<div class="collection__item">
 				{{ column.content }}
 			</div>
 		{% endfor %}
