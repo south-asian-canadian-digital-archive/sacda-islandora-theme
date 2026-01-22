@@ -115,9 +115,9 @@
 
 /* Placeholder when no image */
 .collection__item__img--placeholder {
-	background-color: #f5f5f5;
+	background-color: var(--muted);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #cccccc;
+	color: var(--muted-foreground);
 }

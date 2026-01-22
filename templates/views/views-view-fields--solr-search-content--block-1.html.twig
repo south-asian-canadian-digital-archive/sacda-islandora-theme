@@ -7,28 +7,36 @@
  */
 #}
 {% set theme_path = '/' ~ active_theme_path() %}
-{% set default_image = theme_path ~ '/static/collections/default.jpg' %}
+{% set default_image = default_collection_image|default(theme_path ~ '/static/collections/default.jpg') %}
 
 {% set title_field = fields.title.content|default('') %}
-{% set image_field = fields.did_image.content|default('') %}
 {% set member_of_field = fields.member_of_title.content|default('') %}
 
-{% set has_image = image_field|striptags|trim is not empty %}
+{# Get image content from various possible field names #}
+{% set image_content = fields.did_image.content|default(fields.field_image.content|default(fields.thumbnail.content|default(''))) %}
 
-<div class="search-result-img">
-	{% if has_image %}
-		{{ image_field }}
+{# Convert to string and check if content contains an actual image tag #}
+{% set image_string = image_content|render|raw %}
+{% set display_has_image = '<img' in image_string or 'img' in image_string %}
+
+{# Image Container #}
+<div class="aspect-square bg-muted overflow-hidden [&_a]:block [&_a]:w-full [&_a]:h-full [&_img]:w-full [&_img]:h-full [&_img]:object-contain [&_img]:object-center">
+	{% if display_has_image %}
+		{{ image_content|raw }}
 	{% else %}
-		<img src="{{ default_image }}" alt="{{ 'No image'|t }}">
+		<img src="{{ default_image }}" alt="{{ 'No image'|t }}" class="w-full h-full object-contain">
 	{% endif %}
 </div>
 
-<div class="search-result-info">
-	<div class="search-result-title">
-		{{ title_field|raw }}
+{# Info section #}
+<div class="py-2.5">
+	<div class="text-sm leading-tight mb-1">
+		<a href="{{ fields.title.content|striptags|trim ? '#' : '#' }}" class="text-foreground no-underline hover:text-primary">
+			{{ title_field|raw }}
+		</a>
 	</div>
 	{% if member_of_field|striptags|trim %}
-		<div class="search-result-member">
+		<div class="text-xs text-muted-foreground">
 			{{ member_of_field|striptags|trim }}
 		</div>
 	{% endif %}

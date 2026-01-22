@@ -2,46 +2,23 @@
 /**
  * @file
  * Theme override to display a node of type 'collection'.
+ * Simple layout with title, description, and children content.
  */
 #}
-{% import '@sacda/macros/hero.twig' as hero %}
 
-{# Hero rendered in page.html.twig #}
-<article{{attributes.addClass('node-collection','flex','flex-col')}}>
+<article{{ attributes.addClass('node-collection') }}>
 
-	{# 2. Main Content & Sidebar #}
-	<div class="collection-content container mx-auto px-4 py-8 md:py-12">
+		<h1 class="text-2xl md:text-3xl font-bold text-foreground mb-4">{{ label }}</h1>
 
-		<div
-			class="grid grid-cols-1 md:grid-cols-1 gap-12">
-
-			{# Main Body Area #}
-			<div
-				class="collection-main">
-
-				{# Metadata / Subtitle line if not in hero #}
-				{% if not hero_image_url and content.field_subtitle %}
-					<div class="text-secondary font-bold mb-6 uppercase tracking-wider">
-						{{ content.field_subtitle }}
-					</div>
-				{% endif %}
-
-				{# Body Text #}
-				<div class="prose max-w-none text-foreground leading-relaxed mb-12">
-					{{ content.body }}
-				</div>
-
-				{# Render everything else (except fields we handled) #}
-				{{ content|without('field_image', 'field_media_image', 'field_subtitle', 'body', 'field_member_of', 'field_model') }}
-
-				{# 3. Children / Finding Aid Section #}
-				<div class="collection-children mt-16 border-t border-border pt-8">
-					<h2 class="text-xl font-bold mb-6 border-b-2 border-primary inline-block pb-2">Fonds/Collection Contents</h2>
-				</div>
-
+		{% if content.body|render|striptags|trim %}
+			<div class="prose max-w-none text-foreground leading-relaxed mb-8">
+				{{ content.body }}
 			</div>
+		{% endif %}
 
+		<div class="mt-8 border-t border-border pt-8">
+			<h2 class="text-xl font-bold border-b-2 border-primary inline-block pb-2 mb-6">Fonds/Collection Contents</h2>
+			
+			{{ content|without('body', 'field_image', 'field_media_image', 'field_subtitle', 'field_member_of', 'field_model', 'field_description') }}
 		</div>
-	</div>
-
 </article>

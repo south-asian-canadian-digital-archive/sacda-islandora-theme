@@ -4,9 +4,9 @@
  * Theme override for Solr Search Content view - grid wrapper.
  */
 #}
-<div class="search-results-grid">
+<div class="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
 	{% for row in rows %}
-		<div class="search-result-item">
+		<div class="bg-background overflow-hidden">
 			{{ row.content }}
 		</div>
 	{% endfor %}

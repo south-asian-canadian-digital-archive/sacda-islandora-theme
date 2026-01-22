@@ -24,7 +24,7 @@ const CONFIG = {
 	logoScale: 0.50,
 
 	// Nav horizontal shift when collapsed (negative = left)
-	navX: -100,
+	navX: -80,
 
 	// Nav vertical shift when collapsed (negative = up)
 	navY: -40,

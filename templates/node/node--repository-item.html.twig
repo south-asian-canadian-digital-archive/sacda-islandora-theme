@@ -2,108 +2,109 @@
 /**
  * @file
  * Theme override to display a node of type 'repository_item'.
- * Implements the "Sandwich" layout and Object Detail design.
+ * Two-column layout with image/actions on left, metadata on right.
  */
 #}
 
-<div
-	class="detail-page">
-	{# Side Navigation Placeholders #}
-	<div class="detailNavBgLeft">Back</div>
-	<div class="detailNavBgRight">Next</div>
+{# Helper macro for metadata fields #}
+{% macro meta_field(label, value) %}
+	{% set rendered_value = value|render|striptags|trim %}
+	{% if rendered_value %}
+		<div class="mb-4">
+			<div class="text-xs font-bold text-foreground uppercase tracking-wider mb-1">{{ label }}</div>
+			<div class="text-sm text-foreground">{{ value }}</div>
+		</div>
+	{% endif %}
+{% endmacro %}
 
-	<div class="item-container">
+<div class="max-w-7xl mx-auto px-4 md:px-8 py-8">
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
 
-		<div
-			class="repository-item-grid">
-
-			{# Left Column: Media Viewer #}
-			<div class="viewer-column">
-				<div class="representationViewer">
-					{% if repository_item.representative_image_url %}
-						<img src="{{ repository_item.representative_image_url }}" alt="{{ label }}">
-					{% else %}
-						{# Fallback to field_media if standard display #}
-						{{ content.field_media_image }}
-						{# Or just a placeholder #}
-						{% if not content.field_media_image|render|striptags|trim %}
-							<div class="text-white">No Media Available</div>
-						{% endif %}
-					{% endif %}
-				</div>
-
-				{# Thumbnails Placeholder #}
-				<div
-					class="thumbnails row flex gap-2 mt-4">{# Would iterate media attachments here #}
-				</div>
-
-				<div class="detailTools">
-					<div class="detailTool">
-						<span class="icon-comment"></span>
-						Comments</div>
-					<div class="detailTool">
-						<span class="icon-file"></span>
-						Download as PDF</div>
-				</div>
-			</div>
-
-			{# Right Column: Metadata #}
-			<div
-				class="metadata-column">
-				{# Breadcrumb simulation #}
-				<h4 class="breadcrumb-title">
-					{% if content.field_member_of %}
-						{{ content.field_member_of|render|striptags }}
-						➔
-					{% endif %}
-					{{ label }}
-				</h4>
-
-				<h1 class="object-title">{{ label }}</h1>
-
-				{% if content.field_resource_type %}
-					<h6 class="object-type">{{ content.field_resource_type|render|striptags }}</h6>
+		{# Left Column: Image and Actions #}
+		<div>
+			{# Main Image #}
+			<div class="bg-muted mb-4">
+				{% if repository_item.representative_image_url %}
+					<img src="{{ repository_item.representative_image_url }}" alt="{{ label }}" class="w-full h-auto">
+				{% elseif content.field_thumbnail|render|striptags|trim %}
+					{{ content.field_thumbnail }}
+				{% elseif content.field_media_image|render|striptags|trim %}
+					{{ content.field_media_image }}
+				{% elseif content.field_media|render|striptags|trim %}
+					{{ content.field_media }}
+				{% else %}
+					<div class="aspect-square flex items-center justify-center text-muted-foreground">No Media Available</div>
 				{% endif %}
-
-				<hr class="border-border my-6">
-
-				{# Metadata Units #}
-
-				{# Helper macro for units #}
-					{% macro meta_unit(label, content_value) %}
-						{% if content_value %}
-							<div class='metadata-unit'> <h6>{{ label }}</h6>
-							<div class="field-content trimText">{{ content_value }}</div>
-						</div>
-					{% endif %}
-				{% endmacro %}
-
-				{{ _self.meta_unit('Creator', content.field_linked_agent) }}
-				{{ _self.meta_unit('Date', repository_item.date_created) }}
-				{{ _self.meta_unit('Description', repository_item.description) }}
-				{{ _self.meta_unit('Identifier', repository_item.identifier) }}
-				{{ _self.meta_unit('Publisher', repository_item.publisher) }}
-				{{ _self.meta_unit('Rights Statement', content.field_rights) }}
-
-				{# Render other fields #}
-				{{ content|without('field_representative_image', 'field_media_image', 'field_rights', 'field_linked_agent', 'field_description', 'field_edtf_date_created', 'field_identifier', 'field_publisher', 'field_member_of', 'field_resource_type', 'field_model') }}
-
-				<hr class="border-border my-6">
-
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-					<div>
-						<h6 class="section-heading-small text-muted-foreground uppercase font-bold text-sm tracking-widest mb-4">Related People</h6>
-						{# subjects_name field #}
-						{{ content.field_subjects_name }}
-					</div>
-					<div>
-						{# Map Placeholder #}
-						<div class="bg-muted h-32 w-full flex items-center justify-center text-muted-foreground text-xs">Map Placeholder</div>
-					</div>
-				</div>
-
 			</div>
 
+			{# Action Buttons #}
+			<div class="flex flex-col gap-2">
+				<button class="w-full py-3 px-4 bg-primary text-white font-semibold text-sm uppercase tracking-wide flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+					Share
+				</button>
+				<button class="w-full py-3 px-4 bg-amber-400 text-foreground font-semibold text-sm uppercase tracking-wide flex items-center justify-center gap-2 hover:bg-amber-500 transition-colors">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+					Download as PDF
+				</button>
+			</div>
+		</div>
+
+		{# Right Column: Metadata #}
+		<div>
+			{# Title with breadcrumb #}
+			<h1 class="text-xl md:text-2xl font-bold text-foreground mb-2">
+				{% if content.field_member_of|render|striptags|trim %}
+					<span class="text-muted-foreground">{{ content.field_member_of|render|striptags|trim }}</span>
+					<span class="text-primary mx-2">→</span>
+				{% endif %}
+				{{ label }}
+			</h1>
+
+			{# Item type badge #}
+			{% if content.field_model|render|striptags|trim %}
+				<div class="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-6">{{ content.field_model|render|striptags|trim }}</div>
+			{% endif %}
+
+			{# Metadata Fields #}
+			<div class="space-y-0">
+				{{ _self.meta_field('Identifier', repository_item.identifier) }}
+				{{ _self.meta_field('Alternative Title', repository_item.alt_title) }}
+				{{ _self.meta_field('Repository', content.field_repository) }}
+				{{ _self.meta_field('Repository Web Site', content.field_repository_web_site) }}
+				{{ _self.meta_field('Date', repository_item.date_created) }}
+				{{ _self.meta_field('Extent', repository_item.extent) }}
+				{{ _self.meta_field('Format', content.field_resource_type) }}
+				{{ _self.meta_field('Description', repository_item.description) }}
+				{{ _self.meta_field('Location', content.field_geographic_location) }}
+				{{ _self.meta_field('Rights Statement', content.field_rights) }}
+				{{ _self.meta_field('Subject Headings - Library of Congress', content.field_subject) }}
+			</div>
+
+			{# Related Person and Map section #}
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+				<div>
+					{{ _self.meta_field('Related Person', content.field_linked_agent) }}
+				</div>
+				<div>
+					{# Map Placeholder #}
+					<div class="bg-green-100 h-32 w-full rounded flex items-center justify-center">
+						<div class="text-muted-foreground text-xs">Map</div>
+					</div>
+				</div>
+			</div>
+
+			{# Render any remaining fields not explicitly handled #}
+			<div class="mt-6">
+				{{ content|without(
+					'field_representative_image', 'field_media_image', 'field_thumbnail', 'field_media',
+					'field_member_of', 'field_model', 'field_resource_type',
+					'field_rights', 'field_linked_agent', 'field_description',
+					'field_edtf_date_created', 'field_identifier', 'field_publisher',
+					'field_repository', 'field_repository_web_site', 'field_geographic_location',
+					'field_subject', 'field_extent', 'field_alt_title'
+				) }}
+			</div>
 		</div>
 
 	</div>

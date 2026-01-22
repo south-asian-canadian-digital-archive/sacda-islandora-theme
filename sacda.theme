@@ -172,24 +172,31 @@ function sacda_preprocess_menu(array &$variables): void {
  */
 function sacda_preprocess_views_view_fields(array &$variables): void {
   $view = $variables['view'];
+  $view_id = $view->id();
+  $theme_path = '/' . \Drupal::theme()->getActiveTheme()->getPath();
 
-  // Only apply to the top_level_collections view
-  if ($view->id() === 'top_level_collections') {
-    $theme_path = '/' . \Drupal::theme()->getActiveTheme()->getPath();
+  // List of views that need image handling
+  $image_views = ['top_level_collections', 'solr_search_content'];
+
+  if (in_array($view_id, $image_views)) {
     $variables['default_collection_image'] = $theme_path . '/static/collections/default.jpg';
 
-    // Check if the image field is empty
-    if (isset($variables['fields']['field_image'])) {
-      $image_content = trim(strip_tags((string) $variables['fields']['field_image']->content));
-      $variables['has_image'] = !empty($image_content);
-    }
-    elseif (isset($variables['fields']['did_image'])) {
-      $image_content = trim(strip_tags((string) $variables['fields']['did_image']->content));
-      $variables['has_image'] = !empty($image_content);
-    }
-    else {
-      $variables['has_image'] = FALSE;
+    // Check multiple possible image field names
+    $image_field_names = ['did_image', 'field_image', 'thumbnail', 'field_thumbnail', 'field_representative_image'];
+    $variables['has_image'] = FALSE;
+    $variables['image_field_name'] = NULL;
+
+    foreach ($image_field_names as $field_name) {
+      if (isset($variables['fields'][$field_name])) {
+        $image_content = trim(strip_tags((string) $variables['fields'][$field_name]->content));
+        if (!empty($image_content)) {
+          $variables['has_image'] = TRUE;
+          $variables['image_field_name'] = $field_name;
+          break;
+        }
+      }
     }
   }
 }
+
 

@@ -4,26 +4,18 @@
  * Theme override for Views row fields for the Top-Level Collections view.
  *
  * Renders each collection item with image, orange title bar, and optional description.
- * Matches legacy SACDA collection__item / team__member layout.
  */
 #}
 {% set theme_path = '/' ~ active_theme_path() %}
-{% set default_image = theme_path ~ '/static/collections/default.jpg' %}
 
 {# Extract fields #}
 {% set image_field = fields.did_image.content|default(fields.field_image.content|default('')) %}
 {% set title_field = fields.title.content|default('') %}
 {% set description_field = fields.field_description.content|default('') %}
 
-{% set has_image = image_field|striptags|trim is not empty %}
-
 {# Image Container #}
 <div class="collection__item__img">
-	{% if has_image %}
-		{{ image_field }}
-	{% else %}
-		<img src="{{ default_image }}" alt="{{ 'Collection placeholder'|t }}">
-	{% endif %}
+	{{ image_field|raw }}
 </div>
 
 {# Title Overlay (Orange Bar) #}
