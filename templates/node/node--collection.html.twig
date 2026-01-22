@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Theme override to display a node of type 'collection'.
+ */
+#}
+{% import '@sacda/macros/hero.twig' as hero %}
+
+{# Hero rendered in page.html.twig #}
+<article{{attributes.addClass('node-collection','flex','flex-col')}}>
+
+	{# 2. Main Content & Sidebar #}
+	<div class="collection-content container mx-auto px-4 md:px-24 py-8 md:py-12">
+
+		<div
+			class="grid grid-cols-1 md:grid-cols-1 gap-12">
+
+			{# Main Body Area #}
+			<div
+				class="collection-main">
+
+				{# Metadata / Subtitle line if not in hero #}
+				{% if not hero_image_url and content.field_subtitle %}
+					<div class="text-secondary font-bold mb-6 uppercase tracking-wider">
+						{{ content.field_subtitle }}
+					</div>
+				{% endif %}
+
+				{# Body Text #}
+				<div class="prose max-w-none text-foreground leading-relaxed mb-12">
+					{{ content.body }}
+				</div>
+
+				{# Render everything else (except fields we handled) #}
+				{{ content|without('field_image', 'field_media_image', 'field_subtitle', 'body', 'field_member_of', 'field_model') }}
+
+				{# 3. Children / Finding Aid Section #}
+				<div class="collection-children mt-16 border-t border-border pt-8">
+					<h2 class="text-xl font-bold mb-6 border-b-2 border-primary inline-block pb-2">Fonds/Collection Contents</h2>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+</article>

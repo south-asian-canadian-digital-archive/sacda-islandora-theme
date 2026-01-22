@@ -1,0 +1,133 @@
+/**
+ * Detail Page Styles (Repository Item & Collection File)
+ * Implements the "Sandwich" layout and specific module styles.
+ */
+
+/* ========================================
+   Sandwich Layout (Global Foundation)
+   ======================================== */
+
+.detail-page {
+	@apply relative w-full h-[100vh] overflow-x-hidden p-0 m-0;
+}
+
+/* Side Navigation Bars */
+.detailNavBgLeft,
+.detailNavBgRight {
+	@apply bg-light w-[45px] h-[120px] absolute top-[150px] text-center uppercase z-10 font-bold text-xs text-muted-foreground cursor-pointer transition-colors duration-200 py-5;
+	writing-mode: vertical-rl;
+	letter-spacing: 0.1em;
+}
+
+.detailNavBgLeft:hover,
+.detailNavBgRight:hover {
+	@apply bg-secondary text-white;
+}
+
+.detailNavBgLeft {
+	@apply left-0 rounded-r-sm hidden md:block;
+}
+
+.detailNavBgRight {
+	@apply right-0 rounded-l-sm hidden md:block;
+}
+
+/* Main Content Container */
+.item-container {
+	@apply py-8 px-4 md:py-[60px] md:px-0 max-w-[1400px] mx-auto;
+}
+
+
+/* ========================================
+   Repository Item (Object Detail)
+   ======================================== */
+
+.repository-item-grid {
+	@apply grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-[60px];
+}
+
+/* Left Column: Media */
+.representationViewer {
+	@apply bg-black w-full min-h-[400px] flex items-center justify-center mb-5 rounded overflow-hidden;
+}
+
+.representationViewer img {
+	@apply max-w-full h-auto max-h-[600px];
+}
+
+.detailTools {
+	@apply flex gap-4 mt-5 border-t border-border pt-4;
+}
+
+.detailTool {
+	@apply flex items-center gap-2 text-sm font-semibold text-muted-foreground cursor-pointer hover:text-primary;
+}
+
+/* Right Column: Metadata */
+.breadcrumb-title {
+	@apply font-heading text-sm text-muted-foreground uppercase tracking-widest mb-2.5;
+}
+
+.object-title {
+	@apply text-[32px] leading-[1.1] font-bold mb-1.5 text-foreground;
+}
+
+.object-type {
+	@apply text-sm font-semibold text-primary uppercase mb-5;
+}
+
+.metadata-unit {
+	@apply mb-5;
+}
+
+.metadata-unit h6 {
+	@apply text-[13px] font-bold uppercase text-muted-foreground mb-1.5 tracking-widest;
+}
+
+.metadata-unit .field-content {
+	@apply text-base leading-relaxed text-foreground;
+}
+
+/* Trim Text Plugin styling matching legacy */
+.trimText.capped {
+	@apply max-h-[400px] overflow-hidden relative;
+}
+
+.trimText.capped::after {
+	content: "";
+	@apply absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-b from-transparent to-background;
+}
+
+
+/* ========================================
+   Collection File (Gallery View)
+   ======================================== */
+
+.collection-header {
+	@apply text-center mb-10 max-w-[800px] mx-auto;
+}
+
+.collection-title {
+	@apply text-[42px] font-bold mb-2.5 uppercase;
+}
+
+.collection-meta {
+	@apply text-sm text-primary uppercase font-semibold tracking-widest;
+}
+
+.collection-hierarchy-tree {
+	@apply bg-muted p-5 rounded mb-10 min-h-[100px];
+}
+
+.collection-about-grid {
+	@apply grid grid-cols-1 md:grid-cols-2 gap-[30px] mb-[60px];
+}
+
+.section-heading {
+	@apply text-2xl font-bold uppercase mb-[30px] border-b-2 border-primary pb-1.5 inline-block;
+}
+
+/* Gallery / Infinite Scroll Area */
+#browseResultsContainer {
+	@apply min-h-[200px];
+}

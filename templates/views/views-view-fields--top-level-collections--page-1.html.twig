@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Theme override for Views row fields for the Top-Level Collections view.
+ *
+ * Renders each collection item with a fallback default image if no cover image exists.
+ *
+ * Available variables:
+ * - view: The view object.
+ * - fields: An object containing rendered field data.
+ * - row: The raw result row from the view.
+ * - default_collection_image: Path to the default placeholder image (from preprocess).
+ * - has_image: Boolean indicating if the row has an image (from preprocess).
+ */
+#}
+{% for field in fields %}
+	{% if field.label %}
+		<{{field.element_type}}{{field.element_attributes}}>
+			{{ field.content }}
+		</{{field.element_type}}>
+	{% elseif loop.first and not has_image %}
+		{# First field is usually the image - show default if no image present #}
+		<div{{field.element_attributes}}>
+			<img src="{{ default_collection_image }}" alt="{{ 'Collection placeholder'|t }}" class="w-full h-full object-cover object-top">
+		</div>
+	{% else %}
+		<{{field.element_type}}{{field.element_attributes}}>
+			{{ field.content }}
+		</{{field.element_type}}>
+	{% endif %}
+{% endfor %}

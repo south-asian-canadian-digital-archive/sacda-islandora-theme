@@ -1,0 +1,54 @@
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
+	{% import '@sacda/macros/hero.twig' as hero %}
+
+	{{ hero.section({
+    title: 'CONTACT SACDA',
+    background: base_path ~ directory ~ '/static/graphics/contact/hero-bg.jpg',
+    overlay: true,
+    align: 'center'
+}) }}
+
+	<div class="row content-section">
+		<div class="contact-intro">
+			<h2 class="has-text-align-center">LET'S CHAT</h2>
+			<p>Get in touch with the team behind the South Asian Canadian Digital Archive.</p>
+		</div>
+	</div>
+
+	<div class="row contact-section">
+		<img src="{{ base_path ~ directory }}/static/graphics/contact/section-bg.jpg" class="section-bg" alt="Section Background">
+
+		<div class="col-sm-12 contact-flex-wrapper">
+
+			<div class="contact__content">
+				<h3>CONTACT</h3>
+
+				<div class="contact-block">
+					<h4>Address</h4>
+					<p>
+						South Asian Canadian Digital Archive<br>
+						South Asian Studies Institute<br>
+						Building K, University of the Fraser Valley
+						<br>
+						33844 King Road, Abbotsford, BC V2S 7M8
+					</p>
+				</div>
+
+				<div class="contact-block">
+					<h4>Email</h4>
+					<a href="mailto:sacda@ufv.ca">sacda@ufv.ca</a>
+
+					<h4>Phone</h4>
+					<a href="tel:+16048544547">(604) 854-4547</a>
+				</div>
+			</div>
+
+			<div class="contact__map">
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1673.6796605941547!2d-122.28907861683435!3d49.02974787742539!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54844bebe7ef0241%3A0xbbf2fa6d7e1d808!2sUFV%20Building%20K!5e0!3m2!1sen!2sca!4v1706726549563!5m2!1sen!2sca" width="600" height="600" style="border:0; width:100%; height:100%; outline: none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+			</div>
+
+		</div>
+	</div>
+{% endblock %}

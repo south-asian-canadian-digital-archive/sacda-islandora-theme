@@ -7,8 +7,7 @@
 #}
 
 <div id="page-wrapper" class="page-wrapper">
-	<div
-		id="page">
+	<div id="page">
 
 		{# MOBILE HEADER (shown < 768px) #}
 		{% include '@sacda/navigation/mobile-header.html.twig' with { is_front: is_front } %}
@@ -16,20 +15,25 @@
 		{# DESKTOP HEADER (shown >= 768px) #}
 		{% include '@sacda/navigation/header.html.twig' with { is_front: is_front } %}
 
-		{# MAIN CONTENT - Override this block in child templates #}
 		{% block main %}
 			<div id="main-wrapper" class="layout-main-wrapper layout-container">
-				<div id="main" class="layout-main">
-					<div class="main-content">
-						<a id="main-content" tabindex="-1"></a>
-						{% block hero %}{% endblock %}
-						<div class="main-content__container container">
-							{{ page.content_top }}
-							<main role="main">
-								{{ page.content }}
-							</main>
-						</div>
-					</div>
+				<div class="main-content w-full">
+					<a id="main-content" tabindex="-1"></a>
+					{% block hero %}
+						{# Render Global Hero from Page Preprocess #}
+						{% if hero_data %}
+							{% import '@sacda/macros/hero.twig' as hero %}
+							{% if hero_data.image %}
+								{{ hero.section(hero_data) }}
+							{% else %}
+								{{ hero.title_bar({ title: hero_data.title }) }}
+							{% endif %}
+						{% endif %}
+					{% endblock %}
+					{{ page.content_top }}
+					<main role="main">
+						{{ page.content }}
+					</main>
 				</div>
 			</div>
 		{% endblock %}

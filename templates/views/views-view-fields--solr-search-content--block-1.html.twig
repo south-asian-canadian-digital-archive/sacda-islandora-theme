@@ -1,0 +1,70 @@
+{#
+/**
+ * @file
+ * Theme override for Solr Search Content view - individual result card.
+ *
+ * Displays: image, title, year/date, and description in a card format.
+ * 
+ * Expected fields:
+ *   - title: Link to the item
+ *   - did_image: Thumbnail image
+ *   - edtf_year: Year/date
+ *   - field_description: Description text
+ *   - member_of_title: Parent collection
+ */
+#}
+{% set theme_path = '/' ~ active_theme_path() %}
+{% set default_image = theme_path ~ '/static/collections/default.jpg' %}
+
+{# Extract field values #}
+{% set title_field = fields.title.content|default('') %}
+{% set image_field = fields.did_image.content|default('') %}
+{% set year_field = fields.edtf_year.content|default('') %}
+{% set description_field = fields.field_description.content|default('') %}
+{% set member_of_field = fields.member_of_title.content|default('') %}
+
+{# Check if image is empty #}
+{% set has_image = image_field|striptags|trim is not empty %}
+
+<a
+	href="{{ fields.title.content|striptags|trim != '' ? '' : '#' }}" class="sacda-search-card__link block no-underline text-foreground">
+	{# Image Section #}
+	<div class="sacda-search-card__image h-48 overflow-hidden bg-muted">
+		{% if has_image %}
+			{{ image_field }}
+		{% else %}
+			<img src="{{ default_image }}" alt="No image available" class="w-full h-full object-cover object-center">
+		{% endif %}
+	</div>
+
+	{# Content Section #}
+	<div
+		class="sacda-search-card__body p-4">
+		{# Title #}
+		<h3 class="sacda-search-card__title text-base font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+			{{ title_field|striptags }}
+		</h3>
+
+		{# Year/Date Badge #}
+		{% if year_field|striptags|trim %}
+			<span class="sacda-search-card__date inline-block text-xs bg-primary/10 text-primary px-2 py-1 mb-3">
+				{{ year_field|striptags|trim }}
+			</span>
+		{% endif %}
+
+		{# Description #}
+		{% if description_field|striptags|trim %}
+			<p class="sacda-search-card__desc text-sm text-muted-foreground line-clamp-3 mb-3">
+				{{ description_field|striptags|trim }}
+			</p>
+		{% endif %}
+
+		{# Member Of (collection) #}
+		{% if member_of_field|striptags|trim %}
+			<p class="sacda-search-card__collection text-xs text-muted-foreground">
+				<span class="font-medium">Collection:</span>
+				{{ member_of_field|striptags|trim }}
+			</p>
+		{% endif %}
+	</div>
+</a>

@@ -1,0 +1,86 @@
+/**
+ * System Styles
+ * Styling for Drupal core components: Admin Tabs, Messages, Pager, etc.
+ */
+
+/* ========================================
+   Local Tasks (Admin Tabs)
+   ======================================== */
+.tabs-wrapper ul {
+	@apply flex flex-wrap pl-0 mb-0 list-none gap-x-1 border-b border-border;
+}
+
+.tabs-wrapper li {
+	@apply -mb-px;
+}
+
+.tabs-wrapper a {
+	@apply block px-4 py-2 text-sm font-medium rounded-t-md border border-transparent text-muted-foreground no-underline transition-colors;
+}
+
+.tabs-wrapper a:hover {
+	@apply text-primary bg-muted;
+}
+
+.tabs-wrapper a.is-active {
+	@apply bg-card text-primary border-border border-b-card;
+}
+
+/* ========================================
+   Status Messages
+   ======================================== */
+.messages-wrapper .messages {
+	@apply p-4 mb-4 rounded-md border-l-4 flex items-start gap-3;
+}
+
+/* Status / Success */
+.messages-wrapper .messages--status {
+	@apply bg-green-50 border-green-500 text-green-800;
+}
+
+/* Error */
+.messages-wrapper .messages--error {
+	@apply bg-red-50 border-destructive text-destructive;
+}
+
+/* Warning */
+.messages-wrapper .messages--warning {
+	@apply bg-yellow-50 border-yellow-500 text-yellow-800;
+}
+
+/* Links inside messages */
+.messages-wrapper .messages a {
+	@apply underline font-semibold hover:no-underline;
+}
+
+/* Messages dismiss button */
+.messages-dismiss {
+	@apply absolute top-2 right-2 p-2 text-foreground/60 cursor-pointer transition-colors;
+}
+
+.messages-dismiss:hover {
+	@apply text-foreground;
+}
+
+/* ========================================
+   SACDA Tabs Block (rectangular buttons)
+   ======================================== */
+.sacda-tabs-block ul {
+	@apply flex flex-wrap gap-2 list-none m-0 p-0;
+}
+
+.sacda-tabs-block li {
+	@apply m-0;
+}
+
+.sacda-tabs-block a {
+	@apply inline-block px-5 py-2 border-2 border-foreground/20 bg-transparent text-foreground font-medium text-xs uppercase tracking-wider no-underline transition-all;
+}
+
+.sacda-tabs-block a:hover {
+	@apply border-primary text-primary;
+}
+
+.sacda-tabs-block a.is-active {
+	@apply bg-teal-dark border-teal-dark text-white;
+}

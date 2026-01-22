@@ -7,37 +7,25 @@
  * Path: /collections
  */
 #}
-{% import '@sacda/macros/hero.twig' as hero %}
-
-{# Hero Section #}
-{{ hero.section({
-  title: 'Collections',
-  subtitle: 'Explore curated archival content',
-  background_color: 'bg-primary',
-  overlay: false,
-  height: 'h-56 md:h-72',
-  align: 'center'
-}) }}
+{# Hero Section handled by page.html.twig #}
 
 {# Intro Section #}
-<section class="collection-intro py-10 md:py-14 text-center px-4 md:px-24">
+<section class="collection-intro py-10 md:py-14 text-center">
 	<p class="text-lg text-secondary max-w-3xl mx-auto">
 		Engage with materials of significance to South Asian Canadian history. Browse our growing collection of digitized archives, photographs, documents, and oral histories.
 	</p>
 </section>
 
 {# Collections Grid #}
-<section class="collections-section px-4 md:px-24 pb-16 md:pb-24">
-	{% if header %}
+<section class="collections-section pb-16 md:pb-24">
+	{# {% if header %}
 		<header class="view-header mb-8">
 			{{ header }}
 		</header>
-	{% endif %}
+	{% endif %} #}
 
 	{% if rows %}
-		<div class="collection-grid">
 			{{ rows }}
-		</div>
 	{% elseif empty %}
 		<div class="view-empty text-center py-12">
 			{{ empty }}
@@ -50,7 +38,4 @@
 		</div>
 	{% endif %}
 
-	{% if attachment_after %}
-		{{ attachment_after }}
-	{% endif %}
 </section>

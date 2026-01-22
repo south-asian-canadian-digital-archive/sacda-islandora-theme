@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * SACDA Messages Block
+ * 
+ * Renders Drupal system messages with a dismiss button.
+ * Styles defined in _system.css
+ */
+#}
+<div class="messages-block max-w-7xl mx-auto px-4 md:px-24 my-4" data-sacda-messages>
+	<div class="messages-wrapper relative">
+		<button type="button" class="messages-dismiss" aria-label="{{ 'Dismiss messages'|t }}" onclick="this.closest('[data-sacda-messages]').remove()">
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<line x1="18" y1="6" x2="6" y2="18"></line>
+				<line x1="6" y1="6" x2="18" y2="18"></line>
+			</svg>
+		</button>
+		{{ content }}
+	</div>
+</div>

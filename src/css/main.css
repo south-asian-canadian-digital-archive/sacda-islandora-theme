@@ -4,10 +4,13 @@
 @import "tw-animate-css";
 @import "./_base.css";
 @import "./_buttons.css";
-@import "./_collections.css";
+@import "./_detail.css";
+@import "./_system.css";
+@import "./_search.css";
 
-@source "../templates/**/*.twig";
-@source "../templates/**/*.html";
+
+@source "../../templates/**/*.twig";
+@source "../../templates/**/*.html";
 @source "../js/**/*.js";
 
 @custom-variant dark (&:is(.dark *));

@@ -1,0 +1,110 @@
+{#
+/**
+ * @file
+ * Theme override to display a node of type 'repository_item'.
+ * Implements the "Sandwich" layout and Object Detail design.
+ */
+#}
+
+<div
+	class="detail-page">
+	{# Side Navigation Placeholders #}
+	<div class="detailNavBgLeft">Back</div>
+	<div class="detailNavBgRight">Next</div>
+
+	<div class="item-container">
+
+		<div
+			class="repository-item-grid">
+
+			{# Left Column: Media Viewer #}
+			<div class="viewer-column">
+				<div class="representationViewer">
+					{% if repository_item.representative_image_url %}
+						<img src="{{ repository_item.representative_image_url }}" alt="{{ label }}">
+					{% else %}
+						{# Fallback to field_media if standard display #}
+						{{ content.field_media_image }}
+						{# Or just a placeholder #}
+						{% if not content.field_media_image|render|striptags|trim %}
+							<div class="text-white">No Media Available</div>
+						{% endif %}
+					{% endif %}
+				</div>
+
+				{# Thumbnails Placeholder #}
+				<div
+					class="thumbnails row flex gap-2 mt-4">{# Would iterate media attachments here #}
+				</div>
+
+				<div class="detailTools">
+					<div class="detailTool">
+						<span class="icon-comment"></span>
+						Comments</div>
+					<div class="detailTool">
+						<span class="icon-file"></span>
+						Download as PDF</div>
+				</div>
+			</div>
+
+			{# Right Column: Metadata #}
+			<div
+				class="metadata-column">
+				{# Breadcrumb simulation #}
+				<h4 class="breadcrumb-title">
+					{% if content.field_member_of %}
+						{{ content.field_member_of|render|striptags }}
+						➔
+					{% endif %}
+					{{ label }}
+				</h4>
+
+				<h1 class="object-title">{{ label }}</h1>
+
+				{% if content.field_resource_type %}
+					<h6 class="object-type">{{ content.field_resource_type|render|striptags }}</h6>
+				{% endif %}
+
+				<hr class="border-border my-6">
+
+				{# Metadata Units #}
+
+				{# Helper macro for units #}
+					{% macro meta_unit(label, content_value) %}
+						{% if content_value %}
+							<div class='metadata-unit'> <h6>{{ label }}</h6>
+							<div class="field-content trimText">{{ content_value }}</div>
+						</div>
+					{% endif %}
+				{% endmacro %}
+
+				{{ _self.meta_unit('Creator', content.field_linked_agent) }}
+				{{ _self.meta_unit('Date', repository_item.date_created) }}
+				{{ _self.meta_unit('Description', repository_item.description) }}
+				{{ _self.meta_unit('Identifier', repository_item.identifier) }}
+				{{ _self.meta_unit('Publisher', repository_item.publisher) }}
+				{{ _self.meta_unit('Rights Statement', content.field_rights) }}
+
+				{# Render other fields #}
+				{{ content|without('field_representative_image', 'field_media_image', 'field_rights', 'field_linked_agent', 'field_description', 'field_edtf_date_created', 'field_identifier', 'field_publisher', 'field_member_of', 'field_resource_type', 'field_model') }}
+
+				<hr class="border-border my-6">
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div>
+						<h6 class="section-heading-small text-muted-foreground uppercase font-bold text-sm tracking-widest mb-4">Related People</h6>
+						{# subjects_name field #}
+						{{ content.field_subjects_name }}
+					</div>
+					<div>
+						{# Map Placeholder #}
+						<div class="bg-muted h-32 w-full flex items-center justify-center text-muted-foreground text-xs">Map Placeholder</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+</div>
