@@ -66,8 +66,33 @@ function sacda_preprocess_page(array &$variables): void {
   $variables['logo'] = $theme_path . '/logo.svg';
   $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
 
+  // Route-based hero configuration
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+  
+  // Hero info mapped to routes - each can have: image, title, subtitle
+  $hero_info = [
+    '/collections' => [
+      'image' => $theme_path . '/static/collections/hero-bg.jpg',
+      'title' => 'Collections',
+    ],
+    '/contact' => [
+      'image' => $theme_path . '/static/contact/hero-bg.jpg',
+      'title' => 'Contact Us',
+    ],
+    // '/about' => [
+    //   'image' => $theme_path . '/static/about/hero-bg.jpg',
+    //   'title' => 'About SACDA',
+    // ],
+  ];
 
-
+  // Check if current path has hero info configured
+  $hero_config = $hero_info[$path_alias] ?? $hero_info[$current_path] ?? NULL;
+  
+  // Set hero_data if we have config for this path
+  if ($hero_config) {
+    $variables['hero_data'] = $hero_config;
+  }
 
   _sacda_preprocess_footer_partners($variables, $theme_path);
   _sacda_preprocess_footer_social($variables);

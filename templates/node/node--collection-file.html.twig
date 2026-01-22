@@ -6,77 +6,23 @@
  */
 #}
 
-<div
-	class="detail-page">
-	{# Side Navigation Placeholders #}
-	<div class="detailNavBgLeft">Back</div>
-	<div class="detailNavBgRight">Next</div>
+<article{{ attributes.addClass('node-collection') }}>
 
-	<div
-		class="item-container">
+		<h1 class="text-2xl md:text-3xl font-bold text-foreground mb-4">{{ label }}</h1>
 
-		{# 1. Header Section #}
-		<div class="collection-header">
-			<h1 class="collection-title">{{ label }}</h1>
-			<div
-				class="collection-meta">
-				{# Show ID or Type if available, for now showing Date if present #}
-				{% if collection_file.date %}
-					{{ collection_file.date }}
-				{% endif %}
+		{% if content.body|render|striptags|trim %}
+			<div class="prose max-w-none text-foreground leading-relaxed mb-8">
+				{{ content.body }}
 			</div>
+		{% endif %}
+
+		{{ content|without('body') }}
+
+		<div class="mt-8 border-t border-border pt-8">
+			<h3 class="">Contents</h3>
+			
+			{# {{ content|without('body', 'field_image', 'field_media_image', 'field_subtitle', 'field_member_of', 'field_model', 'field_description') }} #}
 		</div>
+</article>
 
-		{# 2. Hierarchy Tree Placeholder #}
-		<div id="collectionHierarchy" class="collection-hierarchy-tree">
-			<div class="text-center text-muted-foreground italic p-4">
-				[Hierarchy Tree Placeholder]
-			</div>
-		</div>
 
-		{# 3. About & Related Section #}
-		<div class="collection-about-grid">
-			<div class="about-column">
-				<h6 class="section-heading-small text-muted-foreground uppercase font-bold text-sm tracking-widest mb-4">About</h6>
-				<div
-					class="prose max-w-none text-foreground leading-relaxed">
-					{# Use preprocessed description or fallback to body #}
-					{% if collection_file.description %}
-						<p>{{ collection_file.description }}</p>
-					{% else %}
-						{{ content.body }}
-					{% endif %}
-				</div>
-			</div>
-
-			<div class="related-column">
-				<h6 class="section-heading-small text-muted-foreground uppercase font-bold text-sm tracking-widest mb-4">Related Collections</h6>
-				{# Helper for member of links #}
-				<div class="related-links prose">
-					{{ content.field_member_of }}
-				</div>
-			</div>
-		</div>
-
-		{# 4. Gallery / Children Section #}
-		<div class="gallery-section mt-12">
-			<h3 class="section-heading">Related Objects</h3>
-
-			{# Grid container for infinite scroll results #}
-			<div
-				id="browseResultsContainer">
-				{# 
-				           Currently, this checks for the rest of the content which likely includes 
-				           the children view (e.g. members view).
-				           We rely on CSS to grid-ify this if possible, or usually this is 
-				           handled by a specific view block 'Members' placed here.
-				        #}
-				{{ content|without('body', 'field_description', 'field_date', 'field_member_of', 'field_full_title', 'field_model') }}
-			</div>
-
-			{# If no children view is embedded, we might need to rely on block placement. 
-			         Ideally, the View "Members" should be configured to show on this node type. #}
-		</div>
-
-	</div>
-</div>

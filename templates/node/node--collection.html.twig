@@ -16,9 +16,11 @@
 			</div>
 		{% endif %}
 
+		{{ content|without('body') }}
+
 		<div class="mt-8 border-t border-border pt-8">
-			<h2 class="text-xl font-bold border-b-2 border-primary inline-block pb-2 mb-6">Fonds/Collection Contents</h2>
+			<h3 class="">Fonds/Collection Contents</h3>
 			
-			{{ content|without('body', 'field_image', 'field_media_image', 'field_subtitle', 'field_member_of', 'field_model', 'field_description') }}
+			{# {{ content|without('body', 'field_image', 'field_media_image', 'field_subtitle', 'field_member_of', 'field_model', 'field_description') }} #}
 		</div>
 </article>
