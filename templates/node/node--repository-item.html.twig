@@ -53,7 +53,7 @@
 		{# Right Column: Metadata #}
 		<div>
 			{# Title with breadcrumb #}
-			<h1 class="text-xl md:text-2xl font-bold text-foreground mb-2">
+			<h1>
 				{% if content.field_member_of|render|striptags|trim %}
 					<span class="text-muted-foreground">{{ content.field_member_of|render|striptags|trim }}</span>
 					<span class="text-primary mx-2">→</span>

@@ -8,7 +8,7 @@
 
 <article{{ attributes.addClass('node-collection') }}>
 
-		<h1 class="text-2xl md:text-3xl font-bold text-foreground mb-4">{{ label }}</h1>
+		<h1>{{ label }}</h1>
 
 		{% if content.body|render|striptags|trim %}
 			<div class="prose max-w-none text-foreground leading-relaxed mb-8">
@@ -19,9 +19,9 @@
 		{{ content|without('body') }}
 
 		<div class="mt-8 border-t border-border pt-8">
-			<h3 class="">Contents</h3>
+			<h3>Contents</h3>
 			
-			{# {{ content|without('body', 'field_image', 'field_media_image', 'field_subtitle', 'field_member_of', 'field_model', 'field_description') }} #}
+
 		</div>
 </article>
 

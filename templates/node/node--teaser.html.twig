@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * Theme override for node teasers.
+ * Single column layout: title, metadata, description, read more.
+ */
+#}
+
+<article{{ attributes.addClass('node-teaser', 'group', 'border-b', 'border-border', 'pb-8', 'mb-8') }}>
+	<div class="flex flex-col">
+
+		<h2>
+			<a href="{{ url }}" class="no-underline text-inherit block">
+				{{ node.label }}
+			</a>
+		</h2>
+
+		{# Metadata Grid Use node object to avoid Drupal field wrappers #}
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-base text-muted-foreground mb-4">
+			
+
+			{% if node.field_model.entity %}
+				<div class="flex gap-2 items-baseline">
+					<span class="font-semibold text-foreground/80 min-w-[4rem]">Type:</span>
+					<span class="text-foreground font-medium">{{ node.field_model.entity.label }}</span>
+				</div>
+			{% endif %}
+
+			{# Linked Agent (Creator) #}
+			{% if not node.field_linked_agent.isEmpty() %}
+				<div class="flex gap-2 items-baseline">
+					<span class="font-semibold text-foreground/80 min-w-[4rem]">Creator:</span>
+					<span class="text-foreground font-medium">
+							{{ item.entity.label }}{% if not loop.last %}, {% endif %}
+						{% endfor %}
+					</span>
+				</div>
+			{% endif %}
+
+
+			{% if not node.field_date_created.isEmpty() %}
+				<div class="flex gap-2 items-baseline">
+					<span class="font-semibold text-foreground/80 min-w-[4rem]">Date:</span>
+					<span class="text-foreground font-medium">{{ node.field_date_created.value }}</span>
+				</div>
+			{% endif %}
+
+
+			{% if node.field_member_of.entity %}
+				<div class="flex gap-2 items-baseline">
+					<span class="font-semibold text-foreground/80 min-w-[4rem]">Collection:</span>
+					<span class="text-foreground font-medium">
+						<a href="{{ path('entity.node.canonical', {'node': node.field_member_of.entity.id}) }}" class="hover:underline">
+							{{ node.field_member_of.entity.label }}
+						</a>
+					</span>
+				</div>
+			{% endif %}
+		</div>
+		
+
+		{% if not node.field_description.isEmpty() %}
+			<div class="text-base md:text-lg text-foreground/75 leading-relaxed mb-4">
+				{{ node.field_description.value|striptags|truncate(300, true, '...') }}
+			</div>
+		{% endif %}
+
+
+		<div class="mt-2">
+			<a href="{{ url }}" class="inline-flex items-center text-primary font-bold hover:underline decoration-2 underline-offset-4 group-hover:translate-x-1 transition-transform">
+				Read More <span class="ml-1">&rarr;</span>
+			</a>
+		</div>
+	</div>
+</article>
