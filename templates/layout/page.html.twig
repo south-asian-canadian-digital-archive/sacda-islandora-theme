@@ -28,8 +28,6 @@
 							{% import '@sacda/macros/hero.twig' as hero %}
 							{% if hero_data.image %}
 								{{ hero.section(hero_data) }}
-							{% else %}
-								{{ hero.title_bar({ title: hero_data.title }) }}
 							{% endif %}
 						{% endif %}
 					{% endblock %}

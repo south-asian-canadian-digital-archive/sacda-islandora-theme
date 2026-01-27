@@ -67,10 +67,26 @@ function sacda_preprocess_page(array &$variables): void {
   $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
 
   // Route-based hero configuration
+  $variables['hero_data'] = _sacda_get_hero_data();
+
+  _sacda_preprocess_footer_partners($variables, $theme_path);
+  _sacda_preprocess_footer_social($variables);
+  _sacda_add_color_variables($variables);
+  _sacda_preprocess_carousel($variables, $theme_path);
+}
+
+/**
+ * Helper to determine hero data based on current route.
+ *
+ * @return array|null
+ *   Hero data array or NULL if none configured.
+ */
+function _sacda_get_hero_data(): ?array {
+  $theme_path = '/' . \Drupal::theme()->getActiveTheme()->getPath();
   $current_path = \Drupal::service('path.current')->getPath();
   $path_alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
-  
-  // Hero info mapped to routes - each can have: image, title, subtitle
+
+  // Hero info mapped to routes
   $hero_info = [
     '/collections' => [
       'image' => $theme_path . '/static/collections/hero-bg.jpg',
@@ -80,24 +96,9 @@ function sacda_preprocess_page(array &$variables): void {
       'image' => $theme_path . '/static/contact/hero-bg.jpg',
       'title' => 'Contact Us',
     ],
-    // '/about' => [
-    //   'image' => $theme_path . '/static/about/hero-bg.jpg',
-    //   'title' => 'About SACDA',
-    // ],
   ];
 
-  // Check if current path has hero info configured
-  $hero_config = $hero_info[$path_alias] ?? $hero_info[$current_path] ?? NULL;
-  
-  // Set hero_data if we have config for this path
-  if ($hero_config) {
-    $variables['hero_data'] = $hero_config;
-  }
-
-  _sacda_preprocess_footer_partners($variables, $theme_path);
-  _sacda_preprocess_footer_social($variables);
-  _sacda_add_color_variables($variables);
-  _sacda_preprocess_carousel($variables, $theme_path);
+  return $hero_info[$path_alias] ?? $hero_info[$current_path] ?? NULL;
 }
 
 /**
@@ -154,8 +155,8 @@ function sacda_preprocess_node(array &$variables): void {
      ];
   }
 
-  // 3. Repository Item Preprocess
-  if ($type === 'repository_item') {
+  // 3. Repository Item / Islandora Object Preprocess
+  if ($type === 'repository_item' || $type === 'islandora_object') {
     // Extract commonly used fields for easier template access
     $variables['repository_item'] = [
       'abstract' => $node->hasField('field_abstract') ? $node->get('field_abstract')->value : null,
@@ -167,7 +168,7 @@ function sacda_preprocess_node(array &$variables): void {
       'extent' => $node->hasField('field_extent') ? $node->get('field_extent')->value : null,
       'identifier' => $node->hasField('field_identifier') ? $node->get('field_identifier')->value : null,
       'publisher' => $node->hasField('field_publisher') ? $node->get('field_publisher')->value : null,
-      'representative_image_url' => $get_media_url('field_representative_image'),
+      'representative_image_url' => $get_media_url('field_representative_image') ?: $get_media_url('field_media_image'),
     ];
   }
 }
@@ -181,6 +182,9 @@ function sacda_preprocess_block(array &$variables): void {
   if (isset($variables['elements']['#id'])) {
     $variables['attributes']['data-block-id'] = $variables['elements']['#id'];
   }
+
+  // Inject hero data into all blocks (or specific ones if needed)
+  $variables['hero_data'] = _sacda_get_hero_data();
 }
 
 /**

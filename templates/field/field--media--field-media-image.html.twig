@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * Theme override for 'field_media_image' on 'media' entities.
+ * Removes default divs for cleaner inline display.
+ */
+#}
+{% for item in items %}
+  {{ item.content }}
+{% endfor %}
