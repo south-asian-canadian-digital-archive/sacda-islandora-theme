@@ -7,5 +7,4 @@ global:
     dist/search.util.js: {}
   css:
     theme:
-      dist/main.css: {}
       dist/styles.css: {}
