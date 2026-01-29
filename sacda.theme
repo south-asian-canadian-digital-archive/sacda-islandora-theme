@@ -208,6 +208,33 @@ function sacda_preprocess_views_view_fields(array &$variables): void {
   $image_views = ['top_level_collections', 'solr_search_content'];
 
   if (in_array($view_id, $image_views)) {
+    // The default configuration uses 'medium' (220x220) which is too blurry for the grid.
+    if ($view_id === 'solr_search_content' && isset($variables['fields']['did_image'])) {
+      $handler = $view->field['did_image'];
+      $row = $variables['row'];
+      // Attempt to get the Media ID from the field handler
+      $media_id = $handler->getValue($row);
+
+      // If we have a valid media ID, try to re-render with the correct style
+      if (is_numeric($media_id) && $media = \Drupal\media\Entity\Media::load($media_id)) {
+        if ($media->hasField('field_media_image') && !$media->get('field_media_image')->isEmpty()) {
+           $file = $media->get('field_media_image')->entity;
+           if ($file) {
+             $image_build = [
+               '#theme' => 'image_style',
+               '#style_name' => 'max_650x650',
+               '#uri' => $file->getFileUri(),
+               '#attributes' => ['loading' => 'lazy', 'class' => ['img-responsive']],
+             ];
+             // Render the image
+             $image_html = \Drupal::service('renderer')->render($image_build);
+             
+             $variables['fields']['did_image']->content = $image_html;
+           }
+        }
+      }
+    }
+
     $variables['default_collection_image'] = $theme_path . '/static/collections/default.jpg';
 
     // Check multiple possible image field names

@@ -8,5 +8,3 @@ global:
   css:
     theme:
       dist/styles.css: {}
-  dependencies:
-    - core/drupal

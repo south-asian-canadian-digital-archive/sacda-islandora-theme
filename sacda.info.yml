@@ -7,6 +7,8 @@ description: Theme for sacda.ca frontend
 core_version_requirement: ^10
 libraries:
   - sacda/global
+  - core/drupal
+
 # all this below is just for while we do deveopment
 # libraries-override:
 #   olivero/global-styling:
