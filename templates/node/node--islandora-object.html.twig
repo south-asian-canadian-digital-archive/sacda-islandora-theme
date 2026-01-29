@@ -21,9 +21,7 @@
 
 			{# Map Display (if coordinates exist) #}
 			{% if content.field_coordinates|render|striptags|trim %}
-				{# <div class="mb-6 overflow-hidden border border-border"> #}
-					{{ content.field_coordinates }}
-				{# </div> #}
+				{{ content.field_coordinates }}
 			{% endif %}
 
 			{# Action Buttons #}
