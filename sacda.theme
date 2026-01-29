@@ -240,7 +240,7 @@ function sacda_preprocess_views_view_fields(array &$variables): void {
            foreach ($candidates as $field) {
              if ($entity->hasField($field) && !$entity->get($field)->isEmpty()) {
                $ref = $entity->get($field)->entity;
-               if ($ref instanceof \Drupal\media\Entity\MediaInterface) {
+               if ($ref instanceof \Drupal\media\MediaInterface) {
                  $media_found = $ref;
                   $debug_info[] = "Media Found via Node field: $field";
                  break;
@@ -253,7 +253,8 @@ function sacda_preprocess_views_view_fields(array &$variables): void {
       }
 
       // Re-render if Media found
-      if ($media_found instanceof \Drupal\media\Entity\MediaInterface) {
+      // Corrected Interface: \Drupal\media\MediaInterface (was Entity\MediaInterface)
+      if ($media_found instanceof \Drupal\media\MediaInterface) {
         if ($media_found->hasField('field_media_image') && !$media_found->get('field_media_image')->isEmpty()) {
            $file = $media_found->get('field_media_image')->entity;
            if ($file) {
@@ -287,11 +288,17 @@ function sacda_preprocess_views_view_fields(array &$variables): void {
              // If we just output the image, it should be fine.
              
              $variables['fields']['did_image']->content = $image_html . "<!-- DEBUG: SACDA Fix Applied ($style_name) -->";
+           } else {
+              $debug_info[] = "File entity missing on field_media_image";
+              $variables['fields']['did_image']->content .= "<!-- DEBUG: SACDA Fix Failed. Info: " . implode('; ', $debug_info) . " -->";
            }
+        } else {
+             $debug_info[] = "Media " . $media_found->id() . " has no field_media_image or is empty";
+             $variables['fields']['did_image']->content .= "<!-- DEBUG: SACDA Fix Failed. Info: " . implode('; ', $debug_info) . " -->";
         }
       } else {
           // Append debug info
-          $variables['fields']['did_image']->content .= "<!-- DEBUG: SACDA Fix Failed. Info: " . implode('; ', $debug_info) . " -->";
+          $variables['fields']['did_image']->content .= "<!-- DEBUG: SACDA Fix Failed. Info: " . implode('; ', $debug_info) . ". Instance Check Failed (Got: " . (is_object($media_found) ? get_class($media_found) : gettype($media_found)) . ") -->";
       }
     }
 
