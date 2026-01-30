@@ -131,3 +131,27 @@
 #browseResultsContainer {
 	@apply min-h-[200px];
 }
+
+
+/* ========================================
+   Citation Select Block
+   ======================================== */
+.citation-select-select-citation .citation-container {
+	@apply flex flex-col gap-4;
+}
+
+.citation-select-select-citation select.form-select {
+	@apply w-full h-[50px] px-4 border border-border bg-background text-foreground text-sm focus:border-primary outline-none appearance-none rounded-none;
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+	background-position: right 0.75rem center;
+	background-repeat: no-repeat;
+	background-size: 1.25em 1.25em;
+}
+
+.citation-select-select-citation .clipboard-button {
+	@apply w-full h-[50px] flex items-center justify-center bg-primary text-primary-foreground border border-primary text-sm font-bold uppercase tracking-wider transition-colors duration-300 cursor-pointer hover:bg-transparent hover:text-foreground hover:border-foreground;
+}
+
+#formatted-bibliography {
+	@apply mt-4 p-4 bg-muted border border-border text-sm leading-relaxed empty:hidden;
+}
