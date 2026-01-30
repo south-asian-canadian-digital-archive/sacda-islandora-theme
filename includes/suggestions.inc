@@ -31,11 +31,6 @@ function sacda_theme_suggestions_block_alter(array &$suggestions, array $variabl
     $region = $variables['elements']['#configuration']['region'];
     $suggestions[] = 'block__region__' . $region;
 
-    // Use generic sidebar section template for all blocks in object_sidebar
-    if ($region === 'object_sidebar') {
-      $suggestions[] = 'block__sidebar_section';
-    }
-    
     if (isset($variables['elements']['#plugin_id'])) {
       $plugin_id = str_replace(':', '_', $variables['elements']['#plugin_id']);
       $suggestions[] = 'block__region__' . $region . '__' . $plugin_id;

@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Theme override for Citation Select block.
+ */
+#}
+<div class="">
+	{{ title_prefix }}
+	{% if label %}
+		<h2 class="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-2">{{ label }}</h2>
+	{% endif %}
+	{{ title_suffix }}
+	{% block content %}
+		<div class="sidebar-block-content text-sm">
+			{{ content }}
+		</div>
+	{% endblock %}
+</div>
