@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Theme override for a feed icon.
+ *
+ * Available variables:
+ * - url: An internal system path or a fully qualified external URL of the feed.
+ * - title: Title of the feed for describing the feed on the subscribe link.
+ * - attributes: Remaining HTML attributes for the feed link.
+ *   - title: A descriptive title of the feed link.
+ *   - class: HTML classes to be applied to the feed link.
+ */
+#}
+<div class="flex my-4">
+	<a href="{{ url }}" {{ attributes.addClass('inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-muted-foreground hover:text-primary border border-border rounded-md transition-colors hover:bg-muted/50') }}>
+		<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+			<path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20C5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1Z"/>
+		</svg>
+		<span>{{ title }}</span>
+	</a>
+</div>

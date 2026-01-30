@@ -73,6 +73,7 @@ function sacda_preprocess_page(array &$variables): void {
   _sacda_preprocess_footer_social($variables);
   _sacda_add_color_variables($variables);
   _sacda_preprocess_carousel($variables, $theme_path);
+  _sacda_preprocess_carousel($variables, $theme_path);
 }
 
 /**
@@ -169,9 +170,30 @@ function sacda_preprocess_node(array &$variables): void {
       'identifier' => $node->hasField('field_identifier') ? $node->get('field_identifier')->value : null,
       'publisher' => $node->hasField('field_publisher') ? $node->get('field_publisher')->value : null,
       'representative_image_url' => $get_media_url('field_representative_image') ?: $get_media_url('field_media_image'),
+      'coordinates' => $node->hasField('field_coordinates') && !$node->get('field_coordinates')->isEmpty() 
+        ? $node->get('field_coordinates')->getString() 
+        : null,
     ];
+
+    // Inject Object Sidebar Region blocks
+    $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties([
+      'theme' => \Drupal::theme()->getActiveTheme()->getName(),
+      'region' => 'object_sidebar',
+    ]);
+    
+    if (!empty($blocks)) {
+      uasort($blocks, 'Drupal\block\Entity\Block::sort');
+      $build = [];
+      foreach ($blocks as $key => $block) {
+        if ($block->access('view')) {
+          $build[$key] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+        }
+      }
+      $variables['object_sidebar'] = $build;
+    }
   }
 }
+
 
 /**
  * Implements hook_preprocess_HOOK() for block templates.

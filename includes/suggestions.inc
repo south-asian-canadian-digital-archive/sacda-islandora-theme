@@ -30,6 +30,11 @@ function sacda_theme_suggestions_block_alter(array &$suggestions, array $variabl
   if (isset($variables['elements']['#configuration']['region'])) {
     $region = $variables['elements']['#configuration']['region'];
     $suggestions[] = 'block__region__' . $region;
+
+    // Use generic sidebar section template for all blocks in object_sidebar
+    if ($region === 'object_sidebar') {
+      $suggestions[] = 'block__sidebar_section';
+    }
     
     if (isset($variables['elements']['#plugin_id'])) {
       $plugin_id = str_replace(':', '_', $variables['elements']['#plugin_id']);
@@ -44,5 +49,15 @@ function sacda_theme_suggestions_block_alter(array &$suggestions, array $variabl
 function sacda_theme_suggestions_menu_alter(array &$suggestions, array $variables): void {
   if (isset($variables['menu_name'])) {
     $suggestions[] = 'menu__' . $variables['menu_name'];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for node templates.
+ */
+function sacda_theme_suggestions_node_alter(array &$suggestions, array $variables): void {
+  if (isset($variables['view']) && $variables['view'] instanceof \Drupal\views\ViewExecutable) {
+    $suggestions[] = 'node__view__' . $variables['view']->id();
+    $suggestions[] = 'node__view__' . $variables['view']->id() . '__' . $variables['view']->current_display;
   }
 }

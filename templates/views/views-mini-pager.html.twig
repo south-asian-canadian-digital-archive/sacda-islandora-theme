@@ -10,38 +10,42 @@
  */
 #}
 {% if items.previous or items.next %}
-  <nav class="pager pager--mini flex justify-center items-center my-6" role="navigation" aria-labelledby="pagination-heading-mini">
-    <h4 id="pagination-heading-mini" class="visually-hidden">{{ 'Pagination'|t }}</h4>
-    <ul class="pager__items flex items-center justify-center gap-2 js-pager__items">
+	<nav class="pager pager--mini flex justify-center items-center my-6" role="navigation" aria-labelledby="pagination-heading-mini">
+		<h4 id="pagination-heading-mini" class="visually-hidden">{{ 'Pagination'|t }}</h4>
+		<ul class="pager__items flex items-center justify-center gap-2 js-pager__items">
 
-      {% if items.previous %}
-        <li class="pager__item pager__item--previous">
-          <a href="{{ items.previous.href }}" title="{{ 'Go to previous page'|t }}" rel="prev"{{ items.previous.attributes.addClass('flex items-center justify-center px-4 h-10 rounded border border-input bg-background/50 hover:bg-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider') }}>
-            <span class="visually-hidden">{{ 'Previous page'|t }}</span>
-            <span aria-hidden="true">‹ {{ 'Previous'|t }}</span>
-          </a>
-        </li>
-      {% endif %}
+			{% if items.previous %}
+				<li class="pager__item pager__item--previous">
+					<a href="{{ items.previous.href }}" title="{{ 'Go to previous page'|t }}" rel="prev" {{ items.previous.attributes.addClass('flex items-center justify-center w-10 h-10 rounded border border-input hover:bg-primary hover:text-primary-foreground transition-colors') }}>
+						<span class="visually-hidden">{{ 'Previous page'|t }}</span>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+						</svg>
+					</a>
+				</li>
+			{% endif %}
 
-      {% if items.current %}
-        <li class="pager__item pager__item--current hidden">
-            <span class="visually-hidden">
-              {{ 'Current page'|t }}
-            </span>
-            {# Mini pager typically doesn't show numbers, but if we wanted to: #}
-            {# {{ items.current }} #}
-        </li>
-      {% endif %}
+			{% if items.current %}
+				<li class="pager__item pager__item--current hidden">
+					<span class="visually-hidden">
+						{{ 'Current page'|t }}
+					</span>
+					{# Mini pager typically doesn't show numbers, but if we wanted to: #}
+					{# {{ items.current }} #}
+				</li>
+			{% endif %}
 
-      {% if items.next %}
-        <li class="pager__item pager__item--next">
-          <a href="{{ items.next.href }}" title="{{ 'Go to next page'|t }}" rel="next"{{ items.next.attributes.addClass('flex items-center justify-center px-4 h-10 rounded border border-input bg-background/50 hover:bg-muted hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider') }}>
-            <span class="visually-hidden">{{ 'Next page'|t }}</span>
-            <span aria-hidden="true">{{ 'Next'|t }} ›</span>
-          </a>
-        </li>
-      {% endif %}
+			{% if items.next %}
+				<li class="pager__item pager__item--next">
+					<a href="{{ items.next.href }}" title="{{ 'Go to next page'|t }}" rel="next" {{ items.next.attributes.addClass('flex items-center justify-center w-10 h-10 rounded border border-input hover:bg-primary hover:text-primary-foreground transition-colors') }}>
+						<span class="visually-hidden">{{ 'Next page'|t }}</span>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+						</svg>
+					</a>
+				</li>
+			{% endif %}
 
-    </ul>
-  </nav>
+		</ul>
+	</nav>
 {% endif %}
